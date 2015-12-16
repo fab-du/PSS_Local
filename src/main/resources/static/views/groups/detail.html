@@ -1,0 +1,36 @@
+<div class="container jumbotron" style="margin-top:20px;padding-left:2px" >
+
+    <div class="btn-group container" style="margin-left:180px;">
+            <button class="btn btn-info" type="button">
+                Add User <span class="glyphicon glyphicon-plus" style="color : red; padding-right: 20px; "> </span>
+            </button>
+
+            <a class="btn btn-info" type="button" ui-sref="groups.id.upload">
+                Add Document <span class="glyphicon glyphicon-plus"> </span>
+            </a>
+    </div>
+
+    <div class="panel panel-primary col-sm-2" style="padding-left:1px;padding-right: 1px" >
+        <div class="panel-heading">
+            <H5>Group : {{ selected.groupname }} </H5>
+        </div>
+        <div class="panel-content">
+            <button class="btn btn-success" type="button" style="width:100%;margin-botton:2px">
+                Id : {{ selected.id }}
+            </button>
+
+            <button class="btn btn-info" type="button" style="width:100%" >
+                Users : <span class="badge"> {{ selected.users }}</badge>
+            </button>
+
+            <button class="btn btn-warning" type="button" style="width:100%">
+                Documents :  <span class="badge"> {{ selected.documents }} </span>
+            </button>
+
+        </div>
+    </div>
+
+   <ui-view>
+   </ui-view>
+    
+</div>

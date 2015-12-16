@@ -1,0 +1,36 @@
+<div class="container jumbotron" ng-controller="CtrlDocument">
+   <div class="page-header">
+       <h4 class="well"> Document </h4>
+   </div>
+
+<div class="row">
+       
+       <div class="col-lg-6 col-sm-6 col-12">
+           <div class="input-group">
+               <span class="input-group-btn">
+                   <span class="btn btn-primary btn-file">
+                       Browse&hellip; <input type="file" uploader cryptfiles="files" multiple>
+                   </span>
+               </span>
+               <input type="text" class="form-control" readonly>
+           </div>
+       </div>
+
+       <div class="col-lg-3 col-sm-3 input-group">
+            <button ng-click="startUpload()" class="btn btn-success">Upload</button>
+            <button ng-click="clean_document_list()" class="btn btn-danger">Remove all</button>
+       </div>
+   </div>
+
+            <div class="row">
+                <div ng-repeat="file in files" style="margin-top: 20px;border-bottom-color: antiquewhite;border-bottom-style: double;">
+                    <div><span>{{file.name}}</span><div style="float:right;"></span><a  title="Remove from list to be uploaded"><i class="icon-remove"></i></a></div>
+                    </div>
+                    <progress style="width:400px;" value="{{file.loaded}}" max="{{file.size}}"></progress>
+                </div>
+           </div>
+
+</div>
+
+</div>
+
