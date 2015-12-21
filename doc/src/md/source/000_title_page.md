@@ -1,8 +1,3 @@
-<!-- 
-This is the Latex-heavy title page. 
-People outside UCL may want to remove the header logo 
-and add the centred logo
--->
 
 \begin{titlepage}
     \begin{center}
@@ -16,34 +11,29 @@ and add the centred logo
         
         \huge
         CryptoOne-System : Sicherheit im Computernetze 
+
+        \vspace{1.0cm}
+        \huge
+         Bachelorarbeit
         
         \vspace{1.5cm}
-        
+        Vorgelegt von:\\
         \Large
          Fabrice Dufils Siyapdje
 
-        \vspace{1.5cm}
-
-        \normalsize
-        Bachelor of Sciences Informationstechnick
-        
         \vfill
         
         \normalsize
         Betreuer:\\
-        H. Pr. Dr Martin Damm\\
+        H. Prof. Dr. Martin Damm, Hochschule Mannheim\\
+        H. Christian, Hochschule Mannheim\\
 
         \vspace{0.8cm}
 
-        % Uncomment the following line
-        % to add a centered university logo
-        % \includegraphics[width=0.4\textwidth]{style/univ_logo.eps}
-        
         \normalsize
-        University College London, UK\\
-        January 2015
-
-        % Except where otherwise noted, content in this thesis is licensed under a Creative Commons Attribution 4.0 License (http://creativecommons.org/licenses/by/4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original work is properly cited. Copyright 2015,Tom Pollard.
+        Fakultät für Informationstechnik, Hochschule Mannheim\\
+        Paul-Wittsack-Straße 10, 68163 Mannheim\\
+        Mannheim, 15. Februar 2016
 
     \end{center}
 \end{titlepage}

@@ -84,7 +84,12 @@ $if(verbatim-in-note)$
 $endif$
 $if(tables)$
 \usepackage{longtable,booktabs}
+\usepackage{etoolbox,tabu,makecell}
+\usepackage{pdflscape}
+\usepackage[svgnames]{xcolor}
+\usepackage{colortbl}%
 $endif$
+
 $if(graphics)$
 \usepackage{graphicx}
 \makeatletter
@@ -113,6 +118,10 @@ $endif$
             linkcolor=$if(linkcolor)$$linkcolor$$else$magenta$endif$,
             pdfborder={0 0 0}}
 \urlstyle{same}  % don't use monospace font for urls
+
+
+
+
 $if(links-as-notes)$
 % Make links footnotes instead of hotlinks:
 \renewcommand{\href}[2]{#2\footnote{\url{#1}}}

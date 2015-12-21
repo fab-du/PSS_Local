@@ -1,0 +1,18 @@
+#/bin/sh
+
+#
+# make pu diagramm
+#
+cd src/pu
+ant main
+
+#
+# make dotty diagramm
+# TODO
+cd ../dotty
+
+
+cd ../md
+make pdf
+cp output/thesis.pdf ../../bachelorArbeit.pdf
+cd ../../

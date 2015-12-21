@@ -4,8 +4,8 @@
 ## Gliederung
 
 Diese Arbeit lässt sich in drei große Abschnitte aufteilen: Kapitel 2 behandelt 
-die Anförderungen eines sicheren Dokumentaustausch
- die für das Verständnis der weiteren Kapitel wichtig sind.
+die Anförderungen eines sicheren Dokumentaustausch sowie der Authententifizierungmechanismen
+die für das Verständnis der weiteren Kapitel wichtig sind.
 Im folgenden Kapitel 3 werden beispielhaft die aktuelle Stand der Technick vorgestellt und 
 ihre technische Umsetzung aufgeführt.
 In Kapitel 4 wird anhand der Problemstellung ein

@@ -1,8 +1,5 @@
 <!-- This page is for an official declaration. -->
 
-# Erklärung
-
-
 \vspace*{\fill}
 \noindent 
 \textit{

@@ -27,28 +27,21 @@ help:
    # --csl="$(STYLEDIR)/ref_format.csl" \
 	   
 pdf:
-	pandoc "$(INPUTDIR)"/*.md \
+	pandoc "$(INPUTDIR)"/*.md -N \
+	--latex-engine=xelatex \
 	-o "$(OUTPUTDIR)/thesis.pdf" \
 	-H "$(STYLEDIR)/preamble.tex" \
 	--template="$(STYLEDIR)/template.tex" \
 	--bibliography="$(BIBFILE)" 2>pandoc.log \
+	--filter=pandoc-citeproc \
 	-V fontsize=12pt \
 	-V papersize=a4paper \
 	-V documentclass:report \
-	-N \
-	--latex-engine=xelatex
-
-#pdf:
-	#pandoc "$(INPUTDIR)"/*.md \
-	#-o "$(OUTPUTDIR)/thesis.pdf" \
-	#-H "$(STYLEDIR)/preamble.tex" \
-	#--template="/home/batie/.pandoc/templates/pandoc-thesis/ClassicThesis.tex" \
-	#--bibliography="$(BIBFILE)" 2>pandoc.log \
-	#-V fontsize=12pt \
-	#-V papersize=a4paper \
-	#-V documentclass:report \
-	#-N \
-	#--latex-engine=xelatex
+	-V language="ngerman" \
+        --include-in-header="options.sty" \
+        --include-after-body="footer.sty" \
+        -M biblio-style="apalike2" \
+		--csl="$(STYLEDIR)/deutsche-gesellschaft-fur-psychologie.csl" 
 
 tex:
 	pandoc "$(INPUTDIR)"/*.md \
