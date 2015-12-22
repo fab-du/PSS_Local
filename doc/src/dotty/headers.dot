@@ -1,0 +1,53 @@
+
+digraph g {
+    node [shape = record, height=2]
+
+    node_header[label=< 
+    <table border="3" cellspacing="0" cellborder="1" cellpadding="4">
+        <tr>
+         <td>Authorization</td>
+         <td>SRP</td> 
+        </tr>
+
+        <tr>
+         <td>WWW-Authenticate</td>
+         <td>SRP</td> 
+        </tr>
+
+        <tr>
+         <td>realm</td>
+         <td>realm</td> 
+        </tr>
+
+        <tr>
+         <td>hash-algorithm</td>
+         <td>SHA256</td> 
+        </tr>
+
+        <tr>
+         <td>X-XSRF-TOKEN</td>
+         <td>X_XSRF_TOKEN</td> 
+        </tr>
+
+        <tr>
+         <td>AUTH-TOKEN</td>
+         <td>auth_token</td> 
+        </tr>
+
+        <tr>
+         <td>EXPIRES-IN</td>
+         <td>expires_in</td> 
+        </tr>
+
+        <tr>
+         <td>client-public-key</td>
+         <td>client_public_key</td> 
+        </tr>
+
+    </table>>]
+
+
+}
+
+
+
