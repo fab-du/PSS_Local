@@ -17,25 +17,33 @@ den.
 
 ### Benutzerrecht  __<i>USER_ROLE</i>__ 
 
-* Der Benutzer kann eine Vertrauensbeziehung zu anderen Benutzern erstellen
-und sie wieder zerstören.
+* Der Benutzer kann eine Vertrauensbeziehung zu anderen Benutzern erstellen und sie wieder zerstören.
 * Der Benutzer kann eine Gruppe erstellen und entfernen.
-* Der Benutzer kann vertraute Benutzer in einer Gruppe hinzufügen und ent-
-fernen
+* Der Benutzer kann vertraute Benutzer in einer Gruppe hinzufügen und entfernen
 * Der Benutzer kann den Zugriff auf seine Dateischlüssel an alle Mitglieder
-einer Gruppe freigeben und diese Freigabe auch wieder zurückziehen.
-Die funktionalen Anforderungen sind in der Abbildung 2.1 zusammengefasst.
+  einer Gruppe freigeben und diese Freigabe auch wieder zurückziehen.
 
-### Registrierung
+### Registrierung und Login
 
-### Login
+Bei der Registrierung und Login dürfen keine Password oder Passphrase durch
+die Netz übertragen werden.  
+
 
 ### Data upload
 
-### Data upload
+unchiffrierte Datei dürfen nicht durch der Netz übertragen werden, da 
+Datei auch als kritischen Daten gilt, müssen die vorab lokal chiffriert 
+werden befor sie dann an RemoteServer geschickt werden.
+
+### graphische Zusammenfassung von funktionale Anforderungen
+
+Dabei ist noch anschaulich das __LocalServer__ und __RemoteServer__ zwei 
+unterschiedliche Softwaresystem sind die getrennt voneinander laufen.
+Noch bedeuntender ist es dass man der __RemoteServer__ nur duch der
+__LocalServer__ ansprechen kann. 
 
 
-
+![Funktionale Anforderungen](figures/plantuml/functionaleAnforderungen.png)
 
 
 \newpage

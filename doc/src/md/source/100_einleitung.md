@@ -42,13 +42,6 @@ Informationen ohne weitere Maßnahmen geeignet ist.
 
 \newpage
 
-\begin{figure}[ht]
- \centering % centering figure
- \scalebox{0.5} % rescale the figure by a factor of 0.8
- {\includegraphics{graph.eps}} % importing figure
- \label{fig:exm} % labeling to refer it inside the text
-\end{figure}
---------------------- e
 
 
 ## Stand der Technick
@@ -57,6 +50,41 @@ Informationen ohne weitere Maßnahmen geeignet ist.
 
 ### FTP Server
 
+
 ### Web EDI 
 
 #### AS2
+
+#### Web-Upload
+
+Das Speichern von Dokumenten auf einem Internet-Server ist weit verbreitet und
+weltweit von jedem Browser aus möglich. Eine Installation zusätzlicher Software,
+oder gar die Öffnung zusätzlicher Ports der Unternehmens-Firewall ist nicht 
+notwendig. Die Benutzer-Authentifizierung erfolgt i.d.R. per Login/Password.
+<br/>
+Daten können im Internet mittels des https-Protokolls verschlüsselt übertragen wer-
+den. Fälschlicherweise wird angenommen, dass die übertragenen Dokumente dann
+auch beim Empfänger „sicher“ gespeichert sind. Jedoch werden lediglich die Dokumente
+auf dem Weg zum Server mit SSL verschlüsselt. Danach liegen sie zunächst
+unverschlüsselt vor. So werden von einem Server verschlüsselt übertragene Doku-
+mente vom Browser entschlüsselt und im Klartext auf dem lokalen PC gespeichert.
+Ebenso werden Dokumente, die vom Browser für die Übertragung verschlüsselt
+werden vom Server entschlüsselt und liegen am Server unverschlüsselt vor.
+Somit besteht dieselbe Problematik und auch derselbe Lösungsansatz wie bei Datei-
+Servern. In Folge dessen sollten Dokumente, die per Browser auf einen Datei-Server
+geladen werden, vom Client-PC verschlüsselt werden. Die Dokumente müssen also
+vor dem Upload verschlüsselt worden sein, oder aber der Browser führt die Ver-
+schlüsselung durch. Eine Vorab-Verschlüsselung der Dateien hat den Nachteil, dass
+das Dokumenten- und Schlüssel-Management vom Anwender eigenverantwortlich
+durchgeführt werden muss. Dies ist i.a. den Anwendern zu aufwendig.
+Folglich sollte die Verschlüsselung durch den Browser quasi automatisch erfolgen.
+Dies wird aktuell nur sehr selten durchgeführt, da die Verschlüsselungs-Software
+auch vom Web-Server geladen werden müssen. Und es kann nicht garantiert wer-
+den, dass die geladene Software nicht Eindringlingen unbeabsichtigten Zugriff er-
+möglicht. In Folge dessen werden Dokumente SSL-verschlüsselt zum Server gesen-
+det. Die dort empfangenen, unverschlüsselten Dokumente werden sofort verschlüs-
+selt und als Datei abgelegt. Hier bestehen jedoch folgende Probleme: (1) Wie kom-
+men die notwendigen Schlüssel zum Server? (2) Ein Eindringling auf dem Server
+kann die Klartext-Datei und/oder die Schlüssel mitlesen. Zusammenfassung
+Ein Ansatz für ein sicheres Web-Upload ist bisher nicht bekannt.
+

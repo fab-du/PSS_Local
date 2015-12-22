@@ -1,18 +1,28 @@
 #/bin/sh
 
+mkdir -p src/md/figures
+
 #
 # make pu diagramm
 #
 cd src/pu
-ant main
+ant 
+mv output ../md/figures/plantuml
+cd ../..
 
 #
 # make dotty diagramm
-# TODO
-cd ../dotty
+# 
+cd src/dotty
+source make.sh 
+cd ../..
 
 
-cd ../md
+
+#
+# make markdown pdf
+# 
+cd src/md
 make pdf
 cp output/thesis.pdf ../../bachelorArbeit.pdf
-cd ../../
+cd ../..

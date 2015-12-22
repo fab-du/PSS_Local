@@ -1,0 +1,24 @@
+@startuml
+
+
+class ICryptone{
+}
+
+
+class AbstractCryptone{
+}
+
+class AbstractKeyGenerator{
+}
+
+class AbstractSignature{
+}
+
+
+class AbstractVerifier{
+}
+
+class AbstractHash{
+}
+
+@enduml

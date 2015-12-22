@@ -26,7 +26,7 @@ help:
 
    # --csl="$(STYLEDIR)/ref_format.csl" \
 	   
-pdf:
+pdf:  
 	pandoc "$(INPUTDIR)"/*.md -N \
 	--latex-engine=xelatex \
 	-o "$(OUTPUTDIR)/thesis.pdf" \
@@ -43,7 +43,7 @@ pdf:
         -M biblio-style="apalike2" \
 		--csl="$(STYLEDIR)/deutsche-gesellschaft-fur-psychologie.csl" 
 
-tex:
+tex: 
 	pandoc "$(INPUTDIR)"/*.md \
 	-o "$(OUTPUTDIR)/thesis.tex" \
 	-H "$(STYLEDIR)/preamble.tex" \
