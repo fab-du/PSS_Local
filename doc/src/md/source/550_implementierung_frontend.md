@@ -21,16 +21,60 @@ ___MVVM___.
 
 ### AngularJS und Security 
 
-<i>AngularJS</i> spielt auch eine wichtige Rolle was Security angeht. 
-<br/>
+An der Webbrowser wird vorwiegend Angularjs eingesetzt.
+Was Sicherheit angeht, werden nämmlich den Angular 
+Speicher strategie, __cookies__ , die über den angular-service
+[^$cookies] einsetzbar ist.
 
-#### Absicherung und Abspeicherung von Benutzercredentials 
+1. Cookie speicher Configuration Object 
 
+	* path
+	* domain
+	* expires
+	* secure
+
+Was <i style="color:lightblue">path</i> und <i style="color:lightblue">domain</i> angeht wurden die Default
+Werte gelassen, und zwar Cookie steht zur Verfügung für
+aktuelle Pfad und alle untergeordnete Pfäder bzw. Cookie 
+steht  zur Verfügung nur für die Application domain.
+
+War hier konfiguriert wurde war den Parameter <i> __secure__ </i> mit den wert <i> __true__ </i> und <i> __expires__ </i> 
+mit eine <i> Date </i> Instance in Form eine Zeichenkette,
+der konfigurierte die Lebensdauer der Cookies.  
+
+1.a. Unterschied zwischen mit <i> truthy secure</i> und
+<i> falsy secure</i> 
+
+<img src="img/cookies_no_secure.png/>
+
+<!--
+   -![secure=false](img/cookies_no_secure.png)  	
+   -![secure=true](img/cookies_with_secure.png)
+-->
+
+Wie es zu sehen ist, kann man sehr leicht durch den Browser
+die in Cookie gespeicherte Daten sehen wenn secure nicht gesetzt
+ist. was im gegenteil nicht möglich ist wenn secure gesetzt ist.
+
+### [^cookie-configuration] Cookie configuration object 
+
+```javascript
+  var d = new Date( new Date().getTime() + 600000);
+  var n = d.toUTCString().toString();
+  
+  var cookie_config ={
+    secure : true,
+    expires : n 
+  };
 ```
-Da die Authentifizierung hier Zustandlos erfolgt, wird hier mit Credentials 
-gemeint , die wichtige headers wie X-CSRF-HEADER oder auch 
-AUTH-TOKEN.
-```
+
+
+[^$cookies]: https://docs.angularjs.org/api/ngCookies/service/$cookies
+
+[^cookie-configuration]: https://docs.angularjs.org/api/ngCookies/provider/$cookiesProvider#defaults
+
+[^cookie-configuration]: Local/src/resources/static/app/scripts/service/sessionStore.js
+
 
 
 ### Ausstatung von Aktionen
