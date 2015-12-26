@@ -14,11 +14,47 @@ Begrenzungen an diese Technik sind unerheblich und unheimlich viele :
 * Diese Loesung setzt voraus dass der Kommunikationspartner sich auch mit
   der Kryptographie bzw. Kryptographiesoftware auskennt.
 * mehr problemetik, setzt sich auch voraus dass der Kommunikationpartner
-  neben der Kryptographie know-how, den passenden Software, den passenden kryptographische
-  Algorithmus und der Verschlüsselungschlüssel.
+  neben der Kryptographie know-how, den passenden Software, den passenden 
+  kryptographischen Algorithmus und der Verschlüsselungschlüssel.
 * Schlüsselaustauschsproblematik.
 * Infrakstrukturproblemetik.  
 
+### Web-upload
+
+Das Speichern von Dokumenten auf einem Internet-Server ist weit verbreitet und
+weltweit von jedem Browser aus möglich. Eine Installation zusätzlicher Software,
+oder gar die Öffnung zusätzlicher Ports der Unternehmens-Firewall ist nicht not-
+wendig. Die Benutzer-Authentifizierung erfolgt i.d.R. per Login/Password.
+<br/>
+Daten können im Internet mittels des https-Protokolls verschlüsselt übertragen wer-
+den. Fälschlicherweise wird angenommen, dass die übertragenen Dokumente dann
+auch beim Empfänger „sicher“ gespeichert sind. Jedoch werden lediglich die Doku-
+mente auf dem Weg zum Server mit SSL verschlüsselt. Danach liegen sie zunächst
+unverschlüsselt vor. So werden von einem Server verschlüsselt übertragene Doku-
+mente vom Browser entschlüsselt und im Klartext auf dem lokalen PC gespeichert.
+Ebenso werden Dokumente, die vom Browser für die Übertragung verschlüsselt
+werden vom Server entschlüsselt und liegen am Server unverschlüsselt vor.
+<br/>
+Somit besteht dieselbe Problematik und auch derselbe Lösungsansatz wie bei Datei-
+Servern. In Folge dessen sollten Dokumente, die per Browser auf einen Datei-Server
+geladen werden, vom Client-PC verschlüsselt werden. Die Dokumente müssen also
+vor dem Upload verschlüsselt worden sein, oder aber der Browser führt 
+die Verschlüsselung durch. 
+Eine Vorab-Verschlüsselung der Dateien hat den Nachteil, dass
+das Dokumenten- und Schlüssel-Management vom Anwender eigenverantwortlich
+durchgeführt werden muss. Dies ist i.a. den Anwendern zu aufwendig.
+Folglich sollte die Verschlüsselung durch den Browser quasi automatisch erfolgen.
+Dies wird aktuell nur sehr selten durchgeführt, da die Verschlüsselungs-Software
+auch vom Web-Server geladen werden müssen. Und es kann nicht garantiert wer-
+den, dass die geladene Software nicht Eindringlingen unbeabsichtigten Zugriff er-
+möglicht. In Folge dessen werden Dokumente SSL-verschlüsselt zum Server gesen-
+det. Die dort empfangenen, unverschlüsselten Dokumente werden sofort verschlüs-
+selt und als Datei abgelegt. Hier bestehen jedoch folgende Probleme: (1) Wie kom-
+men die notwendigen Schlüssel zum Server? (2) Ein Eindringling auf dem Server
+kann die Klartext-Datei und/oder die Schlüssel mitlesen. Zusammenfassung
+Ein Ansatz für ein sicheres Web-Upload ist bisher nicht bekannt.
+
+ 
 
 [FTPServer]: "FTP-Server"
 
@@ -30,6 +66,14 @@ Zusätzlich muss der Benutzer der Verantwortung tragen die Datein zu verschlüss
 und selber die Schlüsseln verwalten.
 
 ### Cloud-Service 
+
+Cloud-Service hat sich in der letzen 5 Jahre wesentlich verbreitet. Und war 
+auf einer guten Weg bis zum NSA-Affäre sich als defakto Standard einzusetzen.
+Heute auch trotz die Spionnageskandale, wird Cloud-Service bei viele Endbenutzer
+sehr beliebt. Das Risiko ihre geheime Dokumente gestohlen zu haben, was Endbenutzer
+eingehen, können sie sich Unternehmen nicht leisten. 
+<br/> 
+der Einsatz von Cloud-Service bei Unternehmen ist ein absolut No-go. 
 
 Es besteht hier die gleiche Problematik wie bei [FTP Server][FTP-Server]
 
@@ -104,7 +148,41 @@ Dechiffrierung eingesetzt wird, ist die Schlüssel eine kritische Information.__
 
 
 
+## Zusammenfassung
 
+Schlüsselmanagementssystem und PBK-Infrakstruktur tragen exclusiv die 
+Verantwortung über :
+
+* Schlüsselerzeugung
+* Schlüsselmanagement
+* Schlüsseldeployment
+* usw. 
+
+An sich ist dies nicht problematisch, da die Software machen genau das, 
+wofür sie konzipiert wurden, wobei wie schon besprochen einige Einschrängkungen
+bestehen was Portabilität und Flexibilität angehen. 
+<br/> 
+Dateiablegerung und Dateiaustausch System erfüllen auch genau die 
+Aufgabe wofür sie konzipiert wurden, dabei bestehen jedoch gravierende 
+Sicherheitsproblematik.
+
+* Vorabverschlüsselung von Datei
+    * Vorabinstallation von Schlüssel
+    * Übertragung von Schlüssel
+* Offnung weitere Port wie bei FTP-Server
+* eingeschränkte Einsatzt von HTTPS bzw. [Endknote-problematik]
+* Redeployment 
+
+
+Diese Arbeit setzt sich als Ziel, eine System zu konzipiert, der die oben
+genannte Lücke erfüllen, und von die beide Technologie eins macht, sowie
+eine starke Authentication und zuverlässige Vertrauenmechanismus.  
+
+
+[Endknote-problematik]: Diese Problematik besteht wenn die Übertragungskanal
+sicher ist ( zB: HTTPS ) aber nich den Empfang bei Kommunikationspartner.
+
+\newpage 
 
 
 

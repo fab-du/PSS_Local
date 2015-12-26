@@ -8,5 +8,6 @@ von der verschiedenen Softwareteils, nämmlich :
 * CryptUtils
 * Frontend
 * und Inbetriebnahme-programm
-\pagebreak
+
+\newpage
 

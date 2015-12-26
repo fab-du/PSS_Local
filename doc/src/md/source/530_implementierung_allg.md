@@ -29,18 +29,29 @@ Headers sind mächtige Standard wenn es zum Internet kommt, und wichtiger
 noch im Bereich Security von Webbasierte Anwendungen.
 Bei der Entwurf von dieser Arbeit, wurde die Entscheidung getroffen soviel
 wie möglich auf die Standard zu halten, insbesondere bei sicherheitrelevante
-Bereiche.
+Bereiche dieser Arbeit.
 <br/> 
 __Die richtige Einstellung/Konfiguration von manche Headers tragen  wesentlich
 bei, um der Sicherheitgrad eine Webanwendung zu erhöhen.__ 
 <br/> 
 
-Es wird noch mal über Header die Rede sein, bei alle Softwaresteil wo sie
-gesetzt werden ( LocalServer, RemoteServer ), aber hier ist schon mal
-wichtig drüber zu erwähnen und eine gesamte Überblic über die Headers 
+Es wird noch mal über Headers die Rede sein, bei alle Softwareteil wo sie
+gesetzt werden ( LocalServer, RemoteServer, Frontend ), aber hier ist schon mal
+wichtig darüber zu erwähnen und eine gesamte Überblick über die Headers 
 die Systemweit eingesetzt werden.
 
-> XSS - Attack :
+![Headers](figures/dotty/headers.png)
 
-\newpage
+* (1) `Content-Security-Policy` spiel eine bedeutende Rolle um XSS-Attack 
+  zu vermeiden. mit dem Wert `script-src 'self'` weist die Header hin, dass 
+  alle JavaScript source Datei nur von Server geladen werden dürfen. In unsere 
+  Fall von LocalServer.
+
+* (2) (3) (4) und (5) Informieren den Webbrowser über dem Authentication Algorithmus 
+  bzw. dem Hash-Algorithmus, der eingesetzt wird. 
+
+
+
+
+\pagebreak
 
