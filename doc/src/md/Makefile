@@ -9,21 +9,6 @@ STYLEDIR=$(BASEDIR)/style
 
 BIBFILE=$(INPUTDIR)/references.bib
 
-help:
-	@echo ' 																	  '
-	@echo 'Makefile for the Markdown thesis                                       '
-	@echo '                                                                       '
-	@echo 'Usage:                                                                 '
-	@echo '   make html                        generate a web version             '
-	@echo '   make pdf                         generate a PDF file  			  '
-	@echo '   make docx	                       generate a Docx file 			  '
-	@echo '   make tex	                       generate a Latex file 			  '
-	@echo '                                                                       '
-	@echo ' 																	  '
-	@echo ' 																	  '
-	@echo 'get local templates with: pandoc -D latex/html/etc	  				  '
-	@echo 'or generic ones from: https://github.com/jgm/pandoc-templates		  '
-
    # --csl="$(STYLEDIR)/ref_format.csl" \
 	   
 pdf:  
@@ -35,13 +20,14 @@ pdf:
 	--bibliography="$(BIBFILE)" 2>pandoc.log \
 	--filter=pandoc-citeproc \
 	-V fontsize=12pt \
-	-V papersize=a4paper \
-	-V documentclass:report \
 	-V language="ngerman" \
-        --include-in-header="options.sty" \
-        --include-after-body="footer.sty" \
-        -M biblio-style="apalike2" \
-		--csl="$(STYLEDIR)/deutsche-gesellschaft-fur-psychologie.csl" 
+	-V papersize=a4paper \
+	-V documentclass:report 
+
+        #--include-in-header="options.sty" \
+        #--include-after-body="footer.sty" 
+
+#-M biblio-style="apalike2" \
 
 tex: 
 	pandoc "$(INPUTDIR)"/*.md \
@@ -49,6 +35,7 @@ tex:
 	-H "$(STYLEDIR)/preamble.tex" \
 	--bibliography="$(BIBFILE)" \
 	-V fontsize=12pt \
+	-V fontfamily="serif" \
 	-V papersize=a4paper \
 	-V documentclass:report \
 	-N \
@@ -58,6 +45,7 @@ tex:
 docx:
 	pandoc "$(INPUTDIR)"/*.md \
 	-o "$(OUTPUTDIR)/thesis.docx" \
+	-H "$(STYLEDIR)/preamble.tex" \
 	--bibliography="$(BIBFILE)" \
 	--csl="$(STYLEDIR)/ref_format.csl" \
 	--toc
@@ -75,5 +63,22 @@ html:
 	rm -rf "$(OUTPUTDIR)/source"
 	mkdir "$(OUTPUTDIR)/source"
 	cp -r "$(INPUTDIR)/figures" "$(OUTPUTDIR)/source/figures"
+
+
+help:
+	@echo ' 																	  '
+	@echo 'Makefile for the Markdown thesis                                       '
+	@echo '                                                                       '
+	@echo 'Usage:                                                                 '
+	@echo '   make html                        generate a web version             '
+	@echo '   make pdf                         generate a PDF file  			  '
+	@echo '   make docx	                       generate a Docx file 			  '
+	@echo '   make tex	                       generate a Latex file 			  '
+	@echo '                                                                       '
+	@echo ' 																	  '
+	@echo ' 																	  '
+	@echo 'get local templates with: pandoc -D latex/html/etc	  				  '
+	@echo 'or generic ones from: https://github.com/jgm/pandoc-templates		  '
+
 
 .PHONY: help pdf docx html tex

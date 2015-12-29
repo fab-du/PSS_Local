@@ -68,7 +68,7 @@ ist. was im gegenteil nicht möglich ist wenn secure gesetzt ist.
 
 [^cookie-configuration]: https://docs.angularjs.org/api/ngCookies/provider/$cookiesProvider#defaults
 
-[^cookie-configuration]: Local/src/resources/static/app/scripts/service/sessionStore.js
+[^cookie-configurations]: Local/src/resources/static/app/scripts/service/sessionStore.js
 
 
 
