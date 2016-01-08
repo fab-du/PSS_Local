@@ -7,6 +7,9 @@ doc/src/dotty/output
 doc/src/dotty/out
 doc/src/pu/out
 doc/src/pu/output
+app/
+bower_component/
+node_modules/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
