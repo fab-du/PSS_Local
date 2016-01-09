@@ -1,0 +1,20 @@
+.tabsdemoDynamicHeight md-content {
+  background-color: transparent !important; }
+  .tabsdemoDynamicHeight md-content md-tabs {
+    background: #f6f6f6;
+    border: 1px solid #e1e1e1; }
+    .tabsdemoDynamicHeight md-content md-tabs md-tabs-wrapper {
+      background: #2C2C2C; }
+
+  .tabsdemoDynamicHeight md-content h1:first-child {
+    margin-top: 0; color: #f6f6f6; }
+
+
+html, body {
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+
+md-content.md-default-theme, md-content {
+  background-color: rgba(163, 160, 160, 0.45);
+}
+
