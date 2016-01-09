@@ -7,7 +7,6 @@ doc/src/dotty/output
 doc/src/dotty/out
 doc/src/pu/out
 doc/src/pu/output
-app/
 bower_components/
 .tmp/
 node_modules/
