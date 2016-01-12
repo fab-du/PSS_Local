@@ -28,6 +28,18 @@ angular
       $resourceProvider.defaults.stripTrailingSlashes = false;
 
       $stateProvider
+      .state('login', {
+            templateUrl : "/views/session/login.html"
+      })
+      .state('logout',{
+
+      })
+      .state('register', {
+            templateUrl : "/views/session/register.html"
+
+      });
+
+      $stateProvider
       .state('users', {
           url : '/users', 
           templateUrl : "/views/users.html"
@@ -91,4 +103,4 @@ angular
 
       $routeProvider.otherwise({redirectTo: '/'});
 
-  });
+});

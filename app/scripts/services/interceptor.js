@@ -8,7 +8,7 @@
  * Service in the cryptClientApp.
  */
 angular.module('cryptClientApp')
-.provider('Interceptor', function(Storage ){
+.factory('Interceptor', function($q, $location, Storage ){
 return {
 
 /*
@@ -17,16 +17,35 @@ return {
 */
 
 request : function( config ){
-    if( config.headers["X-XSRF-TOKEN"] === undefined ) config.header["X-XSRF-TOKEN"] = $cookieStore.get('X-XSRF-TOKEN');
-    if( config.headers["Authorization"] === undefined ) config.header["Authorization"] = "SRP";
-    if( config.headers["WWW-Authenticate"] === undefined ) config.header["WWW-Authenticate"] = "SRP";
-    if( config.headers["hash-algorithm"] === undefined ) config.header["hash-algorithm"] = "SHA256";
-    if( config.headers["realm"] === undefined )  config.header["realm"] = "realm";
-    if( config.headers["expires_in"] === undefined ) config.header["expires_in"]  = 3600;
-    if( config.headers["token_type"] === undefined ) config.header["token_type"]  = "bearer";
-    if( config.headers["access_token"] === undefined )  config.header["access_token"]  = "xsrh";
-    if( config.headers["client-public-key"] === undefined )  config.header["client-public-key"]  = "pubkey";
-    if( config.headers["server-public-key"] === undefined )  config.header["server-public-key"]  = "ddodi";
+if( config.headers["X-XSRF-TOKEN"] === undefined ) 
+    config.headers["X-XSRF-TOKEN"] = Storage.get('X-XSRF-TOKEN') || '';
+
+if( config.headers["Authorization"] === undefined ) 
+    config.headers["Authorization"] = "SRP";
+
+if( config.headers["WWW-Authenticate"] === undefined ) 
+    config.headers["WWW-Authenticate"] = "SRP";
+
+if( config.headers["hash-algorithm"] === undefined ) 
+    config.headers["hash-algorithm"] = "SHA256";
+
+if( config.headers["realm"] === undefined )  
+    config.headers["realm"] = "realm";
+
+if( config.headers["expires_in"] === undefined ) 
+    config.headers["expires_in"]  = 3600;
+
+if( config.headers["token_type"] === undefined ) 
+    config.headers["token_type"]  = "bearer";
+
+if( config.headers["access_token"] === undefined )  
+    config.headers["access_token"]  = "xsrh";
+
+if( config.headers["client-public-key"] === undefined )  
+    config.headers["client-public-key"]  = "pubkey";
+
+if( config.headers["server-public-key"] === undefined )  
+    config.headers["server-public-key"]  = "ddodi";
 
     return config;
 },
@@ -35,7 +54,7 @@ request : function( config ){
 * Save authorization header, if those was send back,
 */
 response : function( res ){
-    console.log( res.header );
+    console.log( res );
     return res;
 },
 
@@ -64,4 +83,7 @@ requestError: function(rejection) {
 };
 
 
+})
+.config( function( $httpProvider ){
+    $httpProvider.interceptors.push('Interceptor');
 });
