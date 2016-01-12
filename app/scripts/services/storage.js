@@ -1,7 +1,14 @@
 'use strict';
 
-angular.module('cryptoClientApp')
-  .factory('sessionStorage', function ( $cookies ) {
+/**
+ * @ngdoc service
+ * @name cryptClientApp.storage
+ * @description
+ * # storage
+ * Service in the cryptClientApp.
+ */
+angular.module('cryptClientApp')
+.factory('Storage', function ( $cookies, $filter ) {
 
       /**
       *        path 
@@ -34,24 +41,52 @@ angular.module('cryptoClientApp')
 
       function refresh_token(){
         var d = new Date( new Date().getTime() + 600000);
-
         var n = d.toUTCString().toString();
-  
-        options.expires = n
-        $cookies.put( "refresh", "",  options )
+        options.expires = n;
+        $cookies.put( "refresh", "",  options );
       }
 
-      function init( ){
-      }
+      /*
+       *function init( ){
+       *    var foo = { name : "toto"};
+       *    var bar = "bar";
+       *    var mar = [ "lksjfaksdf", "lksajflkjasf" ];
+       *  console.log( $filter('json')( foo ) );
+       *  console.log( $filter('json')( bar ) );
+       *  console.log( $filter('json')( mar ) );
+       *}
+       */
 
 
       var get = function ( key ){
-          return $cookies.getObject(key);
+          var ret = $cookies.get(key);
+          console.log( ret );
+          if ( ret === undefined) {
+            return null;
+          }
+           return JSON.parse ( ret );
       };
 
       var set = function( key, value ){
           refresh_token();
-          $cookies.put( key, value, options );
+
+          if ( !angular.isString( key ) ){
+              return false; 
+          }
+
+          /*
+           * Json object have to be stringify since *no* storage actually
+           * saving json object
+           ***/
+          if ( angular.isObject( value ) ){
+                $cookies.put( key, $filter('json')( value )  );
+                return true;
+          }
+
+          if( angular.isString( value ) ){
+              $cookies.put( key, value );
+              return true;
+          }
       };
 
       var getAll = function(){
@@ -86,3 +121,4 @@ angular.module('cryptoClientApp')
 
       return sessionStorage;
   });
+
