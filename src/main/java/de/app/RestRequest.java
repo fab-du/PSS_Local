@@ -6,7 +6,6 @@ import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
-import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.apache.http.HttpHost;
@@ -15,7 +14,7 @@ import org.apache.http.HttpHost;
 public class RestRequest implements FactoryBean<RestTemplate>, 
 InitializingBean{
 
-	 private RestTemplate restTemplate;
+	private RestTemplate restTemplate;
 	 
 	@Override
 	public void afterPropertiesSet() throws Exception {

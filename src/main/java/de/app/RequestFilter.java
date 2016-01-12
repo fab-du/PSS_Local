@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Priority;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -24,6 +25,7 @@ import org.springframework.web.client.RestClientException;
 import com.nimbusds.srp6.cli.SRP6Client.User;
 
 @Component
+@Priority(value=1)
 public class RequestFilter implements Filter {
 
 	public static final String URL = "http://localhost:8080";
@@ -62,8 +64,6 @@ public class RequestFilter implements Filter {
 
 
 	    String method = request.getMethod();
-
-
 				      try {
 							chain.doFilter(request, response);
 						} catch (IOException e) {
@@ -72,9 +72,7 @@ public class RequestFilter implements Filter {
 						} catch (ServletException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
-			
-		
+						}	
 	}
 
 

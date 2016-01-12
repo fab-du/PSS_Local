@@ -11,8 +11,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
 public class ClientContext extends HttpComponentsClientHttpRequestFactory{
+	
 	   HttpHost host;
-	   
 	    public ClientContext (HttpHost host) {
 	        super();
 	        this.host = host;
