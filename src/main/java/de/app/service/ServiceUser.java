@@ -2,7 +2,7 @@ package de.app.service;
 
 import de.app.model.form.FormRegister;
 import de.cryptone.crypto.CryptFactor;
-import de.cryptone.crypto.RSAPBECrypto;
+//import de.cryptone.crypto.RSAPBECrypto;
 
 import java.math.BigInteger;
 import java.util.Base64;
@@ -19,27 +19,27 @@ public class ServiceUser {
 		SRP6ClientSession client;
 
 		public Map<String, String> register( Map<String, String> user ){
-			RSAPBECrypto rsa = (RSAPBECrypto) CryptFactor.getInstance(CryptFactor.CRYPT_ASYM_RSA_PBE);
-			
-			de.cryptone.models.KeyPair keypair = rsa.generateKey( user.get("passphrase") );
-
-			Map<String, String> result =  new HashMap<String, String>(); 
-
-			result.put("pubkey", keypair.getPubkey());
-			result.put("prikey", keypair.getPrikey());
-			result.put("pairkeySalt", keypair.getSalt());
-			result.put("email", user.get("email"));
-			result.put("firstname", user.get("firstname"));
-			result.put("secondname", user.get("secondname"));
-
-			result.put("company", user.get("company"));
-			result.put("groupname", user.get("company") + "_" + "group");
-
-			Map<String, String> verifierAndSalt = 
-			this.generateVerifierAndSalt( user.get("email"), user.get("password"));
-			result.putAll(verifierAndSalt);
-			return result;
-			
+//			RSAPBECrypto rsa = (RSAPBECrypto) CryptFactor.getInstance(CryptFactor.CRYPT_ASYM_RSA_PBE);
+//			
+//			de.cryptone.models.KeyPair keypair = rsa.generateKey( user.get("passphrase") );
+//
+//			Map<String, String> result =  new HashMap<String, String>(); 
+//
+//			result.put("pubkey", keypair.getPubkey());
+//			result.put("prikey", keypair.getPrikey());
+//			result.put("pairkeySalt", keypair.getSalt());
+//			result.put("email", user.get("email"));
+//			result.put("firstname", user.get("firstname"));
+//			result.put("secondname", user.get("secondname"));
+//
+//			result.put("company", user.get("company"));
+//			result.put("groupname", user.get("company") + "_" + "group");
+//
+//			Map<String, String> verifierAndSalt = 
+//			this.generateVerifierAndSalt( user.get("email"), user.get("password"));
+//			result.putAll(verifierAndSalt);
+//			return result;
+			return null;
 	}
 
 	public Map<String, String> addUser( String useremail, String currentUserEmail, String pubkey ){

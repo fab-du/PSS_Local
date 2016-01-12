@@ -14,7 +14,7 @@ import org.springframework.web.client.RestClientException;
 import de.app.RestRequest;
 import de.app.model.KeyPair;
 import de.cryptone.crypto.CryptFactor;
-import de.cryptone.crypto.RSAPBECrypto;
+//import de.cryptone.crypto.RSAPBECrypto;
 
 public class ServiceDocument {
 
@@ -39,9 +39,10 @@ public class ServiceDocument {
 //	}
 
 	private String decrypt_symkey( String enc_symkey, String passphrase, String enc_prikey, String prikey_salt ){
-		RSAPBECrypto rsa = ( RSAPBECrypto ) CryptFactor.getInstance(CryptFactor.CRYPT_ASYM_RSA_PBE);
-		String ret = rsa.decrypt(enc_prikey, passphrase, prikey_salt, enc_symkey);
-		return ret;
+	//	RSAPBECrypto rsa = ( RSAPBECrypto ) CryptFactor.getInstance(CryptFactor.CRYPT_ASYM_RSA_PBE);
+	//	String ret = rsa.decrypt(enc_prikey, passphrase, prikey_salt, enc_symkey);
+	//	return ret;
+		return null;
 	}
 
 	public void addDocument( String path, String enc_symkey, String enc_prikey, String passphrase, KeyPair keypair   ){

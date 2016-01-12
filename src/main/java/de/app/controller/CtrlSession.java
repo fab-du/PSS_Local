@@ -67,13 +67,13 @@ public class CtrlSession {
 		 * be store until the session ends. 
 		 * And the private key will be send to the browser.
 		 */
-		RSACrypto rsa = ( RSACrypto ) CryptFactor.getInstance(CryptFactor.CRYPT_ASYM_RSA);
+	//	RSACrypto rsa = ( RSACrypto ) CryptFactor.getInstance(CryptFactor.CRYPT_ASYM_RSA);
 
-		String keypair = rsa.generateKey();
-		System.out.println( keypair );
+	//	String keypair = rsa.generateKey();
+	//	System.out.println( keypair );
 		Gson gson = new Gson();
 		Map<String, String> _keypair = new HashMap<>();
-		_keypair = gson.fromJson(keypair, Map.class);
+	//	_keypair = gson.fromJson(keypair, Map.class);
 
 		result1.put("client_pubkey", _keypair.get("pubkey"));
 		result1.put("email", authdata.get("email"));

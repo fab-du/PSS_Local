@@ -1,5 +1,4 @@
 target/
-bin/
 src/main/resources/static/bower_components
 doc/src/md/output
 doc/src/md/node_modules
