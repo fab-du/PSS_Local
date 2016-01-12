@@ -23,7 +23,7 @@ var routes =
         addDocument   : { method : 'POST', params : { group : 'group' }}
     }
 
-}
+};
 
 return { routes : routes };
 });

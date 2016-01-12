@@ -18,9 +18,12 @@ angular
     'ngRoute',
     'ngMaterial',
     'ui.router',
+    'ngMockE2E',
+    'ui.grid',
+    'ui.grid.selection',
     'ngSanitize'
   ])
-  .config(function ($routeProvider, $resourceProvider, $stateProvider, $mdThemingProvider, $uiViewScrollProvider) {
+  .config(function ($routeProvider, $resourceProvider, $stateProvider, $mdThemingProvider, $uiViewScrollProvider,uiGridConstants ) {
 
       $resourceProvider.defaults.stripTrailingSlashes = false;
 
@@ -45,6 +48,11 @@ angular
       $stateProvider
       .state('groups', {
           url : '/groups',
+          controller : 'GroupsController',
+          templateUrl : "/views/groups.html"
+      })
+      .state('groups.admin', {
+          url : '/groups_admin',
           templateUrl : "/views/groups.html"
       })
       .state('groups.groupId', {

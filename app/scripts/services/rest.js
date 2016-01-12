@@ -27,36 +27,38 @@ angular.module('cryptClientApp')
     * @ref: api/ngResource.$resource for more details 
     *
     * */
-    function rest_config( routes, opts ) {
-        var ret = false;
-        var url_base = null;
-        var withCredentials = false;
-
-
-        if ( angular.isObject( opts ) ){
-            angular.forEach( opts, function( value , key ){
-                if( key  === 'url_base'){
-                    url_base = value;
-                }
-                else if( key === 'withCredentials' ){
-                    withCredentials = value;
-                }
-                else {}
-
-            })
-        }
-
-        if( withCredentials === true ){
-            angular.forEach( users.actions , function( value, key){
-                    routes.actions[key].withCredentials =  true;
-            });
-        }
-
-    }
+/*
+ *    function rest_config( routes, opts ) {
+ *        var ret = false;
+ *        var url_base = null;
+ *        var withCredentials = false;
+ *
+ *
+ *        if ( angular.isObject( opts ) ){
+ *            angular.forEach( opts, function( value , key ){
+ *                if( key  === 'url_base'){
+ *                    url_base = value;
+ *                }
+ *                else if( key === 'withCredentials' ){
+ *                    withCredentials = value;
+ *                }
+ *                else {}
+ *
+ *            });
+ *        }
+ *
+ *        if( withCredentials === true ){
+ *            angular.forEach( users.actions , function( value, key){
+ *                    routes.actions[key].withCredentials =  true;
+ *            });
+ *        }
+ *
+ *    }
+ */
 
     function configs(){
-        agular.forEach(  routes , function( v, k ){
-           api[ k ] = $resource( v );
+        angular.forEach(  routes , function( v, k ){
+           api[ k ] = $resource( v.url , v.defaults, v.actions, v.opts  );
         });
     }
 
