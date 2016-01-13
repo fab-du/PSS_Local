@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+    <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/blog.css">
+    <!-- endbuild -->
+
+    <style>
+    #view-source {
+      position: fixed;
+      display: block;
+      right: 0;
+      bottom: 0;
+      margin-right: 40px;
+      margin-bottom: 40px;
+      z-index: 900;
+    }
+    </style>
+
+  </head>
+  <body ng-app="cryptClientApp" ng-cloak>
+    <!--[if lte IE 8]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <md-toolbar layout="row" layout-align="center end" class="md-thin">
+            <h1> CryptOne </h1>
+
+            <ng-messages when="error">
+                {{ error }}
+            </ng-messages>
+    </md-toolbar>
+
+
+    <div ng-cloak=""  ng-controller="MainController" class="tabsdemoDynamicHeight">
+        <md-content>
+            <md-tabs  md-dynamic-height="" md-border-bottom="" >
+                <md-content class="md-padding mg-warn">
+
+                    <md-tab ng-repeat="tab in tabs" label="{{ tab.label }}" md-on-select="onTabSelected( tab.label )" class="md-primary">
+                        <md-button ng-click="tabContentClick( tab.label, content )" ng-repeat="content in tab.contents"> {{ content }} </md-button>
+                    </md-tab>
+
+                </md-content>
+            </md-tabs>
+        </md-content>
+    </div> 
+    
+
+        <div class="container-fluid row" style="margin-top:20px;">
+            <div class="col-md-1" style="height:500px" ng-cloak>
+                    <div>
+                        <md-button class="md-fab md-primary" aria-label="FAB">
+                            <md-tooltip style="backgroung-color:red;">
+                                <b>home</b>
+                            </md-tooltip>
+                            <span class="glyphicon glyphicon-home"></span>
+                        </md-button>
+
+                        <md-button class="md-fab step md-warn" aria-label="FAB">
+                            <md-tooltip style="backgroung-color:red;">
+                                <b>private upload</b>
+                            </md-tooltip>
+                            <span class="glyphicon glyphicon-cloud-upload"></span>
+                        </md-button>
+
+                        <md-button class="md-fab" aria-label="FAB">
+                            <md-tooltip style="backgroung-color:red;">
+                                <b>Friends</b>
+                            </md-tooltip>
+                            <span class="glyphicon glyphicon-user"></span>
+                        </md-button>
+
+                        <md-button class="md-fab" aria-label="FAB">
+                            <md-tooltip style="backgroung-color:red;">
+                                <b>Add Group</b>
+                            </md-tooltip>
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </md-button>
+                    </div>
+            </div>
+
+
+            <div class="col-md-8 col-md-offset-1" style="height:600px;">
+                    <div class="panel panel-info" >
+                        <div class="panel-heading">
+                            <h1 class="panel-title"> {{ title }}  </h1>
+                        </div>
+                        <div class="panel-body">
+                            <div class="container-fluid" ui-view="">
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-material/angular-material.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+    <script src="bower_components/angular-mocks/angular-mocks.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/about.js"></script>
+        <script src="scripts/services/rest.js"></script>
+        <script src="scripts/services/storage.js"></script>
+        <script src="scripts/services/rtdocuments.js"></script>
+        <script src="scripts/services/rtusers.js"></script>
+        <script src="scripts/services/rtfriends.js"></script>
+        <script src="scripts/services/rtgroups.js"></script>
+        <script src="scripts/controllers/users.js"></script>
+        <script src="scripts/controllers/groups.js"></script>
+        <script src="scripts/controllers/documents.js"></script>
+        <script src="scripts/controllers/friends.js"></script>
+        <script src="scripts/services/serverdatamodel.js"></script>
+        <script src="scripts/services/server.js"></script>
+        <script src="scripts/filters/filter.js"></script>
+        <script src="scripts/services/interceptor.js"></script>
+        <script src="scripts/services/auth.js"></script>
+        <script src="scripts/directives/directive.js"></script>
+        <!-- endbuild -->
+</body>
+</html>
