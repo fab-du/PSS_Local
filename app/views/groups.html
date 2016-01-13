@@ -1,26 +1,9 @@
 <div ng-cloak>
 
-<!--
-   -<div style="width:300px; height:200px;" ng-repeat="group in groups" >
-   -      <md-card>
-   -        <md-card-title>
-   -          <md-card-title-text>
-   -            <span class="md-headline">Card with image</span>
-   -            <span class="md-subhead">Medium</span>
-   -          </md-card-title-text>
-   -          <md-card-title-media>
-   -            <div class="md-media-md card-media"></div>
-   -          </md-card-title-media>
-   -        </md-card-title>
-   -        <md-card-actions layout="row" layout-align="end center">
-   -          <md-button>Action 1</md-button>
-   -          <md-button>Action 2</md-button>
-   -        </md-card-actions>
-   -      </md-card>
-   -</div>
-   -->
+   <h3> registered to Groups : </h3>
+   <tab data="my_groups"></tab>
 
-   <tabs ui-grid="{ data : groups }"></tabs>
-    
+   <h3>  Public Groups : </h3>
+   <tab data="groups"></tab>
 
 </div>

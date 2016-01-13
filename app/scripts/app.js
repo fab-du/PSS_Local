@@ -25,7 +25,9 @@ angular
   ])
   .config(function ($routeProvider, $resourceProvider, $stateProvider, $mdThemingProvider, $uiViewScrollProvider,uiGridConstants ) {
 
-      $resourceProvider.defaults.stripTrailingSlashes = false;
+      /*
+       *$resourceProvider.defaults.stripTrailingSlashes = false;
+       */
 
       $stateProvider
       .state('login', {
@@ -42,7 +44,13 @@ angular
       $stateProvider
       .state('users', {
           url : '/users', 
+          controller : "UsersController",
           templateUrl : "/views/users.html"
+      })
+      .state('users.groups', {
+          url : '/users_grp_admin',
+          controller : 'UserGroupController',
+          templateUrl : '/views/groups/mygroups.html'
       })
       .state('users.userId', {
           url : '/:userId'
@@ -61,11 +69,11 @@ angular
       .state('groups', {
           url : '/groups',
           controller : 'GroupsController',
-          templateUrl : "/views/groups.html"
+          templateUrl : '/views/groups.html'
       })
       .state('groups.admin', {
           url : '/groups_admin',
-          templateUrl : "/views/groups.html"
+          templateUrl : "/views/groups/my_groups.html"
       })
       .state('groups.groupId', {
           url : '/:groupId'

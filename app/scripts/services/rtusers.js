@@ -16,7 +16,7 @@ var routes =
     defaults : { userId : '@userId', suffix : '' },
     actions : 
     {
-        find         : { method : 'GET'  },
+        find         : { method : 'GET', isArray : true  },
         findOne      : { method : 'GET'  },
         create       : { method : 'POST' },
         validate     : { method : 'POST', params : { suffix : 'validate' }},
@@ -25,7 +25,8 @@ var routes =
         addToGroup   : { method : 'POST', params : { suffix : 'addToGroup' }},
         friends      : { method : 'GET',  params : { suffix : 'friends' }},
         groups       : { method : 'GET',  params : { suffix : 'groups' }},
-    }
+    },
+    opts : {}
 
 };
 

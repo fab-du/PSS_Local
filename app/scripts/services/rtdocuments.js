@@ -20,7 +20,7 @@ var routes =
         findOne       : { method : 'GET' },
         changeOwner   : { method : 'POST', params : { verb  : 'changeOwner' }},
         shareDocument : { method : 'POST', params : { verb  : 'shareDocument', group : '@group' }},
-        addDocument   : { method : 'POST', params : { group : 'group' }}
+        addDocument   : { method : 'POST', params : { group : 'group' }, transformRequest : angular.entity, headers : { 'Content-Type' : undefined } }
     }
 
 };

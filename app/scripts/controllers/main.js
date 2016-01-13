@@ -9,11 +9,23 @@
  */
 angular.module('cryptClientApp')
 
-.controller('MainController', function ( $scope, $state, Storage, $http ) {
+.controller('MainController', function ( $scope, $state, Storage, $http, $rootScope ) {
+
+
 
 
     Storage.set( "currentUser" , { email : "tux@linux.com", x_token : "xxxx", id : 1 }  );
     Storage.set( "isLoggedIn" , true );
+
+/*
+ *    $scope.errors = "";
+ *
+ *    $scope.$watch( "errors", function( newErrors , oldErrors ){
+ *        if( newErrors !== oldErrors  ){
+ *            $scope.errors = newErrors; 
+ *        }
+ *    });
+ */
 
     $scope.tabs = 
     {

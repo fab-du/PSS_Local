@@ -60,7 +60,6 @@ angular.module('cryptClientApp')
 
       var get = function ( key ){
           var ret = $cookies.get(key);
-          console.log( ret );
           if ( ret === undefined) {
             return null;
           }
@@ -96,7 +95,6 @@ angular.module('cryptClientApp')
       var putAll = function( values ){
           //refresh_token();
           angular.forEach( values , function(value, key ){
-              console.log( key );
               set( key, value, options );
           });
       };

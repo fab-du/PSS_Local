@@ -9,8 +9,8 @@
  * Filter in the cryptClientApp.
  */
 angular.module('cryptClientApp')
-  .filter('filter', function () {
+.filter('filter', function () {
     return function (input) {
-      return 'filter filter: ' + input;
+        return 'filter filter: ' + input;
     };
-  });
+});
