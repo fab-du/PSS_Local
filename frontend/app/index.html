@@ -10,7 +10,6 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
-    <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -31,7 +30,7 @@
     </style>
 
   </head>
-  <body ng-app="cryptClientApp" ng-cloak>
+  <body ng-app="cryptClientApp"  ng-controller="MainController" ng-cloak>
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -45,7 +44,7 @@
     </md-toolbar>
 
 
-    <div ng-cloak=""  ng-controller="MainController" class="tabsdemoDynamicHeight">
+    <div ng-cloak=""   class="tabsdemoDynamicHeight">
         <md-content>
             <md-tabs  md-dynamic-height="" md-border-bottom="" >
                 <md-content class="md-padding mg-warn">
@@ -63,14 +62,14 @@
         <div class="container-fluid row" style="margin-top:20px;">
             <div class="col-md-1" style="height:500px" ng-cloak>
                     <div>
-                        <md-button class="md-fab md-primary" aria-label="FAB">
-                            <md-tooltip style="backgroung-color:red;">
+                        <md-button ng-click="goHome()" class="md-fab md-primary" aria-label="FAB">
+                            <md-tooltip  style="backgroung-color:red;">
                                 <b>home</b>
                             </md-tooltip>
                             <span class="glyphicon glyphicon-home"></span>
                         </md-button>
 
-                        <md-button class="md-fab step md-warn" aria-label="FAB">
+                        <md-button ng-click="goUpload()" class="md-fab step md-warn" aria-label="FAB">
                             <md-tooltip style="backgroung-color:red;">
                                 <b>private upload</b>
                             </md-tooltip>
@@ -123,8 +122,9 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-material/angular-material.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
     <script src="bower_components/angular-mocks/angular-mocks.js"></script>
+    <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+    <script src="bower_components/ng-file-upload-shim/ng-file-upload-shim.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

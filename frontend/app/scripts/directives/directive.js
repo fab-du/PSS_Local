@@ -7,7 +7,7 @@
  * # directive
  */
 angular.module('cryptClientApp')
-.directive('tab', function( $document ){
+.directive('tab', function( ){
 return{
     template : '<style ui-grid-style>{{ ui-style }}</style><div ui-grid=gridOptions class="grid" ui-grid-selection ></div>',
     restrict : 'E',
@@ -15,7 +15,7 @@ return{
     scope : {
         data : '='
     },
-    link : function( scope, el ){
+    link : function( scope ){
         scope.gridOptions = {
             enableSelectAll: true,
             enableSelection: true,
@@ -34,7 +34,7 @@ return{
 
 
             gridApi.selection.on.rowSelectionChanged( scope, function(row){
-                //console.log( row );
+                console.log( row );
             });
         };
 
@@ -47,14 +47,16 @@ return{
 return {
     restrict: 'A',
     link: function($scope, element, attrs) {
-        var prevDisp = element.css('display')
-            , userRole
-            , accessLevel;
+
+        var prevDisp = element.css('display');
+        var userRole;
+        var accessLevel;
 
         $scope.user = Auth.user;
         $scope.$watch('user', function(user) {
-            if(user.role)
+            if(user.role){
                 userRole = user.role;
+            }
             updateCSS();
         }, true);
 
@@ -75,4 +77,51 @@ return {
         }
     }
 };
+})
+.directive('uploader', function( ){
+    return{
+        restrict : 'E',
+        transclude : true,
+        template : '<div> <form enctype="multipart/form-data"> <label class="fileupload" > <input id="uploader" type="file" onchange="angular.element(this).scope().filesChanged(this)"  multiple/><span> Upload </span></label> </form> </div>'+
+                    '<li ng-repeat="file in files">{{ file.name }}</li>',
+        scope : {
+            cryptfiles : '=',
+            uploader : '=',
+        },
+        controller : function( $scope, $compile ){
+
+            $scope.uploadFiles = function(files, errFiles) {
+                $scope.files = files;
+                $scope.errFiles = errFiles;
+                angular.forEach(files, function(file) {
+                    file.upload = Upload.upload({
+                        url: '/api/addDocuments',
+                        data: {file: file}
+                    });
+
+                    file.upload.then(function (response) {
+                        $timeout(function () {
+                            file.result = response.data;
+                        });
+                    }, function (response) {
+                        if (response.status > 0)
+                            $scope.errorMsg = response.status + ': ' + response.data;
+                    }, function (evt) {
+                        file.progress = Math.min(100, parseInt(100.0 * 
+                                                evt.loaded / evt.total));
+                    });
+                });
+            };
+
+
+        },
+
+        link : function(  scope, element, attributs){
+            angular.element( element ).find( "#uploader" ).css( { position : "fixed", top : "-1000px" } );
+            angular.element( element ).find( ".fileupload" ).css( { display : "inline-block", background : "grey",  radius : "5px", padding: "2px 4px", margin : "4px" } );
+
+        },
+    };
+
 });
+

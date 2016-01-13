@@ -9,7 +9,7 @@
  */
 angular.module('cryptClientApp')
 
-.controller('MainController', function ( $scope, $state, Storage, $http, $rootScope ) {
+.controller('MainController', function ( $scope, $state, Storage ) {
 
 
 
@@ -33,13 +33,15 @@ angular.module('cryptClientApp')
         "documents" : {label : "documents", contents : ["private", "groups" ] },
         "groups"    : {label : "groups"   , contents : ["admin", "member", "search" ] },
         "friends"   : {label : "friends"  , contents : ["find" ] },
-    }
+    };
 
     $scope.title = "Index";
 
     $scope.$watch( "title", function( new_title, old_title ){
-        if( new_title !== old_title )  old_title = new_title; 
-    })
+        if( new_title !== old_title ) {
+           old_title = new_title; 
+        } 
+    });
 
     $scope.onTabSelected = function( tablabel ){
         $scope.title = tablabel;
@@ -48,6 +50,14 @@ angular.module('cryptClientApp')
 
     $scope.tabContentClick = function( tablabel, tabcontent ){
         $state.go( tablabel + "." + tabcontent );
+    };
+
+    $scope.goHome = function( ){
+        $state.go("main");
+    };
+
+    $scope.goUpload = function( ){
+        $state.go("documents.upload");
     };
 
 });

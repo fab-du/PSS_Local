@@ -23,11 +23,13 @@ angular
     'ui.grid.selection',
     'ngSanitize'
   ])
-  .config(function ($routeProvider, $resourceProvider, $stateProvider, $mdThemingProvider, $uiViewScrollProvider,uiGridConstants ) {
+  .config(function ($routeProvider, $resourceProvider, $stateProvider ) {
 
-      /*
-       *$resourceProvider.defaults.stripTrailingSlashes = false;
-       */
+
+      $stateProvider
+      .state('main', {
+        templateUrl : "/views/scratch.html"
+      });
 
       $stateProvider
       .state('login', {
@@ -89,6 +91,10 @@ angular
       .state('documents', {
           url : '/documents',
           templateUrl : "/views/documents.html"
+      })
+      .state('documents.upload', {
+          url : '/documents/upload',
+          templateUrl : "/views/documents/documents.upload.html"
       })
       .state('documents.documentId', {
           url : '/:documentId'

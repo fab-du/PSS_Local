@@ -25,8 +25,8 @@ if( config.headers["X-XSRF-TOKEN"] === undefined ){
     config.headers["X-XSRF-TOKEN"] = Storage.get('X-XSRF-TOKEN') || '';
 }
 
-if( config.headers["Authorization"] === undefined ){
-    config.headers["Authorization"] = "SRP";
+if( config.headers.Authorization === undefined ){
+    config.headers.Authorization = "SRP";
 }
 
 if( config.headers["WWW-Authenticate"] === undefined ){

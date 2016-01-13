@@ -8,7 +8,7 @@
  * Controller of the cryptClientApp
  */
 angular.module('cryptClientApp')
-.controller('GroupsController', function ( Rest, Storage, $scope, $q  ) {
+.controller('GroupsController', function ( Rest, Storage, $scope  ) {
 
     function init(){
         if ( !Storage.get("groups") ){
@@ -36,5 +36,5 @@ angular.module('cryptClientApp')
 
 
     init();
-})
+});
 
