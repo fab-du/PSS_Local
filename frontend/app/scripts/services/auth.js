@@ -8,20 +8,8 @@
  * Service in the cryptClientApp.
  */
 angular.module('cryptClientApp')
-.factory('Auth', function ($http, $state, $q, AUTH_EVENTS, Storage ) {
+.factory('Auth', function ($http, $state, $q, AUTH_EVENTS, Storage,  $rootScope ) {
 var api = {};
-
-var currentSession = Storage.getAll() || {};
-
-
-function storeSession( header ) {
-    Storage.putAll( header );
-}
-
-function removeSession( ){
-    Storage.remove();
-}
-
 
 
 function register( user, success, error ){
@@ -35,18 +23,15 @@ function register( user, success, error ){
     * Follow SRP Working-flow. ie :
     * Challenge -> Authenticate -> Authorize
     **/
-function login( user ){
+api.login = function( user ){
     var q = $q.defer();
-    $http.post('/session/login/challenge', user).success(function( response, status , headers ){
-        /*
-         *Storage.set( "prikey", response.prikey );
-         *var sessionHeader = headers();
-         *storeSession( sessionHeader );
-         *$state.go('api');
-         */
-        Storage.set( "currentUser", response );
+    $http.post('/session/login', user).success(function( response, status , headers ){
+        var authHeaders = headers();
+
         $rootScope.$broadcast( AUTH_EVENTS.loginSuccess );
-        q.resolve( { response : response , status : status, headers : headers } );
+        Storage.putAll( authHeaders );
+        Storage.set("currentUser", user.email );
+        q.resolve( status  );
     }).error( function(err){
         $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
         q.reject( err );
@@ -57,17 +42,19 @@ function login( user ){
 
 
 
-function isLoggedIn() {
-    return (Storage.getAll() === undefined);
+api.isLoggedIn =  function() {
+    var currentUser = Storage.get("currentUser");
+    var ret = currentUser !== null;
+    console.log( "from isloggedin" );
+    console.log( ret )
+    return  currentUser !== null ;
 }
 
-api.logout =  function() {
-    removeSession();
+
+api.logout =  function(){
+    Storage.remove();
 };
 
-
-
-api.currentSession = currentSession;
 
 api.register = function( user, success, error ){
     var count = 0;
@@ -101,18 +88,11 @@ api.register = function( user, success, error ){
         return register( user, success, error );
     }
     else{
-        return false;
+        $rootScope.$broadcast( AUTH_EVENTS.loginFailed );
     }
 };
 
-api.login = function( user, success,error ){
-    login( user, success , error);
-};
 
-api.isLoggedIn = function(user){
-    return isLoggedIn(user);
-};
-
-    return api;
+return api;
 
 });

@@ -60,10 +60,19 @@ angular.module('cryptClientApp')
 
       var get = function ( key ){
           var ret = $cookies.get(key);
-          if ( ret === undefined) {
+          if ( ret === null || angular.isUndefined( ret ) ) {
             return null;
           }
-           return JSON.parse ( ret );
+
+
+          if( angular.isString( ret ) ){
+              return ret;
+          }
+
+          if( angular.isObject( ret ) ){
+              return JSON.parse(ret )
+          }
+
       };
 
       var set = function( key, value ){
@@ -78,7 +87,7 @@ angular.module('cryptClientApp')
            * saving json object
            ***/
           if ( angular.isObject( value ) ){
-                $cookies.put( key, $filter('json')( value )  );
+                $cookies.put( key, JSON.stringify( value )  );
                 return true;
           }
 

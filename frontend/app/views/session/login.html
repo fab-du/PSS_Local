@@ -1,14 +1,20 @@
+<div layout="column" flex="40" layout-align="center" layout-padding ng-cloak>
+  <br/>
+  <md-content class="autoScroll">
+    <md-input-container class="md-icon-float md-block">
+      <label>Email</label>
+      <md-icon md-svg-src="/images/18/person.svg"></md-icon>
+      <input ng-model="user.email" type="email">
+    </md-input-container>
+    <md-input-container class="md-icon-float md-block">
+        <label>Password</label>
+        <md-icon md-svg-src="images/18/person.svg"></md-icon>
+        <input ng-model="user.password" type="password">
+    </md-input-container>
 
-<div>
-    <form name="loginForm" ng-controller="LoginController"
-          ng-submit="login(credentials)" novalidate>
-      <label for="username">Username:</label>
-      <input type="text" id="username"
-             ng-model="credentials.username">
-      <label for="password">Password:</label>
-      <input type="password" id="password"
-             ng-model="credentials.password">
-      <button type="submit">Login</button>
-    </form>
+    <md-input-container class="md-block">
+        <md-button ng-click="login( user )">loging</md-button>
+    </md-input-container>
+  </md-content>
 </div>
 

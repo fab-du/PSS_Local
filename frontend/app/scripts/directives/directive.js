@@ -11,7 +11,7 @@ angular.module('cryptClientApp')
 return{
     template : '<style ui-grid-style>{{ ui-style }}</style><div ui-grid=gridOptions class="grid" ui-grid-selection ></div>',
     restrict : 'E',
-    transclude : true,
+    transclude : false,
     scope : {
         data : '='
     },
@@ -22,9 +22,18 @@ return{
             enableFiltering: true,
             selectionRowHeaderWidth: 35,
             rowHeight: 35,
-            data : scope.data,
             showGridFooter:true
         };
+
+
+        var data = [];
+        var _obj = [];
+
+        scope.$watch('data', function(){
+            scope.gridOptions.data = scope.data;
+            console.log( scope.data );
+            console.log( data );
+        });
 
       scope.myStyle = '.grid { border: 1px solid blue }';
 
@@ -34,7 +43,7 @@ return{
 
 
             gridApi.selection.on.rowSelectionChanged( scope, function(row){
-                console.log( row );
+            
             });
         };
 
@@ -44,30 +53,13 @@ return{
 };
 })
 .directive('accessLevel', function ( Auth ) {
+    //TODO
 return {
     restrict: 'A',
     link: function($scope, element, attrs) {
 
-        var prevDisp = element.css('display');
-        var userRole;
-        var accessLevel;
-
-        $scope.user = Auth.user;
-        $scope.$watch('user', function(user) {
-            if(user.role){
-                userRole = user.role;
-            }
-            updateCSS();
-        }, true);
-
-        attrs.$observe('accessLevel', function(al) {
-            if(al) accessLevel = $scope.$eval(al);
-            updateCSS();
-        });
-
         function updateCSS() {
-            if(userRole && accessLevel) {
-                if(!Auth.authorize(accessLevel, userRole)){
+            if(isLoggedIn) {
                     element.css('display', 'none');
                 }
                 else{
@@ -75,7 +67,7 @@ return {
                 }
             }
         }
-    }
+    
 };
 })
 .directive('uploader', function( ){

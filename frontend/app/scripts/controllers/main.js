@@ -9,23 +9,15 @@
  */
 angular.module('cryptClientApp')
 
-.controller('MainController', function ( $scope, $state, Storage ) {
+.controller('MainController', function ( $q, $scope, $rootScope, AUTH_EVENTS,  $state, $mdSidenav, $mdBottomSheet, Storage, Auth ) {
 
-
-
-
-    Storage.set( "currentUser" , { email : "tux@linux.com", x_token : "xxxx", id : 1 }  );
-    Storage.set( "isLoggedIn" , true );
-
-/*
- *    $scope.errors = "";
- *
- *    $scope.$watch( "errors", function( newErrors , oldErrors ){
- *        if( newErrors !== oldErrors  ){
- *            $scope.errors = newErrors; 
- *        }
- *    });
- */
+    $scope.errors = "";
+    $rootScope.isLoggedIn = false;
+    $scope.$watch( "errors", function( newErrors , oldErrors ){
+        if( newErrors !== oldErrors  ){
+            $scope.errors = newErrors; 
+        }
+    });
 
     $scope.tabs = 
     {
@@ -35,22 +27,25 @@ angular.module('cryptClientApp')
         "friends"   : {label : "friends"  , contents : ["find" ] },
     };
 
-    $scope.title = "Index";
+    $scope.openLeftMenu = function(){
+        $mdSidenav("left").toggle().then( function(){
+        });
+    };
 
-    $scope.$watch( "title", function( new_title, old_title ){
-        if( new_title !== old_title ) {
-           old_title = new_title; 
-        } 
-    });
 
     $scope.onTabSelected = function( tablabel ){
-        $scope.title = tablabel;
-        $state.go( tablabel );
+        if( $rootScope.isLoggedIn ){
+            $scope.title = tablabel;
+            $state.go( tablabel );
+        }
     };
 
     $scope.tabContentClick = function( tablabel, tabcontent ){
-        $state.go( tablabel + "." + tabcontent );
+        if( $rootScope.isLoggedIn ){
+            $state.go( tablabel + "." + tabcontent );
+        }
     };
+
 
     $scope.goHome = function( ){
         $state.go("main");
@@ -59,5 +54,29 @@ angular.module('cryptClientApp')
     $scope.goUpload = function( ){
         $state.go("documents.upload");
     };
+
+
+    // auth message handler 
+	$rootScope.$on(AUTH_EVENTS.notAuthorized, function(){
+        console.log( AUTH_EVENTS.notAuthorized );
+    });
+	$rootScope.$on(AUTH_EVENTS.notAuthenticated, function(){
+        $rootScope.isLoggedIn = false;
+        window.location.href = "/"
+    });
+	$rootScope.$on(AUTH_EVENTS.sessionTimeout, function(){
+        console.log( AUTH_EVENTS.sessionTimeout );
+        window.location.href = "/"
+    });
+	$rootScope.$on(AUTH_EVENTS.logoutSuccess, function(){
+        $rootScope.isLoggedIn = false;
+        window.location.href = "/"
+    });
+	$rootScope.$on(AUTH_EVENTS.loginSuccess, function(){
+        $rootScope.isLoggedIn = Auth.isLoggedIn();
+        $rootScope.isLoggedIn = true;
+        window.location.href = "#/users";
+    });
+
 
 });

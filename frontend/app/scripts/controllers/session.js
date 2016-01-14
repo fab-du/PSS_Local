@@ -8,7 +8,7 @@
  * Controller of the cryptClientApp
  */
 angular.module('cryptClientApp')
-.controller('LoginController', function ( $scope, $rootScope, AUTH_EVENTS, Auth, Storage  ) {
+.controller('SessionController', function ( $scope, $rootScope, $state, AUTH_EVENTS, Auth, Storage  ) {
 
     function init(){
         $scope.credentials = {
@@ -16,45 +16,34 @@ angular.module('cryptClientApp')
             password : ''
         };
 
-        $scope.login = function( credentials ){
-            Auth.login( credentials ); 
-        };
-
-    }
-
-
-    init();
-})
-
-.controller('RegisterController', function ( $scope, $rootScope, AUTH_EVENTS, Auth , Storage ) {
-
-    function init(){
-        $scope.credentials = {
-            email      : '',
-            firstname  : '',
-            secondname : '',
-            password   : '',
-            _password  : '',
-            company    : '',
-        };
 
         $scope.register = function( credentials ){
-
         };
+
+        $scope.logout = function(  ){
+               Storage.remove();
+               $rootScope.isLoggedIn = false;
+               $state.go('login');
+        };
+
     }
+
 
     init();
 })
+.controller('RegisterController', function( $scope, $rootScope, Storage, Auth, AUTH_EVENTS ){
 
-.controller('LogoutController', function ( $scope, $rootScope, AUTH_EVENTS, Auth , Storage ) {
-
-    function init(){
-        $scope.logout = function(){
-            Storage.remove();
+        $scope.register = function( credentials ){
+            console.log( credentials )
+            //Auth.login( credentials ); 
         };
-    }
 
-    init();
+})
+.controller('LoginController', function( $scope, $rootScope, Storage, Auth, AUTH_EVENTS ){
 
-});
+        $scope.login = function( credentials ){
+            Auth.login( credentials );
+        };
+
+})
 

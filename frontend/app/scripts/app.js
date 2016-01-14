@@ -24,7 +24,10 @@ angular
     'ngFileUpload',
     'ngSanitize'
   ])
-  .config(function ($routeProvider, $resourceProvider, $stateProvider ) {
+  .config(function ($routeProvider, $resourceProvider, $stateProvider, $urlRouterProvider ) {
+
+     $urlRouterProvider.otherwise("/");
+
 
 
       $stateProvider
@@ -34,14 +37,14 @@ angular
 
       $stateProvider
       .state('login', {
+            url : "/session/login",
+            controller : "LoginController",
             templateUrl : "/views/session/login.html"
       })
-      .state('logout',{
-
-      })
       .state('register', {
+            templateUrl : "/views/session/register.html",
+            controller : "RegisterController",
             templateUrl : "/views/session/register.html"
-
       });
 
       $stateProvider
@@ -118,4 +121,15 @@ angular
 
       $routeProvider.otherwise({redirectTo: '/'});
 
+})
+.run(function ($rootScope, AUTH_EVENTS, Auth) {
+    $rootScope.$on('$stateChangeStart', 
+    function(event, next ){
+        if( !Auth.isLoggedIn() ){
+            $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+        }
+
+    })
+
 });
+

@@ -10,28 +10,45 @@
 
 angular.module('cryptClientApp')
 .run(function($httpBackend) {
-    
-    $httpBackend.whenGET("/api/users").respond(  function(){
+
         var users= [
             {
                 id : 2,
                 email : "tux@tux.com",
+                password : "pass",
                 friends : [ 3, 4 ]
             },
             {
                 id : 3,
                 email : "linux@linux.com",
+                email : "tux@tux.com",
                 friends : [ 2 ]
             },
             {
                 id : 4,
+                email : "tux@tux.com",
                 email : "fabrice@fabrice.com"
             },
             {
                 id : 5,
+                email : "tux@tux.com",
                 email : "levinas@levinas.com"
             }
         ];
+
+        function userExists( cred ){
+            var ret = false;
+
+            angular.forEach( users, function( v , k ){
+                if( v.email == cred.email && v.password == cred.password  ){
+                    ret = true;
+                }
+            });
+
+            return ret;
+        }
+    
+    $httpBackend.whenGET("/api/users").respond(  function(){
 
         return [200, users, {}];
     });
@@ -72,6 +89,26 @@ angular.module('cryptClientApp')
         return [200, groups, {}];
     });
 
+    $httpBackend.whenPOST('/session/login').respond( function( method, url, data ){
+            var cred = { };
+            cred = angular.fromJson( data )
+            var ret = userExists( cred );
+            if ( ret ){
+                return [ 200, {}, {} ]
+            }
+            else{
+                return [401, {}, {}];
+            }
+    });
+
+    $httpBackend.whenPOST('/session/register').respond( function( method, url, params ){
+
+    });
+
+    $httpBackend.whenPOST('/session/logout').respond( function( method, url, params ){
+
+    });
+
     $httpBackend.whenGET( /(\?|\&)([^=]+)\=([^&]+)/ ).respond(  function(method, url, params  ){
 
         console.log( method );
@@ -100,6 +137,7 @@ angular.module('cryptClientApp')
 
 
     $httpBackend.whenGET(/views\//).passThrough();
+    $httpBackend.whenGET(/images\//).passThrough();
     
 });
 

@@ -2,9 +2,15 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title> CryptoOne </title>
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
+    <!--
+       -<meta name="viewport" content="width=device-width">
+       -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
@@ -18,34 +24,47 @@
     <link rel="stylesheet" href="styles/blog.css">
     <!-- endbuild -->
 
-    <style>
-    #view-source {
-      position: fixed;
-      display: block;
-      right: 0;
-      bottom: 0;
-      margin-right: 40px;
-      margin-bottom: 40px;
-      z-index: 900;
-    }
+    <style type="text/css">
+        /**
+         * Hide when Angular is not yet loaded and initialized
+         */
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+          display: none !important;
+        }
     </style>
 
+
+
   </head>
-  <body ng-app="cryptClientApp"  ng-controller="MainController" ng-cloak>
+  <body ng-app="cryptClientApp" layout="column" ng-controller="MainController" ng-cloak>
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <md-toolbar layout="row" layout-align="center end" class="md-thin">
-            <h1> CryptOne </h1>
+    <md-toolbar layout="row" layout-align="center end" layout="row" class="md-thin">
+        <div  ng-controller="SessionController" > 
+            <md-button ng-if="!isLoggedIn" ui-sref="login" >
+                login
+            </md-button>
 
+            <md-button ng-if="!isLoggedIn" ui-sref="register" >
+                register
+            </md-button>
+
+            <md-button ng-if="isLoggedIn" ng-click="logout()">
+                logout   
+            </md-button>
+
+        </div>
+
+            <h1> CryptOne </h1>
             <ng-messages when="error">
                 {{ error }}
             </ng-messages>
     </md-toolbar>
 
 
-    <div ng-cloak=""   class="tabsdemoDynamicHeight">
+    <div ng-cloak="" ng-if="isLoggedIn" class="tabsdemoDynamicHeight">
         <md-content>
             <md-tabs  md-dynamic-height="" md-border-bottom="" >
                 <md-content class="md-padding mg-warn">
@@ -60,53 +79,34 @@
     </div> 
     
 
-        <div class="container-fluid row" style="margin-top:20px;">
-            <div class="col-md-1" style="height:500px" ng-cloak>
-                    <div>
-                        <md-button ng-click="goHome()" class="md-fab md-primary" aria-label="FAB">
-                            <md-tooltip  style="backgroung-color:red;">
-                                <b>home</b>
-                            </md-tooltip>
-                            <span class="glyphicon glyphicon-home"></span>
-                        </md-button>
+        <div flex  ng-if="isLoggedIn" layout="column">
 
-                        <md-button ng-click="goUpload()" class="md-fab step md-warn" aria-label="FAB">
-                            <md-tooltip style="backgroung-color:red;">
-                                <b>private upload</b>
-                            </md-tooltip>
-                            <span class="glyphicon glyphicon-cloud-upload"></span>
-                        </md-button>
-
-                        <md-button class="md-fab" aria-label="FAB">
-                            <md-tooltip style="backgroung-color:red;">
-                                <b>Friends</b>
-                            </md-tooltip>
-                            <span class="glyphicon glyphicon-user"></span>
-                        </md-button>
-
-                        <md-button class="md-fab" aria-label="FAB">
-                            <md-tooltip style="backgroung-color:red;">
-                                <b>Add Group</b>
-                            </md-tooltip>
-                            <span class="glyphicon glyphicon-plus"></span>
-                        </md-button>
-                    </div>
-            </div>
+            <mg-sidenav layout="row" md-is-locked-open="$media('gt-sm')" md-component-id="left" class="md-sidenav-left md-whiteframe-z2" ng-cloak>
+                        <md-list>
+                            <md-item>
+                                <md-button  ng-click="goHome()" class="menu" aria-label="home">
+                                    <md-icon md-svg-src="/images/48/home.svg" class="avatar"></md-icon>
+                                        Home
+                                </md-button>
+                            </md-item>
+                            
+                            <md-item>
+                                <md-button  ng-click="goUpload()" class="menu" aria-label="upload">
+                                    <md-icon md-svg-src="/images/18/upload.svg" class="avatar"></md-icon>
+                                        upload
+                                </md-button>
+                            </md-item>
+                        </md-list>
+            </md-sidenav>
 
 
-            <div class="col-md-8 " style="height:600px; width:1100px">
-                    <div class="panel panel-info" >
-                        <div class="panel-heading">
-                            <h1 class="panel-title"> {{ title }}  </h1>
-                        </div>
-                        <div class="panel-body">
-                            <div class="container-fluid" ui-view="">
-                            </div>
-                        </div>
-                    </div>
-            </div>
+            <md-content flex id="content">
+                <ui-view></ui-view>
+            </md-content>
+
         </div>
 
+        <ui-view ng-if="!isLoggedIn" layout-align="center end" layout="row"></ui-view>
 
 
     <!-- build:js(.) scripts/vendor.js -->
