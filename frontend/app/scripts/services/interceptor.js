@@ -8,7 +8,7 @@
  * Service in the cryptClientApp.
  */
 angular.module('cryptClientApp')
-.factory('Interceptor', function($q, $location, Storage ){
+.factory('Interceptor', function($q, $location, Storage, $rootScope, AUTH_EVENTS ){
 return {
 
 /*
@@ -75,31 +75,14 @@ response : function( res ){
 /*
 * Handle authentication errors in response object
 */
-responseError: function( error) {
-
-/*
- *        console.log( error )
- *
- *    
- *        var q = $q.defer();
- *
- *        if( error ){
- *             q.resolve( { error : error } )
- *        }
- *        q.reject()
- *
- *        return q.promise;
- */
-
-
-
-    /*
-     *if(response.status === 401 || response.status === 403) {
-     *    window.document.url ='#/login';
-     *}
-     *return $q.reject(response);
-     */
-
+responseError: function( response ) {
+      $rootScope.$broadcast({
+        401: AUTH_EVENTS.notAuthenticated,
+        403: AUTH_EVENTS.notAuthorized,
+        419: AUTH_EVENTS.sessionTimeout,
+        440: AUTH_EVENTS.sessionTimeout
+      }[response.status], response);
+      return $q.reject(response);
 },
 
 /*

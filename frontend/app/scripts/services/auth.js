@@ -8,8 +8,9 @@
  * Service in the cryptClientApp.
  */
 angular.module('cryptClientApp')
-.factory('Auth', function ($http, $state, Storage ) {
+.factory('Auth', function ($http, $state, $q, AUTH_EVENTS, Storage ) {
 var api = {};
+
 var currentSession = Storage.getAll() || {};
 
 
@@ -34,13 +35,24 @@ function register( user, success, error ){
     * Follow SRP Working-flow. ie :
     * Challenge -> Authenticate -> Authorize
     **/
-function login( user, success, error ){
+function login( user ){
+    var q = $q.defer();
     $http.post('/session/login/challenge', user).success(function( response, status , headers ){
-        Storage.set( "prikey", response.prikey );
-        var sessionHeader = headers();
-        storeSession( sessionHeader );
-        $state.go('api');
-    }).error(error);
+        /*
+         *Storage.set( "prikey", response.prikey );
+         *var sessionHeader = headers();
+         *storeSession( sessionHeader );
+         *$state.go('api');
+         */
+        Storage.set( "currentUser", response );
+        $rootScope.$broadcast( AUTH_EVENTS.loginSuccess );
+        q.resolve( { response : response , status : status, headers : headers } );
+    }).error( function(err){
+        $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+        q.reject( err );
+    });
+
+    return q.promise;
 }
 
 
