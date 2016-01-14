@@ -21,6 +21,7 @@ angular
     'ngMockE2E',
     'ui.grid',
     'ui.grid.selection',
+    'ngFileUpload',
     'ngSanitize'
   ])
   .config(function ($routeProvider, $resourceProvider, $stateProvider ) {

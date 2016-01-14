@@ -82,43 +82,61 @@ return {
     return{
         restrict : 'E',
         transclude : true,
-        template : '<div> <form enctype="multipart/form-data"> <label class="fileupload" > <input id="uploader" type="file" onchange="angular.element(this).scope().filesChanged(this)"  multiple/><span> Upload </span></label> </form> </div>'+
-                    '<li ng-repeat="file in files">{{ file.name }}</li>',
+        templateUrl : '/views/documents/widget.uploader.html',
         scope : {
             cryptfiles : '=',
             uploader : '=',
         },
-        controller : function( $scope, $compile ){
+        controller : function( $scope, $compile, Upload ){
+            $scope.files = [];
+            $scope.filesString = [];
 
-            $scope.uploadFiles = function(files, errFiles) {
-                $scope.files = files;
-                $scope.errFiles = errFiles;
-                angular.forEach(files, function(file) {
-                    file.upload = Upload.upload({
-                        url: '/api/addDocuments',
-                        data: {file: file}
-                    });
+            $scope.$watch( "files", function( _new, _old ){
+                if ( _new !== _old  && _new !== null ){
+                    console.log( _new[0] )
+                    $scope.filesString.push( _new[0] );
+                }
+            });
 
-                    file.upload.then(function (response) {
-                        $timeout(function () {
-                            file.result = response.data;
-                        });
-                    }, function (response) {
-                        if (response.status > 0)
-                            $scope.errorMsg = response.status + ': ' + response.data;
-                    }, function (evt) {
-                        file.progress = Math.min(100, parseInt(100.0 * 
-                                                evt.loaded / evt.total));
-                    });
-                });
+            $scope.removeFile = function( index ){
+               var ret = [];
+               var values = $scope.filesString; 
+               angular.forEach( values , function( v, k ){
+                    if ( k !== index ){
+                        ret.push( v );
+                    }
+               })
+               
+               $scope.filesString = ret; 
             };
 
+            $scope.upload = function(){
+/*
+ *                angular.forEach(files, function(file) {
+ *                    file.upload = Upload.upload({
+ *                        url: '/api/addDocuments',
+ *                        data: {file: file}
+ *                    });
+ *
+ *                    file.upload.then(function (response) {
+ *                        $timeout(function () {
+ *                            file.result = response.data;
+ *                        });
+ *                    }, function (response) {
+ *                        if (response.status > 0)
+ *                            $scope.errorMsg = response.status + ': ' + response.data;
+ *                    }, function (evt) {
+ *                        file.progress = Math.min(100, parseInt(100.0 * 
+ *                                                evt.loaded / evt.total));
+ *                    });
+ *                });
+ */
+
+            };
 
         },
 
         link : function(  scope, element, attributs){
-            angular.element( element ).find( "#uploader" ).css( { position : "fixed", top : "-1000px" } );
-            angular.element( element ).find( ".fileupload" ).css( { display : "inline-block", background : "grey",  radius : "5px", padding: "2px 4px", margin : "4px" } );
 
         },
     };
