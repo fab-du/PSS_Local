@@ -28,9 +28,9 @@ api.login = function( user ){
     $http.post('/session/login', user).success(function( response, status , headers ){
         var authHeaders = headers();
 
-        $rootScope.$broadcast( AUTH_EVENTS.loginSuccess );
-        Storage.putAll( authHeaders );
         Storage.set("currentUser", user.email );
+        //Storage.putAll( authHeaders );
+        $rootScope.$broadcast( AUTH_EVENTS.loginSuccess );
         q.resolve( status  );
     }).error( function(err){
         $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
@@ -45,9 +45,7 @@ api.login = function( user ){
 api.isLoggedIn =  function() {
     var currentUser = Storage.get("currentUser");
     var ret = currentUser !== null;
-    console.log( "from isloggedin" );
-    console.log( ret )
-    return  currentUser !== null ;
+    return  ret;
 }
 
 

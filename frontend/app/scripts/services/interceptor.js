@@ -66,9 +66,6 @@ if( config.headers.server_public_key === undefined ) {
 },
 
 response : function( res ){
-    /*
-     *console.log( res );
-     */
     return res;
 },
 
@@ -80,8 +77,12 @@ responseError: function( response ) {
         401: AUTH_EVENTS.notAuthenticated,
         403: AUTH_EVENTS.notAuthorized,
         419: AUTH_EVENTS.sessionTimeout,
-        440: AUTH_EVENTS.sessionTimeout
+        440: AUTH_EVENTS.sessionTimeout,
+
+        404: AUTH_EVENTS.notFound,
+
       }[response.status], response);
+
       return $q.reject(response);
 },
 

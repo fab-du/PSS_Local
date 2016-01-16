@@ -13,38 +13,50 @@ return{
     restrict : 'E',
     transclude : false,
     scope : {
-        data : '='
+        data : '=',
+        crudOnSelect : '=', // display delete/add button on select.
+        onSelect : '='
     },
-    link : function( scope ){
+    link : function( scope, el ){
+
         scope.gridOptions = {
             enableSelectAll: true,
             enableSelection: true,
             enableFiltering: true,
+            showHeader : false,
             selectionRowHeaderWidth: 35,
             rowHeight: 35,
             showGridFooter:true
         };
 
-
         var data = [];
-        var _obj = [];
+        var selectHandler = function( row ){
+                                console.log( row );
+                            };
 
         scope.$watch('data', function(){
             scope.gridOptions.data = scope.data;
-            console.log( scope.data );
-            console.log( data );
         });
+
+        scope.$watch('onSelect', function(){
+            if( angular.isFunction( scope.onSelect ) ){
+                selectHandler = scope.onSelect;
+            }
+        });
+
+        scope.$watch('crudOnSelect', function(){
+            if( scope.crudOnSelect === "true" ){
+                console.log( "lkajsdf" )
+            }
+        });
+
 
       scope.myStyle = '.grid { border: 1px solid blue }';
 
 
         scope.gridOptions.onRegisterApi = function( gridApi ) {
             scope.gridApi = gridApi;
-
-
-            gridApi.selection.on.rowSelectionChanged( scope, function(row){
-            
-            });
+            gridApi.selection.on.rowSelectionChanged( scope, selectHandler );
         };
 
 

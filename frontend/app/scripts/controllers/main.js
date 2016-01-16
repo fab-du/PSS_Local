@@ -9,7 +9,7 @@
  */
 angular.module('cryptClientApp')
 
-.controller('MainController', function ( $q, $scope, $rootScope, AUTH_EVENTS,  $state, $mdSidenav, $mdBottomSheet, Storage, Auth ) {
+.controller('MainController', function ( $q, $scope, $rootScope, AUTH_EVENTS,  $state, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth ) {
 
     $scope.errors = "";
     $rootScope.isLoggedIn = false;
@@ -55,27 +55,42 @@ angular.module('cryptClientApp')
         $state.go("documents.upload");
     };
 
+    function showMessage( type, msg ){
+        $mdToast.show({
+                template: '<md-toast class="md-toast ' + type +'">' + msg + '</md-toast>',
+                hideDelay: 6000,
+                position: 'center left'
+        });
+    }
+
 
     // auth message handler 
 	$rootScope.$on(AUTH_EVENTS.notAuthorized, function(){
+        Storage.deleteAll();
         console.log( AUTH_EVENTS.notAuthorized );
     });
 	$rootScope.$on(AUTH_EVENTS.notAuthenticated, function(){
         $rootScope.isLoggedIn = false;
-        window.location.href = "/"
+        Storage.remove();
+        window.location.href = "/#/session/login"
     });
 	$rootScope.$on(AUTH_EVENTS.sessionTimeout, function(){
         console.log( AUTH_EVENTS.sessionTimeout );
+        Storage.remove();
         window.location.href = "/"
     });
 	$rootScope.$on(AUTH_EVENTS.logoutSuccess, function(){
         $rootScope.isLoggedIn = false;
+        Storage.remove();
         window.location.href = "/"
     });
 	$rootScope.$on(AUTH_EVENTS.loginSuccess, function(){
         $rootScope.isLoggedIn = Auth.isLoggedIn();
-        $rootScope.isLoggedIn = true;
         window.location.href = "#/users";
+    });
+
+	$rootScope.$on(AUTH_EVENTS.notFound, function(){
+        showMessage("success-toast",  AUTH_EVENTS.notFound );
     });
 
 

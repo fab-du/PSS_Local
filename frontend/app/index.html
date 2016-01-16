@@ -21,7 +21,9 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/blog.css">
+    <!--
+       -<link rel="stylesheet" href="styles/blog.css">
+       -->
     <!-- endbuild -->
 
     <style type="text/css">
@@ -81,7 +83,7 @@
 
         <div flex  ng-if="isLoggedIn" layout="column">
 
-            <mg-sidenav layout="row" md-is-locked-open="$media('gt-sm')" md-component-id="left" class="md-sidenav-left md-whiteframe-z2" ng-cloak>
+            <mg-sidenav layout="row" md-is-locked-open="$mdMedia('gt-md')" md-component-id="left" class="md-sidenav-left md-whiteframe-z2" ng-cloak>
                         <md-list>
                             <md-item>
                                 <md-button  ng-click="goHome()" class="menu" aria-label="home">
@@ -123,7 +125,6 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-material/angular-material.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
     <script src="bower_components/angular-mocks/angular-mocks.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
     <script src="bower_components/ng-file-upload-shim/ng-file-upload-shim.js"></script>
@@ -145,8 +146,9 @@
         <script src="scripts/controllers/groups.js"></script>
         <script src="scripts/controllers/documents.js"></script>
         <script src="scripts/controllers/friends.js"></script>
-        <script src="scripts/services/serverdatamodel.js"></script>
-        <script src="scripts/services/server.js"></script>
+        <!--
+           -<script src="scripts/services/server.js"></script>
+           -->
         <script src="scripts/filters/filter.js"></script>
         <script src="scripts/services/interceptor.js"></script>
         <script src="scripts/services/auth.js"></script>

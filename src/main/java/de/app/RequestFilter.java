@@ -47,6 +47,10 @@ public class RequestFilter implements Filter {
 		String realm_header = request.getHeader("realm");
 		String hash_header  = request.getHeader("hash-algorithm");
 
+		/*
+		 * Set xrf_token 
+		 * 
+		 */
 	    if( xrf_token == null ){
 		   	SecureRandom random = new SecureRandom();
 		   	String angular_token = new BigInteger(130, random ).toString();

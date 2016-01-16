@@ -18,16 +18,15 @@ angular
     'ngRoute',
     'ngMaterial',
     'ui.router',
-    'ngMockE2E',
+    /*
+     *'ngMockE2E',
+     */
     'ui.grid',
     'ui.grid.selection',
     'ngFileUpload',
     'ngSanitize'
   ])
-  .config(function ($routeProvider, $resourceProvider, $stateProvider, $urlRouterProvider ) {
-
-     $urlRouterProvider.otherwise("/");
-
+  .config(function ($routeProvider, $resourceProvider, $stateProvider ) {
 
 
       $stateProvider
@@ -42,7 +41,6 @@ angular
             templateUrl : "/views/session/login.html"
       })
       .state('register', {
-            templateUrl : "/views/session/register.html",
             controller : "RegisterController",
             templateUrl : "/views/session/register.html"
       });
@@ -124,12 +122,12 @@ angular
 })
 .run(function ($rootScope, AUTH_EVENTS, Auth) {
     $rootScope.$on('$stateChangeStart', 
-    function(event, next ){
+    function(){
         if( !Auth.isLoggedIn() ){
             $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
         }
 
-    })
+    });
 
 });
 

@@ -8,136 +8,138 @@
  * Service in the cryptClientApp.
  */
 
-angular.module('cryptClientApp')
-.run(function($httpBackend) {
-
-        var users= [
-            {
-                id : 2,
-                email : "tux@tux.com",
-                password : "pass",
-                friends : [ 3, 4 ]
-            },
-            {
-                id : 3,
-                email : "linux@linux.com",
-                email : "tux@tux.com",
-                friends : [ 2 ]
-            },
-            {
-                id : 4,
-                email : "tux@tux.com",
-                email : "fabrice@fabrice.com"
-            },
-            {
-                id : 5,
-                email : "tux@tux.com",
-                email : "levinas@levinas.com"
-            }
-        ];
-
-        function userExists( cred ){
-            var ret = false;
-
-            angular.forEach( users, function( v , k ){
-                if( v.email == cred.email && v.password == cred.password  ){
-                    ret = true;
-                }
-            });
-
-            return ret;
-        }
-    
-    $httpBackend.whenGET("/api/users").respond(  function(){
-
-        return [200, users, {}];
-    });
-
-    $httpBackend.whenGET( "/api/groups" ).respond(  function(method, url, params  ){
-
-        console.log( params );
-
-        console.log( url );
-
-        var groups= [
-            {
-                id : 2,
-                gv : 5,
-                name : "levinas_group",
-                users : [ 5,1 ]
-            },
-            {
-                id : 3,
-                gv : 4,
-                name : "fabrice_group",
-                users : [ 4,1 ]
-            },
-            {
-                id : 4,
-                gv : 2,
-                name : "tux_group",
-                users : [ 2 ]
-            },
-            {
-                id : 5,
-                gv : 3,
-                name : "linux_group",
-                users : [ 3 ]
-            }
-        ];
-
-        return [200, groups, {}];
-    });
-
-    $httpBackend.whenPOST('/session/login').respond( function( method, url, data ){
-            var cred = { };
-            cred = angular.fromJson( data )
-            var ret = userExists( cred );
-            if ( ret ){
-                return [ 200, {}, {} ]
-            }
-            else{
-                return [401, {}, {}];
-            }
-    });
-
-    $httpBackend.whenPOST('/session/register').respond( function( method, url, params ){
-
-    });
-
-    $httpBackend.whenPOST('/session/logout').respond( function( method, url, params ){
-
-    });
-
-    $httpBackend.whenGET( /(\?|\&)([^=]+)\=([^&]+)/ ).respond(  function(method, url, params  ){
-
-        console.log( method );
-        console.log( url );
-        console.log( params );
-
-        var my_groups= [
-            {
-                id : 2,
-                gv : 5,
-                name : "levinas_group",
-                users : [ 5, 1 ]
-            },
-            {
-                id : 3,
-                gv : 4,
-                name : "fabrice_group",
-                users : [ 4 ]
-            }
-            
-        ];
-
-        return [200, my_groups, {}];
-    });
-
-
-
-    $httpBackend.whenGET(/views\//).passThrough();
-    $httpBackend.whenGET(/images\//).passThrough();
-    
-});
-
+/*
+ *angular.module('cryptClientApp')
+ *.run(function($httpBackend) {
+ *
+ *        var users= [
+ *            {
+ *                id : 2,
+ *                email : "tux@tux.com",
+ *                password : "pass",
+ *                friends : [ 3, 4 ]
+ *            },
+ *            {
+ *                id : 3,
+ *                email : "linux@linux.com",
+ *                email : "tux@tux.com",
+ *                friends : [ 2 ]
+ *            },
+ *            {
+ *                id : 4,
+ *                email : "tux@tux.com",
+ *                email : "fabrice@fabrice.com"
+ *            },
+ *            {
+ *                id : 5,
+ *                email : "tux@tux.com",
+ *                email : "levinas@levinas.com"
+ *            }
+ *        ];
+ *
+ *        function userExists( cred ){
+ *            var ret = false;
+ *
+ *            angular.forEach( users, function( v , k ){
+ *                if( v.email == cred.email && v.password == cred.password  ){
+ *                    ret = true;
+ *                }
+ *            });
+ *
+ *            return ret;
+ *        }
+ *    
+ *    $httpBackend.whenGET("/api/users").respond(  function(){
+ *
+ *        return [200, users, {}];
+ *    });
+ *
+ *    $httpBackend.whenGET( "/api/groups" ).respond(  function(method, url, params  ){
+ *
+ *        console.log( params );
+ *
+ *        console.log( url );
+ *
+ *        var groups= [
+ *            {
+ *                id : 2,
+ *                gv : 5,
+ *                name : "levinas_group",
+ *                users : [ 5,1 ]
+ *            },
+ *            {
+ *                id : 3,
+ *                gv : 4,
+ *                name : "fabrice_group",
+ *                users : [ 4,1 ]
+ *            },
+ *            {
+ *                id : 4,
+ *                gv : 2,
+ *                name : "tux_group",
+ *                users : [ 2 ]
+ *            },
+ *            {
+ *                id : 5,
+ *                gv : 3,
+ *                name : "linux_group",
+ *                users : [ 3 ]
+ *            }
+ *        ];
+ *
+ *        return [200, groups, {}];
+ *    });
+ *
+ *    $httpBackend.whenPOST('/session/login').respond( function( method, url, data ){
+ *            var cred = { };
+ *            cred = angular.fromJson( data )
+ *            var ret = userExists( cred );
+ *            if ( ret ){
+ *                return [ 200, {}, {} ]
+ *            }
+ *            else{
+ *                return [401, {}, {}];
+ *            }
+ *    });
+ *
+ *    $httpBackend.whenPOST('/session/register').respond( function( method, url, params ){
+ *
+ *    });
+ *
+ *    $httpBackend.whenPOST('/session/logout').respond( function( method, url, params ){
+ *
+ *    });
+ *
+ *    $httpBackend.whenGET( /(\?|\&)([^=]+)\=([^&]+)/ ).respond(  function(method, url, params  ){
+ *
+ *        console.log( method );
+ *        console.log( url );
+ *        console.log( params );
+ *
+ *        var my_groups= [
+ *            {
+ *                id : 2,
+ *                gv : 5,
+ *                name : "levinas_group",
+ *                users : [ 5, 1 ]
+ *            },
+ *            {
+ *                id : 3,
+ *                gv : 4,
+ *                name : "fabrice_group",
+ *                users : [ 4 ]
+ *            }
+ *            
+ *        ];
+ *
+ *        return [200, my_groups, {}];
+ *    });
+ *
+ *
+ *
+ *    $httpBackend.whenGET(/views\//).passThrough();
+ *    $httpBackend.whenGET(/images\//).passThrough();
+ *    
+ *});
+ *
+ */
