@@ -3,9 +3,7 @@ package de.app;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 
 import javax.annotation.Priority;
 import javax.servlet.Filter;
@@ -18,18 +16,52 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClientException;
 
-import com.nimbusds.srp6.cli.SRP6Client.User;
+import com.google.gson.Gson;
+import de.cryptone.key.*;
 
 @Component
 @Priority(value=1)
 public class RequestFilter implements Filter {
 
-	public static final String URL = "http://localhost:8080";
+	public static int counter;
+	public static boolean isLoggedIn = false;
 
+	public static final String PROTECTED_URI = "api";
+	
+	public static final String URL = "http://localhost:8080";
+	
+	public static final String CONTENT_SECURITY_POLICY = "content-security-header", 
+							   CONTENT_SECURITY_POLICY_VALUE = "script-src 'self'";
+	
+	public static final String X_XSRF_TOKEN = "X-XSRF-TOKEN";
+	
+	public static final String REALM = "realm", 
+							   REALM_VALUE="realm";
+	
+	public static final String WWW_AUTHENTICATION = "WWW-Authentication";
+	
+	public static final String HASH_ALGORITHM = "hash-algorithm"; 
+	
+	public static final String EXPIRES_IN = "EXPIRES-IN";
+	
+	public static final String CLIENT_PUBLIC_KEY = "CLIENT-PUBLIC-KEY";
+	
+	public static final String SERVER_PUBLIC_KEY = "SERVER-PUBLIC-KEY";
+	
+	public static final String TYP = "typ",
+							   TYP_VALUE = "JWT";
+	
+	public static final String ALG = "alg",
+							   ALG_VALUE = "RS512";
+	
+	public static final String AUTHORIZATION = "Authorization",
+			   AUTHORIZATION_VALUE = "Bearer ";
+	
+	
+	
+	
 	@Autowired
 	RestRequest client;
 
@@ -39,48 +71,85 @@ public class RequestFilter implements Filter {
 			throws IOException, ServletException {
 	    HttpServletResponse response = (HttpServletResponse) res;
 	    HttpServletRequest request = (HttpServletRequest) req;
+	    
+	    
+	    /*
+	     * if Authorization Header is not set, and user attempt to
+	     * reach protected api
+	     * redirect to default error handler
+	     */
+	    String authorization = request.getHeader( AUTHORIZATION );
+	    if( authorization == null ){
+	    	String apiUri = null;
+	    	try {
+	    		apiUri = request.getRequestURI().trim().split("/")[1]; 
+			} catch (Exception e) {
+				System.out.println( e.toString() );
+			}
+	    	
+	    	if( apiUri != null && apiUri.trim().equals( PROTECTED_URI ) ){
+	    		this.redirect(request, response, "/auth_error");
+	    	}
+	    }
 
+	    
+	    /*
+	     * if the X-XSRF-TOKEN is not set, that mean it s the first
+	     * REQ to the Local Server. 
+	     * Set X-XSRF-TOKEN
+	     */
+	    String xsrfToken = request.getHeader( X_XSRF_TOKEN );
+	    if( xsrfToken == null ){
+	    	
+	     	SecureRandom random = new SecureRandom();
+		    xsrfToken = new BigInteger(130, random ).toString();
+		    response.setHeader( X_XSRF_TOKEN , xsrfToken);
+	    	response.setHeader(CONTENT_SECURITY_POLICY, CONTENT_SECURITY_POLICY_VALUE);    	
+	    	String keypair = new KeyPair().generate(); 
+	    	System.out.println(keypair);
+	    	Map<String, String> _keypair = new Gson().fromJson(keypair, Map.class);
+	    	response.setHeader(CLIENT_PUBLIC_KEY, _keypair.get("pubKey"));
+	    }
 
-	    String xrf_token    = request.getHeader("X-XSRF-TOKEN");
-		String auth_header  = request.getHeader("Authorization");
-		String auth1_header = request.getHeader("WWW-Authenticate");
-		String realm_header = request.getHeader("realm");
-		String hash_header  = request.getHeader("hash-algorithm");
-
-		/*
-		 * Set xrf_token 
-		 * 
-		 */
-	    if( xrf_token == null ){
-		   	SecureRandom random = new SecureRandom();
-		   	String angular_token = new BigInteger(130, random ).toString();
-		   	response.setHeader("X-XSRF-TOKEN", angular_token);
-	    }else{}
-
-	    if( auth_header  == null ) response.setHeader("Authorization", "SRP");
-	    if( auth1_header == null ) response.setHeader("WWW-Authenticate", "SRP");
-		if( realm_header == null ) response.setHeader("realm", "realm");
-		if(hash_header   == null ) response.setHeader("hash-algorithm", "SHA256");
-
-		response.setHeader("Access-Control-Expose-Headers", "Client_pubkey, Expires");
-
-		//response.sendRedirect("/session/notAuthenticate");
-
-
-	    String method = request.getMethod();
-				      try {
-							chain.doFilter(request, response);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (ServletException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}	
+	    
+	    
+	    String sessionUri = null; 
+	    try {
+		     sessionUri = request.getRequestURI().trim().split("/")[1].trim();  
+		} catch (Exception e) {
+			System.out.println( e.toString() );
+		}
+	    
+	 	/*
+    	 * JWT related header
+    	 */
+	    if ( sessionUri != null ){
+	    	response.setHeader( TYP , TYP_VALUE);
+	    	response.setHeader( ALG , ALG_VALUE);
+	    }
+	    
+	    try {
+	    		chain.doFilter(request, response);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ServletException e) {
+				e.printStackTrace();
+			}	
 	}
 
 
 
+	public void redirect( HttpServletRequest request, HttpServletResponse response, String uri ){
+		try {
+			request.getServletContext().getRequestDispatcher(uri).forward(request, response);
+			return;
+		} catch (ServletException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void destroy() {}
 	@Override
