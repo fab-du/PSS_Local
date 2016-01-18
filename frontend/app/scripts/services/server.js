@@ -102,22 +102,24 @@ angular.module('cryptClientApp')
             }
     });
 
+    $httpBackend.whenPOST('/session/register').respond( function( method, url, data ){
+        console.log(data)
+        if( angular.isUndefined( data ) || data === null ){
+            return [400, { message : 'registration failed' }, {}];
+        }
+        return [200, {}, {}];
+    });
+
     $httpBackend.whenPOST('/api/documents/addDocuments').respond( function( method, url, params ){
 
     });
 
-    $httpBackend.whenPOST('/session/register').respond( function( method, url, params ){
-    });
 
     $httpBackend.whenPOST('/session/logout').respond( function( method, url, params ){
 
     });
 
     $httpBackend.whenGET( /(\?|\&)([^=]+)\=([^&]+)/ ).respond(  function(method, url, params  ){
-
-        console.log( method );
-        console.log( url );
-        console.log( params );
 
         var my_groups= [
             {

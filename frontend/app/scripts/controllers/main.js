@@ -95,6 +95,18 @@ angular.module('cryptClientApp')
         Storage.remove();
     });
 
+	$rootScope.$on(AUTH_EVENTS.registrationFailed, function(){
+        $window.location.href = "#/";
+        $rootScope.isLoggedIn = false;
+        Storage.remove();
+    });
+
+	$rootScope.$on(AUTH_EVENTS.registrationSuccess, function(){
+        $window.location.href = "#/";
+        $rootScope.isLoggedIn = false;
+        Storage.remove();
+    });
+
 	$rootScope.$on(AUTH_EVENTS.notFound, function(){
         showMessage("success-toast",  AUTH_EVENTS.notFound );
     });

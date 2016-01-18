@@ -21,9 +21,9 @@ angular.module('cryptClientApp')
         };
 
         $scope.logout = function(){
-            console.log( "come hree" )
                Storage.remove();
                $rootScope.isLoggedIn = false;
+               $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
                $state.go('login');
         };
 
@@ -33,10 +33,8 @@ angular.module('cryptClientApp')
     init();
 })
 .controller('RegisterController', function( $scope, $rootScope, Storage, Auth, AUTH_EVENTS ){
-
         $scope.register = function( credentials ){
-            console.log( credentials )
-            Auth.register( credentials ); 
+            Auth.register( credentials );
         };
 
 })

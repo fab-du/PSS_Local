@@ -86,40 +86,21 @@ api.logout =  function(){
 };
 
 
-api.register = function( user, success, error ){
-    var count = 0;
+api.register = function( credentials ){
+    var q = $q.defer();
 
-    angular.forEach( user , function(value, key){
+    console.log('come here');
 
-        if( key === 'email' ){
-            count++;
-        }  
-
-        if( key === 'password') {
-          count++;
-        }
-
-        if( key === 'passphrase'){
-           count++;
-        } 
-
-        if( key === 'firstname'){
-           count++;
-        } 
-        if( key === 'secondname') {
-          count++;
-        }
-        if( key === 'company') {
-          count++;
-        }
-    })    
-
-    if( count === 6 ){
-        return register( user, success, error );
-    }
-    else{
-        $rootScope.$broadcast( AUTH_EVENTS.loginFailed );
-    }
+    $http.post('/session/register', credentials ).success( function( res ){
+        var message = { message : 'Registration success' };
+        $rootScope.$broadcast( AUTH_EVENTS.registrationSuccess );
+        q.resolve( message );
+    }).error( function( err ){
+        var err = { error : 'Authentication failed' };
+        $rootScope.$broadcast( AUTH_EVENTS.registrationFailed );
+        q.reject( err );
+    });
+    return q.promise;
 };
 
 

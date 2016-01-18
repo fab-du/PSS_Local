@@ -14,6 +14,8 @@ angular.module('cryptClientApp')
     logoutSuccess: 'auth-logout-success',
     sessionTimeout: 'auth-session-timeout',
     notAuthenticated: 'auth-not-authenticated',
-    notFound: 'reosource-not-found',
+    notFound: 'resource-not-found',
+    registrationFailed: 'registration-failed',
+    registrationSuccess: 'registration-success',
     notAuthorized: 'auth-not-authorized'
 });
