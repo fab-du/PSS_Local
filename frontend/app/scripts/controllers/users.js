@@ -11,19 +11,9 @@ angular.module('cryptClientApp')
 .controller('UsersController', function ( $scope, $rootScope, $state, Rest, Storage ) {
 
     function init(){
-
         Rest.User.find().$promise.then( function( users ){
             $scope.users = users; 
         });
-
-
-        /*
-         *if( !Storage.get("users") ){
-         *}
-         *else{
-         *    $scope.users = Storage.get("users"); 
-         *}
-         */
 
     }
 
