@@ -16,7 +16,7 @@ public class Get extends IRest {
 		
 		 try {
 			return this.rest.getObject()
-						 .getForEntity(URL + "/api/users", (Class<? extends ArrayList<HashMap<String,Object>>>)ArrayList.class);
+						 .getForEntity(URL + "/api" + uri, (Class<? extends ArrayList<HashMap<String,Object>>>)ArrayList.class);
 		} catch (Exception e) {
 			return new ResponseEntity<ArrayList<HashMap<String,Object>>>( new ArrayList<>(), HttpStatus.NO_CONTENT );
 		}

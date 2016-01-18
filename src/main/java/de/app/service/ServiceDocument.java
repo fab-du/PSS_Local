@@ -8,40 +8,12 @@ import java.security.Key;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.client.RestClientException;
-
-import de.app.RestRequest;
 import de.app.model.KeyPair;
-import de.cryptone.crypto.CryptFactor;
-//import de.cryptone.crypto.RSAPBECrypto;
 
 public class ServiceDocument {
 
-//	@Autowired
-//	RestRequest rest; 
-//	private final static String URL = "http://localhost:8080";
-//
-//
-//	public String getPublicKey( Long currentUserId ) {
-//	     String url =  URL + "/api/keypair/" + currentUserId; 
-//
-//     	 String pubkey;
-//		try {
-//			pubkey = rest.getObject()
-//			.getForEntity(url, String.class ).getBody();
-//
-//			if( pubkey != null ) return pubkey;
-//     	 					  return null;
-//		} catch (Exception e) {
-//			return null;
-//		}
-//	}
 
 	private String decrypt_symkey( String enc_symkey, String passphrase, String enc_prikey, String prikey_salt ){
-	//	RSAPBECrypto rsa = ( RSAPBECrypto ) CryptFactor.getInstance(CryptFactor.CRYPT_ASYM_RSA_PBE);
-	//	String ret = rsa.decrypt(enc_prikey, passphrase, prikey_salt, enc_symkey);
-	//	return ret;
 		return null;
 	}
 
@@ -72,17 +44,19 @@ public class ServiceDocument {
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(cipherMode, secretKey);
              
-            FileInputStream inputStream = new FileInputStream(inputFile);
-            byte[] inputBytes = new byte[(int) inputFile.length()];
-            inputStream.read(inputBytes);
-             
-            byte[] outputBytes = cipher.doFinal(inputBytes);
-             
-            FileOutputStream outputStream = new FileOutputStream(outputFile);
-            outputStream.write(outputBytes);
-             
-            inputStream.close();
-            outputStream.close();
+            FileInputStream fis = new FileInputStream(inputFile);
+            FileOutputStream fos = new FileOutputStream(outputFile);
+
+            byte[] chunk = new byte[64];
+            
+            int readed;
+            while( ( readed = fis.read(chunk)) != -1 ){
+            	byte[] cipherBytes = cipher.update(chunk, 0, readed);
+            	fos.write(cipherBytes, 0, readed);
+            }
+            
+            fis.close();
+            fos.close();
              
         } catch ( Exception ex) {
           return; 
