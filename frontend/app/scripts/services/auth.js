@@ -29,15 +29,11 @@ function register( user, success, error ){
        var q = $q.defer();
        var value;
        
-
       angular.forEach( headers , function( _v, _k ){
-          console.log( _k )
           if ( !angular.isUndefined( _k )  &&  _k !== null && header === _k  ){
                   value = _v; 
                   ret = true;
-          }
-         else{}
-
+          }else{}
       });
 
       if ( ret ){
@@ -52,10 +48,7 @@ function register( user, success, error ){
 api.login = function( user ){
     var q = $q.defer();
     $http.post('/session/login', user).success(function( response, status , headers ){
-        var error = false;
-        var errorMessage;
         var authHeaders = headers();
-
         Storage.set("currentUser", user.email );
 
         angular.forEach( HEADERS , function( _v, _k ){
@@ -63,23 +56,17 @@ api.login = function( user ){
                 function( header ){
                     Storage.set( header.name , header.value  );
                },function(err){
-                    error = true;
-                    errorMessage = err;
-                    console.log( err )
+                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                    q.reject( err );
                });
         });
+        
 
-        if ( !error ){
-            $rootScope.$broadcast( AUTH_EVENTS.loginSuccess );
-            q.resolve( status  );
-        }
-        else{
-            $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-            q.reject( err );
-        }
+        $rootScope.$broadcast( AUTH_EVENTS.loginSuccess );
+        q.resolve( status  );
     }).error( function(err){
         $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-        q.reject( errorMessage );
+        q.reject( err );
     });
 
     return q.promise;

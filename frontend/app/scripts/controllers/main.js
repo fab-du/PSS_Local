@@ -9,7 +9,7 @@
  */
 angular.module('cryptClientApp')
 
-.controller('MainController', function ( $q, $scope, $rootScope, AUTH_EVENTS,  $state, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth ) {
+.controller('MainController', function ( $q, $scope, $window, $rootScope, AUTH_EVENTS,  $state, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth ) {
 
     $scope.errors = "";
     $rootScope.isLoggedIn = false;
@@ -72,21 +72,27 @@ angular.module('cryptClientApp')
 	$rootScope.$on(AUTH_EVENTS.notAuthenticated, function(){
         $rootScope.isLoggedIn = false;
         Storage.remove();
-        window.location.href = "/#/session/login"
+        $window.location.href = "/#/session/login"
     });
 	$rootScope.$on(AUTH_EVENTS.sessionTimeout, function(){
         console.log( AUTH_EVENTS.sessionTimeout );
         Storage.remove();
-        window.location.href = "/"
+        $window.location.href = "/"
     });
 	$rootScope.$on(AUTH_EVENTS.logoutSuccess, function(){
         $rootScope.isLoggedIn = false;
         Storage.remove();
-        window.location.href = "/"
+        $window.location.href = "/"
     });
 	$rootScope.$on(AUTH_EVENTS.loginSuccess, function(){
         $rootScope.isLoggedIn = Auth.isLoggedIn();
-        window.location.href = "#/users";
+        $window.location.href = "#/";
+    });
+
+	$rootScope.$on(AUTH_EVENTS.loginFailed, function(){
+        $window.location.href = "#/";
+        $rootScope.isLoggedIn = false;
+        Storage.remove();
     });
 
 	$rootScope.$on(AUTH_EVENTS.notFound, function(){

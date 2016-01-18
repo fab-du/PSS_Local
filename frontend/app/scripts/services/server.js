@@ -102,8 +102,11 @@ angular.module('cryptClientApp')
             }
     });
 
-    $httpBackend.whenPOST('/session/register').respond( function( method, url, params ){
+    $httpBackend.whenPOST('/api/documents/addDocuments').respond( function( method, url, params ){
 
+    });
+
+    $httpBackend.whenPOST('/session/register').respond( function( method, url, params ){
     });
 
     $httpBackend.whenPOST('/session/logout').respond( function( method, url, params ){
