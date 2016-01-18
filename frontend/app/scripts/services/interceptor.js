@@ -91,6 +91,7 @@ responseError: function( response ) {
 */
 requestError: function(rejection) {
 
+    return $q.reject( rejection );
 /*
  *    console.log( rejection );
  *

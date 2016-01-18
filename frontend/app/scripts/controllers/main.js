@@ -72,17 +72,17 @@ angular.module('cryptClientApp')
 	$rootScope.$on(AUTH_EVENTS.notAuthenticated, function(){
         $rootScope.isLoggedIn = false;
         Storage.remove();
-        $window.location.href = "/#/session/login"
+        $window.location.href = "/#/session/login";
     });
 	$rootScope.$on(AUTH_EVENTS.sessionTimeout, function(){
         console.log( AUTH_EVENTS.sessionTimeout );
         Storage.remove();
-        $window.location.href = "/"
+        $window.location.href = "/";
     });
 	$rootScope.$on(AUTH_EVENTS.logoutSuccess, function(){
         $rootScope.isLoggedIn = false;
         Storage.remove();
-        $window.location.href = "/"
+        $window.location.href = "/";
     });
 	$rootScope.$on(AUTH_EVENTS.loginSuccess, function(){
         $rootScope.isLoggedIn = Auth.isLoggedIn();
@@ -99,12 +99,14 @@ angular.module('cryptClientApp')
         $window.location.href = "#/";
         $rootScope.isLoggedIn = false;
         Storage.remove();
+        showMessage("success-toast",  AUTH_EVENTS.registrationFailed );
     });
 
 	$rootScope.$on(AUTH_EVENTS.registrationSuccess, function(){
         $window.location.href = "#/";
         $rootScope.isLoggedIn = false;
         Storage.remove();
+        showMessage("success-toast",  AUTH_EVENTS.registrationSuccess );
     });
 
 	$rootScope.$on(AUTH_EVENTS.notFound, function(){

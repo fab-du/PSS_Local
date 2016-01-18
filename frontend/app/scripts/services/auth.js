@@ -11,19 +11,6 @@ angular.module('cryptClientApp')
 .factory('Auth', function ($http, $state, $q, AUTH_EVENTS, Storage, HEADERS,  $rootScope ) {
 var api = {};
 
-
-function register( user, success, error ){
-    $http.post('/session/register', user).success(function(res) {
-        $state.go('login');
-    }).error(error);
-}
-
-
-/*
-    * Follow SRP Working-flow. ie :
-    * Challenge -> Authenticate -> Authorize
-    **/
-
    function findHeader( header, headers ){
        var ret = false;
        var q = $q.defer();
@@ -37,7 +24,7 @@ function register( user, success, error ){
       });
 
       if ( ret ){
-          q.resolve( { name :  header, value :  value } )
+          q.resolve( { name :  header, value :  value } );
       }
       else{
           q.reject( { err : 'header error \t' + header } );
@@ -51,7 +38,7 @@ api.login = function( user ){
         var authHeaders = headers();
         Storage.set("currentUser", user.email );
 
-        angular.forEach( HEADERS , function( _v, _k ){
+        angular.forEach( HEADERS , function( _v ){
                findHeader( _v.name, authHeaders).then( 
                 function( header ){
                     Storage.set( header.name , header.value  );
@@ -70,7 +57,7 @@ api.login = function( user ){
     });
 
     return q.promise;
-}
+};
 
 
 
@@ -78,7 +65,7 @@ api.isLoggedIn =  function() {
     var currentUser = Storage.get("currentUser");
     var ret = currentUser !== null;
     return  ret;
-}
+};
 
 
 api.logout =  function(){
@@ -92,11 +79,9 @@ api.register = function( credentials ){
     console.log('come here');
 
     $http.post('/session/register', credentials ).success( function( res ){
-        var message = { message : 'Registration success' };
         $rootScope.$broadcast( AUTH_EVENTS.registrationSuccess );
-        q.resolve( message );
+        q.resolve( res );
     }).error( function( err ){
-        var err = { error : 'Authentication failed' };
         $rootScope.$broadcast( AUTH_EVENTS.registrationFailed );
         q.reject( err );
     });

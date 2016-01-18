@@ -18,7 +18,9 @@ angular
     'ngRoute',
     'ngMaterial',
     'ui.router',
-    'ngMockE2E',
+    /*
+     *'ngMockE2E',
+     */
     'ui.grid',
     'ui.grid.selection',
     'ngFileUpload',

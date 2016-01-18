@@ -8,7 +8,7 @@
  * Controller of the cryptClientApp
  */
 angular.module('cryptClientApp')
-.controller('UsersController', function ( $scope, $rootScope, $state, Rest, Storage ) {
+.controller('UsersController', function ( $scope, $rootScope, $state, Rest ) {
 
     function init(){
         Rest.User.find().$promise.then( function( users ){

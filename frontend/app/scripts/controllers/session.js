@@ -11,15 +11,6 @@ angular.module('cryptClientApp')
 .controller('SessionController', function ( $scope, $rootScope, $state, AUTH_EVENTS, Auth, Storage  ) {
 
     function init(){
-        $scope.credentials = {
-            email : '',
-            password : ''
-        };
-
-
-        $scope.register = function( credentials ){
-        };
-
         $scope.logout = function(){
                Storage.remove();
                $rootScope.isLoggedIn = false;
@@ -32,17 +23,15 @@ angular.module('cryptClientApp')
 
     init();
 })
-.controller('RegisterController', function( $scope, $rootScope, Storage, Auth, AUTH_EVENTS ){
+.controller('RegisterController', function( $scope, Auth){
         $scope.register = function( credentials ){
             Auth.register( credentials );
         };
 
 })
-.controller('LoginController', function( $scope, $rootScope, Storage, Auth, AUTH_EVENTS ){
-
+.controller('LoginController', function( $scope, Auth ){
         $scope.login = function( credentials ){
             Auth.login( credentials );
         };
-
-})
+});
 
