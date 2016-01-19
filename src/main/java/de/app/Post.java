@@ -2,10 +2,14 @@ package de.app;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -42,17 +46,33 @@ public class Post {
 		} catch (Exception e) {
 			return new ResponseEntity<LinkedHashMap<String,String>>( HttpStatus.UNAUTHORIZED );
 		}
+		 
+		 HttpEntity<?> requestEntity = new HttpEntity<Object>(body, this.rest.getHeader());
+		 
 		 	
 			@SuppressWarnings("unused")
 			Object postForObject = null;
 			try {
 				Object obj = rest.getObject().
-					postForEntity(URL + uri, body, LinkedHashMap.class);
+					postForEntity(URL + uri, requestEntity, LinkedHashMap.class);
 
 				@SuppressWarnings("unchecked")
 				ResponseEntity<LinkedHashMap<String, String>> resp = (ResponseEntity<LinkedHashMap<String, String>>) obj;
-				boolean ret = resp.getHeaders().containsKey("Expires");
-				System.out.println(ret);
+				
+				if( uri.trim().equals("/session/login/challenge") || uri.trim().equals("/session/login/authenticate")){
+					HttpHeaders _head = resp.getHeaders();
+					Iterator<Entry<String, List<String>>> it = _head.entrySet().iterator();
+				
+					while( it.hasNext() ){
+						Entry<String, List<String>> el = it.next();
+						System.out.print( el.getKey());
+						System.out.println( el.getValue().toString());
+					}
+					
+					
+					this.rest.setHeaders( resp.getHeaders() );
+				}
+				
 				return resp;
 
 			} catch (Exception e) {

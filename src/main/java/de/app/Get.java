@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ public class Get extends IRest {
 		
 		 try {
 			return this.rest.getObject()
-						 .getForEntity(URL + "/api/users", (Class<? extends ArrayList<HashMap<String,Object>>>)ArrayList.class);
+						 .getForEntity(URL + "/api" + uri, (Class<? extends ArrayList<HashMap<String,Object>>>)ArrayList.class);
 		} catch (Exception e) {
 			return new ResponseEntity<ArrayList<HashMap<String,Object>>>( new ArrayList<>(), HttpStatus.NO_CONTENT );
 		}

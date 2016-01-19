@@ -43,27 +43,23 @@ angular.module('cryptClientApp')
         var d = new Date( new Date().getTime() + 600000);
         var n = d.toUTCString().toString();
         options.expires = n;
-        $cookies.put( "refresh", "",  options );
       }
-
-      /*
-       *function init( ){
-       *    var foo = { name : "toto"};
-       *    var bar = "bar";
-       *    var mar = [ "lksjfaksdf", "lksajflkjasf" ];
-       *  console.log( $filter('json')( foo ) );
-       *  console.log( $filter('json')( bar ) );
-       *  console.log( $filter('json')( mar ) );
-       *}
-       */
-
 
       var get = function ( key ){
           var ret = $cookies.get(key);
-          if ( ret === undefined) {
+          if ( ret === null || angular.isUndefined( ret ) ) {
             return null;
           }
-           return JSON.parse ( ret );
+
+
+          if( angular.isString( ret ) ){
+              return ret;
+          }
+
+          if( angular.isObject( ret ) ){
+              return JSON.parse(ret )
+          }
+
       };
 
       var set = function( key, value ){
@@ -73,12 +69,8 @@ angular.module('cryptClientApp')
               return false; 
           }
 
-          /*
-           * Json object have to be stringify since *no* storage actually
-           * saving json object
-           ***/
           if ( angular.isObject( value ) ){
-                $cookies.put( key, $filter('json')( value )  );
+                $cookies.put( key, JSON.stringify( value )  );
                 return true;
           }
 
@@ -93,15 +85,13 @@ angular.module('cryptClientApp')
       };
 
       var putAll = function( values ){
-          //refresh_token();
           angular.forEach( values , function(value, key ){
-              set( key, value, options );
+              set( key, value );
           });
       };
 
       var remove =  function(){
           var cookies = getAll();
-
           angular.forEach( cookies , function( value, key ){
               $cookies.remove( key );
           });

@@ -8,7 +8,7 @@
  * Service in the cryptClientApp.
  */
 angular.module('cryptClientApp')
-.factory('Interceptor', function($q, $location, Storage ){
+.factory('Interceptor', function($q, $location, Storage, $rootScope, AUTH_EVENTS ){
 return {
 
 /*
@@ -25,8 +25,8 @@ if( config.headers["X-XSRF-TOKEN"] === undefined ){
     config.headers["X-XSRF-TOKEN"] = Storage.get('X-XSRF-TOKEN') || '';
 }
 
-if( config.headers["Authorization"] === undefined ){
-    config.headers["Authorization"] = "SRP";
+if( config.headers.Authorization === undefined ){
+    config.headers.Authorization = "SRP";
 }
 
 if( config.headers["WWW-Authenticate"] === undefined ){
@@ -66,40 +66,24 @@ if( config.headers.server_public_key === undefined ) {
 },
 
 response : function( res ){
-    /*
-     *console.log( res );
-     */
     return res;
 },
 
 /*
 * Handle authentication errors in response object
 */
-responseError: function( error) {
+responseError: function( response ) {
+      $rootScope.$broadcast({
+        401: AUTH_EVENTS.notAuthenticated,
+        403: AUTH_EVENTS.notAuthorized,
+        419: AUTH_EVENTS.sessionTimeout,
+        440: AUTH_EVENTS.sessionTimeout,
 
-/*
- *        console.log( error )
- *
- *    
- *        var q = $q.defer();
- *
- *        if( error ){
- *             q.resolve( { error : error } )
- *        }
- *        q.reject()
- *
- *        return q.promise;
- */
+        404: AUTH_EVENTS.notFound,
 
+      }[response.status], response);
 
-
-    /*
-     *if(response.status === 401 || response.status === 403) {
-     *    window.document.url ='#/login';
-     *}
-     *return $q.reject(response);
-     */
-
+      return $q.reject(response);
 },
 
 /*
@@ -107,6 +91,7 @@ responseError: function( error) {
 */
 requestError: function(rejection) {
 
+    return $q.reject( rejection );
 /*
  *    console.log( rejection );
  *

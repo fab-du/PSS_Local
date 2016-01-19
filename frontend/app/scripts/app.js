@@ -18,27 +18,31 @@ angular
     'ngRoute',
     'ngMaterial',
     'ui.router',
-    'ngMockE2E',
+    /*
+     *'ngMockE2E',
+     */
     'ui.grid',
     'ui.grid.selection',
+    'ngFileUpload',
     'ngSanitize'
   ])
-  .config(function ($routeProvider, $resourceProvider, $stateProvider, $mdThemingProvider, $uiViewScrollProvider,uiGridConstants ) {
+  .config(function ($routeProvider, $resourceProvider, $stateProvider ) {
 
-      /*
-       *$resourceProvider.defaults.stripTrailingSlashes = false;
-       */
+
+      $stateProvider
+      .state('main', {
+        templateUrl : "/views/scratch.html"
+      });
 
       $stateProvider
       .state('login', {
+            url : "/session/login",
+            controller : "LoginController",
             templateUrl : "/views/session/login.html"
       })
-      .state('logout',{
-
-      })
       .state('register', {
+            controller : "RegisterController",
             templateUrl : "/views/session/register.html"
-
       });
 
       $stateProvider
@@ -90,6 +94,10 @@ angular
           url : '/documents',
           templateUrl : "/views/documents.html"
       })
+      .state('documents.upload', {
+          url : '/documents/upload',
+          templateUrl : "/views/documents/documents.upload.html"
+      })
       .state('documents.documentId', {
           url : '/:documentId'
       });
@@ -111,4 +119,15 @@ angular
 
       $routeProvider.otherwise({redirectTo: '/'});
 
+})
+.run(function ($rootScope, AUTH_EVENTS, Auth) {
+    $rootScope.$on('$stateChangeStart', 
+    function(){
+        if( !Auth.isLoggedIn() ){
+            $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+        }
+
+    });
+
 });
+

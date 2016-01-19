@@ -1,8 +1,8 @@
 package de.app.service;
 
 import de.app.model.form.FormRegister;
-import de.cryptone.crypto.CryptFactor;
-//import de.cryptone.crypto.RSAPBECrypto;
+
+
 
 import java.math.BigInteger;
 import java.util.Base64;
@@ -19,7 +19,7 @@ public class ServiceUser {
 		SRP6ClientSession client;
 
 		public Map<String, String> register( Map<String, String> user ){
-//			RSAPBECrypto rsa = (RSAPBECrypto) CryptFactor.getInstance(CryptFactor.CRYPT_ASYM_RSA_PBE);
+			//RSACrypto rsa =  CryptFactor.getInstance(CryptFactor.CRYPT_ASYM_RSA);
 //			
 //			de.cryptone.models.KeyPair keypair = rsa.generateKey( user.get("passphrase") );
 //
@@ -93,6 +93,7 @@ public class ServiceUser {
 			return ret;
 
 		} catch (SRP6Exception e) {
+			System.out.println("From Step 2");
 			System.out.println(e.getMessage());
 			return null;
 		}

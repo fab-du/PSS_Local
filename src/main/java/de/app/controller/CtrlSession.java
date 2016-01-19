@@ -1,12 +1,11 @@
 package de.app.controller;
 
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Produces;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,7 @@ import com.google.gson.Gson;
 import de.app.Post;
 import de.app.RestRequest;
 import de.app.service.ServiceUser;
-import de.cryptone.crypto.CryptFactor;
-import de.cryptone.crypto.RSACrypto;
+import de.cryptone.key.KeyPair;
 
 @RestController
 @RequestMapping(value="/session")
@@ -42,23 +40,40 @@ public class CtrlSession {
 	ServiceUser serviceuser = new ServiceUser();
 	
 
-	@RequestMapping( value="/login/challenge", method = RequestMethod.POST )
+	@RequestMapping( value="/login", method = RequestMethod.POST )
 	@Produces("application/json")
 	public ResponseEntity<LinkedHashMap<String, String>>
-	login_challenge( @RequestBody Map<String, String> authdata, HttpServletRequest mRequest ) throws RestClientException, Exception{
+	login_challenge( @RequestBody Map<String, String> authdata, HttpServletRequest mRequest, HttpServletResponse response ) throws RestClientException, Exception{
+	
+		
+		boolean ret = false; 
+		
+		
+		
 		ResponseEntity<LinkedHashMap<String, String>> result = null;
-		serviceuser.step1( authdata.get("email"), authdata.get("password"));
+		String email = authdata.get("email"); 
+		String password = authdata.get("password"); 
+		
+		serviceuser.step1( email, password);
 		Map<String, String> challenge = new HashMap<String, String>();
-		challenge.put("email", authdata.get("email"));
+		challenge.put("email", email);
 
 		result = POST.simplePost("/session/login/challenge", challenge );
 
-		Map<String, String> result1 = serviceuser.step2( result.getBody());
+		LinkedHashMap<String, String> body = result.getBody();
+		
+		if( body  == null ){
+			LinkedHashMap<String, String> errorMessage = new LinkedHashMap<String, String>();
+			return 
+			new ResponseEntity<LinkedHashMap<String,String>>(errorMessage, HttpStatus.UNAUTHORIZED );
+		}
+		
+		Map<String, String> result1 = serviceuser.step2( body );
 
 		if( result1  == null ){
 			LinkedHashMap<String, String> errorMessage = new LinkedHashMap<String, String>();
 			return 
-			new ResponseEntity<LinkedHashMap<String,String>>(errorMessage, HttpStatus.FORBIDDEN );
+			new ResponseEntity<LinkedHashMap<String,String>>(errorMessage, HttpStatus.UNAUTHORIZED );
 		}
 		
 		/*
@@ -67,24 +82,37 @@ public class CtrlSession {
 		 * be store until the session ends. 
 		 * And the private key will be send to the browser.
 		 */
-	//	RSACrypto rsa = ( RSACrypto ) CryptFactor.getInstance(CryptFactor.CRYPT_ASYM_RSA);
-
-	//	String keypair = rsa.generateKey();
-	//	System.out.println( keypair );
+		
+		KeyPair keyGenerator = new KeyPair();
+		String keypair = keyGenerator.algorithm("RSA").generate();
+		System.out.println(keypair);
 		Gson gson = new Gson();
 		Map<String, String> _keypair = new HashMap<>();
-	//	_keypair = gson.fromJson(keypair, Map.class);
+		_keypair = gson.fromJson(keypair, Map.class);
+		
+		if( _keypair  == null ){
+			LinkedHashMap<String, String> errorMessage = new LinkedHashMap<String, String>();
+			return 
+			new ResponseEntity<LinkedHashMap<String,String>>(errorMessage, HttpStatus.UNAUTHORIZED );
+		}
 
-		result1.put("client_pubkey", _keypair.get("pubkey"));
-		result1.put("email", authdata.get("email"));
-		result1.put("B", result.getBody().get("B"));
+		result1.put("client_pubkey", _keypair.get("pubKey"));
+		result1.put("email", email);
+		result1.put("B", body.get("B"));
+		
 		ResponseEntity<LinkedHashMap<String, String>> endResponse = 
-		POST.simplePost("session/login/authenticate", result1);
+		POST.simplePost("/session/login/authenticate", result1);
 
 		LinkedHashMap<String, String> zwischenErg = endResponse.getBody();
-		zwischenErg.put("prikey", _keypair.get("prikey"));
+		
+		if ( zwischenErg == null ){
+			LinkedHashMap<String, String> errorMessage = new LinkedHashMap<String, String>();
+			return 
+			new ResponseEntity<LinkedHashMap<String,String>>(errorMessage, HttpStatus.UNAUTHORIZED );
+		}
+		zwischenErg.put("prikey", _keypair.get("priKey"));
 		org.springframework.http.HttpHeaders headers = endResponse.getHeaders();
-		return new ResponseEntity<LinkedHashMap<String, String>>( zwischenErg, headers, HttpStatus.OK );
+		return new ResponseEntity<LinkedHashMap<String, String>>( zwischenErg, request.getHeader(), HttpStatus.OK );
 	}
 	
 

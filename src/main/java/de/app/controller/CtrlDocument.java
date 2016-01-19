@@ -30,6 +30,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import de.app.Get;
 import de.app.RestRequest;
 
 
@@ -39,6 +40,9 @@ public class CtrlDocument {
 	
 	@Autowired
 	RestRequest rest;
+	
+	@Autowired
+	Get GET; 
 	
 	@RequestMapping( method=RequestMethod.GET  )
 	public ResponseEntity<?> get(){
@@ -99,8 +103,8 @@ public class CtrlDocument {
 	}
 
 	@RequestMapping(value="/{documentId}", method=RequestMethod.GET  )
-	public ResponseEntity<?> documentId( @PathVariable(value="documentId") Long documentId ){
-		return null;
+	public ResponseEntity<?> findOne( @PathVariable(value="documentId") Long documentId ){
+		return GET.singleGET( "/documents/" + documentId );
 	}
 
 	@RequestMapping(value="/{documentId}/changeOwner", method=RequestMethod.POST  )

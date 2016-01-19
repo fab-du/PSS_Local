@@ -8,99 +8,87 @@
  * Service in the cryptClientApp.
  */
 angular.module('cryptClientApp')
-.factory('Auth', function ($http, $state, Storage ) {
+.factory('Auth', function ($http, $state, $q, AUTH_EVENTS, Storage, HEADERS,  $rootScope ) {
 var api = {};
-var currentSession = Storage.getAll() || {};
+
+   function findHeader( header, headers ){
+       var ret = false;
+       var q = $q.defer();
+       var value;
+       
+      angular.forEach( headers , function( _v, _k ){
+          if ( !angular.isUndefined( _k )  &&  _k !== null && header === _k  ){
+                  value = _v; 
+                  ret = true;
+          }else{}
+      });
+
+      if ( ret ){
+          q.resolve( { name :  header, value :  value } );
+      }
+      else{
+          q.reject( { err : 'header error \t' + header } );
+      }
+      return q.promise;
+   }
+
+api.login = function( user ){
+    var q = $q.defer();
+    $http.post('/session/login', user).success(function( response, status , headers ){
+        var authHeaders = headers();
+        Storage.set("currentUser", user.email );
+
+        angular.forEach( HEADERS , function( _v ){
+               findHeader( _v.name, authHeaders).then( 
+                function( header ){
+                    Storage.set( header.name , header.value  );
+               },function(err){
+                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                    q.reject( err );
+               });
+        });
+        
+
+        $rootScope.$broadcast( AUTH_EVENTS.loginSuccess );
+        q.resolve( status  );
+    }).error( function(err){
+        $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+        q.reject( err );
+    });
+
+    return q.promise;
+};
 
 
-function storeSession( header ) {
-    Storage.putAll( header );
-}
 
-function removeSession( ){
+api.isLoggedIn =  function() {
+    var currentUser = Storage.get("currentUser");
+    var ret = currentUser !== null;
+    return  ret;
+};
+
+
+api.logout =  function(){
     Storage.remove();
-}
-
-
-
-function register( user, success, error ){
-    $http.post('/session/register', user).success(function(res) {
-        $state.go('login');
-    }).error(error);
-}
-
-
-/*
-    * Follow SRP Working-flow. ie :
-    * Challenge -> Authenticate -> Authorize
-    **/
-function login( user, success, error ){
-    $http.post('/session/login/challenge', user).success(function( response, status , headers ){
-        Storage.set( "prikey", response.prikey );
-        var sessionHeader = headers();
-        storeSession( sessionHeader );
-        $state.go('api');
-    }).error(error);
-}
-
-
-
-function isLoggedIn() {
-    return (Storage.getAll() === undefined);
-}
-
-api.logout =  function() {
-    removeSession();
 };
 
 
+api.register = function( credentials ){
+    var q = $q.defer();
 
-api.currentSession = currentSession;
+    console.log('come here');
 
-api.register = function( user, success, error ){
-    var count = 0;
-
-    angular.forEach( user , function(value, key){
-
-        if( key === 'email' ){
-            count++;
-        }  
-
-        if( key === 'password') {
-          count++;
-        }
-
-        if( key === 'passphrase'){
-           count++;
-        } 
-
-        if( key === 'firstname'){
-           count++;
-        } 
-        if( key === 'secondname') {
-          count++;
-        }
-        if( key === 'company') {
-          count++;
-        }
-    })    
-
-    if( count === 6 ){
-        return register( user, success, error );
-    }
-    else{
-        return false;
-    }
+    $http.post('/session/register', credentials ).success( function( res ){
+        $rootScope.$broadcast( AUTH_EVENTS.registrationSuccess );
+        q.resolve( res );
+    }).error( function( err ){
+        $rootScope.$broadcast( AUTH_EVENTS.registrationFailed );
+        q.reject( err );
+    });
+    return q.promise;
 };
 
-api.login = function( user, success,error ){
-    login( user, success , error);
-};
 
-api.isLoggedIn = function(user){
-    return isLoggedIn(user);
-};
-
-    return api;
+return api;
 
 });
