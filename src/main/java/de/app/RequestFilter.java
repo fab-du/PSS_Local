@@ -24,6 +24,9 @@ import de.cryptone.key.*;
 @Component
 @Priority(value=1)
 public class RequestFilter implements Filter {
+	
+	@Autowired
+	RestRequest rest;
 
 	public static int counter;
 	public static boolean isLoggedIn = false;
@@ -50,16 +53,11 @@ public class RequestFilter implements Filter {
 	
 	public static final String SERVER_PUBLIC_KEY = "SERVER-PUBLIC-KEY";
 	
-	public static final String TYP = "typ",
-							   TYP_VALUE = "JWT";
 	
-	public static final String ALG = "alg",
-							   ALG_VALUE = "RS512";
+
 	
 	public static final String AUTHORIZATION = "Authorization",
 			   AUTHORIZATION_VALUE = "Bearer ";
-	
-	
 	
 	
 	@Autowired
@@ -109,6 +107,7 @@ public class RequestFilter implements Filter {
 	    	System.out.println(keypair);
 	    	Map<String, String> _keypair = new Gson().fromJson(keypair, Map.class);
 	    	response.setHeader(CLIENT_PUBLIC_KEY, _keypair.get("pubKey"));
+	    	rest.setHeader( CLIENT_PUBLIC_KEY, _keypair.get("pubKey"));
 	    }
 
 	    
@@ -119,14 +118,6 @@ public class RequestFilter implements Filter {
 		} catch (Exception e) {
 			System.out.println( e.toString() );
 		}
-	    
-	 	/*
-    	 * JWT related header
-    	 */
-	    if ( sessionUri != null ){
-	    	response.setHeader( TYP , TYP_VALUE);
-	    	response.setHeader( ALG , ALG_VALUE);
-	    }
 	    
 	    try {
 	    		chain.doFilter(request, response);

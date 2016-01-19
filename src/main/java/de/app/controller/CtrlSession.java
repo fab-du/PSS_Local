@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Produces;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +43,12 @@ public class CtrlSession {
 	@RequestMapping( value="/login", method = RequestMethod.POST )
 	@Produces("application/json")
 	public ResponseEntity<LinkedHashMap<String, String>>
-	login_challenge( @RequestBody Map<String, String> authdata, HttpServletRequest mRequest ) throws RestClientException, Exception{
+	login_challenge( @RequestBody Map<String, String> authdata, HttpServletRequest mRequest, HttpServletResponse response ) throws RestClientException, Exception{
 	
+		
 		boolean ret = false; 
+		
+		
 		
 		ResponseEntity<LinkedHashMap<String, String>> result = null;
 		String email = authdata.get("email"); 
@@ -101,9 +104,15 @@ public class CtrlSession {
 		POST.simplePost("/session/login/authenticate", result1);
 
 		LinkedHashMap<String, String> zwischenErg = endResponse.getBody();
-		zwischenErg.put("prikey", _keypair.get("prikey"));
+		
+		if ( zwischenErg == null ){
+			LinkedHashMap<String, String> errorMessage = new LinkedHashMap<String, String>();
+			return 
+			new ResponseEntity<LinkedHashMap<String,String>>(errorMessage, HttpStatus.UNAUTHORIZED );
+		}
+		zwischenErg.put("prikey", _keypair.get("priKey"));
 		org.springframework.http.HttpHeaders headers = endResponse.getHeaders();
-		return new ResponseEntity<LinkedHashMap<String, String>>( zwischenErg, headers, HttpStatus.OK );
+		return new ResponseEntity<LinkedHashMap<String, String>>( zwischenErg, request.getHeader(), HttpStatus.OK );
 	}
 	
 

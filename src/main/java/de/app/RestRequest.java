@@ -2,30 +2,40 @@ package de.app;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.http.converter.ByteArrayHttpMessageConverter;
-import org.springframework.http.converter.ResourceHttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.apache.http.HttpHost;
+
+import java.util.Map;
 
 @Component
 public class RestRequest implements FactoryBean<RestTemplate>, 
 InitializingBean{
+	
+	public static final String CONTENT_SECURITY_POLICY = "content-security-header", 
+			   CONTENT_SECURITY_POLICY_VALUE = "script-src 'self'";
+	
+public static final String HASH_ALGORITHM = "hash-algorithm",
+						   HASH_ALGORITHM_VALUE = "sha256";
+public static final String ALG = "alg",
+						   ALG_VALUE = "RS512";
 
+public static final String TYP = "typ",
+						   TYP_VALUE = "JWT";
+
+
+	private HttpHeaders headers = new HttpHeaders();
+	
 	private RestTemplate restTemplate;
 	 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		HttpHost host = new HttpHost("localhost", 8080, "http");
-		restTemplate = new RestTemplate(
-		new ClientContext(host));
-
-		restTemplate.getMessageConverters().add( new ByteArrayHttpMessageConverter());
-		restTemplate.getMessageConverters().add( new StringHttpMessageConverter());
-		restTemplate.getMessageConverters().add( new ResourceHttpMessageConverter());
-	    restTemplate.getMessageConverters().add(new AllEncompassingFormHttpMessageConverter());
+		restTemplate = new RestTemplate();
+		headers.add("REALM", "REALM");
+		headers.add(CONTENT_SECURITY_POLICY, CONTENT_SECURITY_POLICY_VALUE);
+		headers.add(HASH_ALGORITHM, HASH_ALGORITHM_VALUE);
+		headers.add(TYP, TYP_VALUE);
+		headers.add("tototot", "tototot");
 	}
 
 	@Override
@@ -43,5 +53,16 @@ InitializingBean{
 		return true;
 	}
 	
+	public void setHeaders( HttpHeaders httpHeaders ){
+		this.headers.putAll(httpHeaders);
+	}
+	
+	public void setHeader( String headerName, String headerValue ){
+		this.headers.add(headerName, headerValue);
+	}
+	
+	public HttpHeaders getHeader(){
+		return this.headers;
+	}
 
 }
