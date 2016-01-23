@@ -76,48 +76,48 @@ public class RequestFilter implements Filter {
 	     * reach protected api
 	     * redirect to default error handler
 	     */
-	    String authorization = request.getHeader( AUTHORIZATION );
-	    if( authorization == null ){
-	    	String apiUri = null;
-	    	try {
-	    		apiUri = request.getRequestURI().trim().split("/")[1]; 
-			} catch (Exception e) {
-				System.out.println( e.toString() );
-			}
-	    	
-	    	if( apiUri != null && apiUri.trim().equals( PROTECTED_URI ) ){
-	    		this.redirect(request, response, "/auth_error");
-	    	}
-	    }
-
-	    
-	    /*
-	     * if the X-XSRF-TOKEN is not set, that mean it s the first
-	     * REQ to the Local Server. 
-	     * Set X-XSRF-TOKEN
-	     */
-	    String xsrfToken = request.getHeader( X_XSRF_TOKEN );
-	    if( xsrfToken == null ){
-	    	
-	     	SecureRandom random = new SecureRandom();
-		    xsrfToken = new BigInteger(130, random ).toString();
-		    response.setHeader( X_XSRF_TOKEN , xsrfToken);
-	    	response.setHeader(CONTENT_SECURITY_POLICY, CONTENT_SECURITY_POLICY_VALUE);    	
-	    	String keypair = new KeyPair().generate(); 
-	    	System.out.println(keypair);
-	    	Map<String, String> _keypair = new Gson().fromJson(keypair, Map.class);
-	    	response.setHeader(CLIENT_PUBLIC_KEY, _keypair.get("pubKey"));
-	    	rest.setHeader( CLIENT_PUBLIC_KEY, _keypair.get("pubKey"));
-	    }
-
-	    
-	    
-	    String sessionUri = null; 
-	    try {
-		     sessionUri = request.getRequestURI().trim().split("/")[1].trim();  
-		} catch (Exception e) {
-			System.out.println( e.toString() );
-		}
+//	    String authorization = request.getHeader( AUTHORIZATION );
+//	    if( authorization == null ){
+//	    	String apiUri = null;
+//	    	try {
+//	    		apiUri = request.getRequestURI().trim().split("/")[1]; 
+//			} catch (Exception e) {
+//				System.out.println( e.toString() );
+//			}
+//	    	
+//	    	if( apiUri != null && apiUri.trim().equals( PROTECTED_URI ) ){
+//	    		this.redirect(request, response, "/auth_error");
+//	    	}
+//	    }
+//
+//	    
+//	    /*
+//	     * if the X-XSRF-TOKEN is not set, that mean it s the first
+//	     * REQ to the Local Server. 
+//	     * Set X-XSRF-TOKEN
+//	     */
+//	    String xsrfToken = request.getHeader( X_XSRF_TOKEN );
+//	    if( xsrfToken == null ){
+//	    	
+//	     	SecureRandom random = new SecureRandom();
+//		    xsrfToken = new BigInteger(130, random ).toString();
+//		    response.setHeader( X_XSRF_TOKEN , xsrfToken);
+//	    	response.setHeader(CONTENT_SECURITY_POLICY, CONTENT_SECURITY_POLICY_VALUE);    	
+//	    	String keypair = new KeyPair().generate(); 
+//	    	System.out.println(keypair);
+//	    	Map<String, String> _keypair = new Gson().fromJson(keypair, Map.class);
+//	    	response.setHeader(CLIENT_PUBLIC_KEY, _keypair.get("pubKey"));
+//	    	rest.setHeader( CLIENT_PUBLIC_KEY, _keypair.get("pubKey"));
+//	    }
+//
+//	    
+//	    
+//	    String sessionUri = null; 
+//	    try {
+//		     sessionUri = request.getRequestURI().trim().split("/")[1].trim();  
+//		} catch (Exception e) {
+//			System.out.println( e.toString() );
+//		}
 	    
 	    try {
 	    		chain.doFilter(request, response);

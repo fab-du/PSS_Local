@@ -3,8 +3,11 @@ package de.app.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,37 +16,32 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
 import de.app.Get;
-
+import de.app.client.ClientUser;
+import de.app.model.User;
 import de.app.model.form.FormMisc;
 import de.app.model.form.FormRegister;
 
 @RestController
 @RequestMapping(value="/api/users")
-public class CtrlUser {
+public class ControllerUser {
 
 	@Autowired
 	Get GET;
-
-	public final static String URL = "http://localhost:8080";
 	
+	@Autowired
+	ClientUser clientUser;
+
 	
 	@RequestMapping( method = RequestMethod.GET )
-	public ResponseEntity<? extends ArrayList<HashMap<String,Object>>> get() throws RestClientException, Exception{
-		return GET.listGET("/api/users");
+	public ResponseEntity<User[]> find() throws RestClientException, Exception{
+		return clientUser.find();
+	}
+	
+	@RequestMapping(value="/{userId}",  method = RequestMethod.GET )
+	public ResponseEntity<User> find(@PathVariable(value="userId") Long id) throws RestClientException, Exception{
+		return clientUser.findOne( id );
 	}
 
-	@RequestMapping( method = RequestMethod.POST )
-	public ResponseEntity<?> post( @RequestBody FormRegister newuser ) throws RestClientException, Exception{
-		//String response = "";
-		return null;
-		//response = (String)request.getObject().postForEntity(URL + "/api/users", newuser , String.class).getBody();
-		//return new ResponseEntity<String>(newuser.getEmail() + response, org.springframework.http.HttpStatus.CREATED);
-	}
-
-	@RequestMapping(value="/{userId}", method = RequestMethod.GET )
-	public ResponseEntity<?> userId( @PathVariable(value="userId") Long userId ){
-		return null;
-	}
 
 	@RequestMapping(value="/{userId}/validate", method = RequestMethod.POST )
 	public ResponseEntity<?> userId_validate( @PathVariable(value="userId") Long userId,
@@ -69,5 +67,9 @@ public class CtrlUser {
 		return null;
 	}
 	
-
+	@ExceptionHandler({Exception.class})
+	public void exceptionHandler( HttpServletRequest request, Exception exception){
+		System.out.println( exception.getMessage());
+	}
+	
 }

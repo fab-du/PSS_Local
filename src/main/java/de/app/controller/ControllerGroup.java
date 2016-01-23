@@ -21,23 +21,29 @@ import org.springframework.web.client.RestClientException;
 import com.google.gson.Gson;
 
 import de.app.RestRequest;
+import de.app.client.ClientGroup;
 import de.app.model.*;
 import de.app.service.ServiceGroup;
 
 @RestController
 @RequestMapping(value="/api/groups")
-public class CtrlGroup {
+public class ControllerGroup {
 
 	@Inject
 	RestRequest request;
 	private final static String URL = "http://localhost:8080";
+	
+	@Autowired
+	ClientGroup clientGroup;
 
 	@RequestMapping( method = RequestMethod.GET )
-	public ResponseEntity<? extends ArrayList<HashMap<String,Object>>>  get() throws RestClientException, Exception{
-		ResponseEntity<? extends ArrayList<HashMap<String,Object>>> responseEntity 
-		= request.getObject()
-		.getForEntity(URL + "/api/groups", (Class<? extends ArrayList<HashMap<String,Object>>>)ArrayList.class);
-		return responseEntity;
+	public ResponseEntity<Group[]>  find(){
+		return clientGroup.find();
+	}
+	
+	@RequestMapping(value="/{groupId}",  method = RequestMethod.GET )
+	public ResponseEntity<Group>  findOne(@PathVariable(value="groupId") Long groupId){
+		return clientGroup.findOne(groupId);
 	}
 
 	@RequestMapping( method = RequestMethod.POST )
@@ -62,11 +68,6 @@ public class CtrlGroup {
 		return new ResponseEntity<Map<String,String>>( misc , HttpStatus.CREATED);
 	}
 
-	@RequestMapping( value="/{groupId}", method = RequestMethod.GET )
-	public ResponseEntity<?> groupId( @PathVariable(value="groupId") Long groupId ) throws RestClientException, Exception{
-		String url = URL + "/api/groups/" + groupId;
-		return request.getObject().getForEntity(url, Map.class );
-	}
 
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.GET )
 	public ResponseEntity<?> groupId_documents( @PathVariable(value="groupId") Long groupId ){

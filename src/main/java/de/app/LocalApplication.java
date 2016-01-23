@@ -3,6 +3,9 @@ package de.app;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 
@@ -18,6 +21,40 @@ public class LocalApplication {
 	    resolver.setCacheable(false);
 	    resolver.setCharacterEncoding("UTF-8");
 	    return resolver;
+	}
+	
+	/*
+	 * Resolve for data up/down-load
+	 */
+	
+//	@Bean
+//	public CommonsMultipartResolver multipartResolver(){
+//		final CommonsMultipartResolver resolver = 
+//				new CommonsMultipartResolver(SpringApplication.);
+//		resolver.setMaxUploadSize(500000);
+//		return resolver;
+//	}
+	
+	@Bean
+	public HttpHeaders headers(){
+		return new HttpHeaders();
+	}
+	
+	/**
+	 * Create a new instance of the {@link RestTemplate} using default settings.
+	 * Default {@link HttpMessageConverter}s are initialized.
+	 * 
+	 *  Those converter are provided : 
+	 * 	ByteArrayHttpMessageConverter
+	 *	StringHttpMessageConverter
+	 *  ResourceHttpMessageConverter
+	 *	SourceHttpMessageConverter
+	 *  AllEncompassingFormHttpMessageConverter
+	 */
+	@Bean
+	public RestTemplate restTemplate(){
+		RestTemplate template = new RestTemplate();
+		return new RestTemplate();
 	}
 
     public static void main(String[] args) {
