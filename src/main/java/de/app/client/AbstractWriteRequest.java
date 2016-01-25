@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 public  class AbstractWriteRequest<CRES, CREQ > {
 	
-    private final String url = "http://localhost:3000";
+    private final String url = "http://localhost:8080";
     private String uri = "";
     
     protected final RestClient client;
@@ -22,28 +22,48 @@ public  class AbstractWriteRequest<CRES, CREQ > {
 		this.requestClazz = requestClazz;	
 	}
 	
+	public 
 	ResponseEntity<CRES> create( CREQ body ){
 		ResponseEntity<CRES> response = null;
-    	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders() );
-
+    	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders(), body );
     	response = client.getRestTemplate().exchange(url + uri, HttpMethod.POST,  requestEntity,   responseClazz );
 		return response; 
 	}
 	
-	public void update(){
-		
+	public 
+	ResponseEntity<CRES> create( CREQ body, Long id ){
+		ResponseEntity<CRES> response = null;
+    	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders(), body );
+    	System.out.println( url + uri);
+    	response = client.getRestTemplate().exchange(url + uri, HttpMethod.POST,  requestEntity,   responseClazz , id);
+		return response; 
 	}
 	
-	public void delete(){
-		
+	public void update(){
 	}
+	
+	public ResponseEntity<?>  delete(Long id, Long _id, String suffix ){
+		ResponseEntity<?> response = null;
+    	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders());
+    	System.out.println( url + uri + "/" + _id);
+    	response = client.getRestTemplate().exchange(url + uri + "/" + _id + suffix, HttpMethod.DELETE,  requestEntity,   ResponseEntity.class, id, _id);
+		return response; 
+	}
+	
 	
 	public void setUri( String uri ){
 		this.uri = uri;
 	}
 	
+
+	
     HttpEntity<?> getHttpEntity( HttpHeaders headers ){
    	 HttpEntity<?> requestEntity = new HttpEntity<>( headers );
    	 return requestEntity;
    }
+    
+    HttpEntity<?> getHttpEntity( HttpHeaders headers, CREQ body ){
+      	 HttpEntity<CREQ> requestEntity = new HttpEntity<CREQ>( body, headers );
+      	 return requestEntity;
+      }
 }

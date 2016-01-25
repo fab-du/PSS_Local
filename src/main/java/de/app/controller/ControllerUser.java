@@ -1,7 +1,5 @@
 package de.app.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,18 +13,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
-import de.app.Get;
 import de.app.client.ClientUser;
 import de.app.model.User;
 import de.app.model.form.FormMisc;
-import de.app.model.form.FormRegister;
 
 @RestController
 @RequestMapping(value="/api/users")
 public class ControllerUser {
 
-	@Autowired
-	Get GET;
 	
 	@Autowired
 	ClientUser clientUser;
@@ -42,7 +36,6 @@ public class ControllerUser {
 		return clientUser.findOne( id );
 	}
 
-
 	@RequestMapping(value="/{userId}/validate", method = RequestMethod.POST )
 	public ResponseEntity<?> userId_validate( @PathVariable(value="userId") Long userId,
 			@RequestBody FormMisc user_to_validate ){
@@ -50,8 +43,7 @@ public class ControllerUser {
 	}
 
 	@RequestMapping(value="/{userId}/addFriend", method = RequestMethod.POST )
-	public ResponseEntity<?> userId_addFriend( @PathVariable(value="userId") Long userId,
-			@RequestBody FormMisc user_to_add ){
+	public ResponseEntity<?> userId_addFriend( @PathVariable(value="userId") Long userId, @RequestBody FormMisc user_to_add ){
 		return null;
 	}
 

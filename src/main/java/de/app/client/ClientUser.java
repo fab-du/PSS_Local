@@ -1,7 +1,7 @@
 package de.app.client;
-import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import de.app.model.User;
@@ -10,16 +10,20 @@ import de.app.model.User;
 @Component
 public class ClientUser extends AbstractFindRequest<User> {
 	
-	public final static String URI = "/api/users";
-	
-	public final AbstractWriteRequest<?, User> Writer;
 
+	
+	
+	public  AbstractWriteRequest<?, User> Writer;
+	
+	@Value("${remote.users}")
+	String uri="/api/users";
 	
 	@Autowired
 	public ClientUser(RestClient client) {
 		super(client, User.class, User[].class );
-		this.setUri(URI);
+		this.setUri(uri);
 		Writer = new AbstractWriteRequest<>(client, Object.class, User.class );
+		Writer.setUri(uri);
 	}
 	
 	

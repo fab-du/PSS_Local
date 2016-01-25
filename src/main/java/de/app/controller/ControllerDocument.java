@@ -33,7 +33,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import de.app.Get;
 import de.app.RestRequest;
 import de.app.client.ClientDocument;
 import de.app.model.Document;

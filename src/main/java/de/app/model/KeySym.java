@@ -2,23 +2,20 @@ package de.app.model;
 
 import java.util.Date;
 
+
 import org.springframework.data.annotation.LastModifiedDate;
 
-public class Group extends AbstractEntity{
-	String name, path;
-	public  Long version;
+public class KeySym extends AbstractEntity{
+	String symkey;
+
+
+	public Long version;
 	public @LastModifiedDate Date date;
-	public String getName() {
-		return name;
+	public String getSymkey() {
+		return symkey;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getPath() {
-		return path;
-	}
-	public void setPath(String path) {
-		this.path = path;
+	public void setSymkey(String symkey) {
+		this.symkey = symkey;
 	}
 	public Long getVersion() {
 		return version;
@@ -32,6 +29,5 @@ public class Group extends AbstractEntity{
 	public void setDate(Date date) {
 		this.date = date;
 	} 
-	
 	
 }
