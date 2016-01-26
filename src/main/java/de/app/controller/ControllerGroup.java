@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 
 import de.app.RestRequest;
 import de.app.client.ClientGroup;
+import de.app.client.ClientUser;
 import de.app.model.*;
 import de.app.service.ServiceGroup;
 
@@ -29,13 +30,13 @@ import de.app.service.ServiceGroup;
 @RequestMapping(value="/api/groups")
 public class ControllerGroup {
 
-	@Inject
-	RestRequest request;
-	private final static String URL = "http://localhost:8080";
 	
 	@Autowired
 	ClientGroup clientGroup;
 
+	@Autowired 
+	ClientUser clientUser;
+	
 	@RequestMapping( method = RequestMethod.GET )
 	public ResponseEntity<Group[]>  find(){
 		return clientGroup.find();
@@ -47,32 +48,21 @@ public class ControllerGroup {
 	}
 
 	@RequestMapping( method = RequestMethod.POST )
-	public ResponseEntity<Map<String, String>> post( @RequestBody Map<String, String> misc ) throws RestClientException, Exception{
-     Long foo = new Long(  misc.get("currentUserId")) ;
-     String url =  URL + "/api/keypair/" + misc.get("currentUserId");
-
-     	 String pubkey = 
-				request.getObject()
-				.getForEntity(url, String.class ).getBody();
-
-     	 String groupname = misc.get("name");
-     	 String currentUserId = misc.get("currentUserId");
-
-     	 ServiceGroup servicegroup = new ServiceGroup();
-     	 Map<String,String> result = servicegroup.createGroup(groupname, pubkey, currentUserId );
-     	
-     	 System.out.println( result.values().toString());
-     	 	
-     	 request.getObject().postForEntity(URL + "/api/groups", result, ResponseEntity.class);
-
-		return new ResponseEntity<Map<String,String>>( misc , HttpStatus.CREATED);
+	public ResponseEntity<?> create( @RequestBody Group group ) throws RestClientException, Exception{
+		System.out.println( group.toString());
+		return clientGroup.Writer.create(group);
 	}
 
+	
+	@RequestMapping( value="/{groupId}/users", method = RequestMethod.GET )
+	public ResponseEntity<User[]> users( @PathVariable(value="groupId") Long groupId ){
+		clientUser.setUri( "/api/groups/" + groupId + "/" + "/users");
+		return clientUser.find(groupId);
+	}
 
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.GET )
 	public ResponseEntity<?> groupId_documents( @PathVariable(value="groupId") Long groupId ){
 		return null;
-		
 	}
 
 	@RequestMapping( value="/{groupId}/documents/addDocument", method = RequestMethod.POST )
@@ -100,35 +90,11 @@ public class ControllerGroup {
 		return null;
 	}
 
-	@RequestMapping(value="/{groupId}/users", method=RequestMethod.GET )
-	public ResponseEntity<?> goupId_users(@PathVariable(value="groupId") Long groupId ) throws RestClientException, Exception{
-		String url = URL + "/api/groups/" + groupId;
-		return request.getObject().getForEntity(url, Map.class);
-	}
-
-	@RequestMapping(value="/{groupId}/users/{userId}", method=RequestMethod.GET )
-	public ResponseEntity<?> goupId_users_userId(@PathVariable(value="groupId") Long groupId,
-			@PathVariable(value="userId") Long userId ) throws RestClientException, Exception{
-		String url = URL + "/api/groups/" + groupId + "/users/" + userId;
-		return request.getObject().getForEntity(url, Map.class);
-	}
-
-	@RequestMapping(value="/{groupId}/users/{userId}/validate", method=RequestMethod.POST )
-	public ResponseEntity<?> goupId_users_userId_validate(@PathVariable(value="groupId") Long groupId,
-			@PathVariable(value="userId") Long userId ){
-		return null;
-	}
-
-	@RequestMapping(value="/{groupId}/users/{userId}/addFriend", method=RequestMethod.POST )
-	public ResponseEntity<?> goupId_users_userId_addFriend(@PathVariable(value="groupId") Long groupId,
-			@PathVariable(value="userId") Long userId ){
-		return null;
-	}
-
-	@RequestMapping(value="/{groupId}/users/{userId}/revoke", method=RequestMethod.POST )
-	public ResponseEntity<?> goupId_users_userId_revoke(@PathVariable(value="groupId") Long groupId,
-			@PathVariable(value="userId") Long userId ){
-		return null;
-	}
+	
+//	@RequestMapping(value="/{groupId}/users", method=RequestMethod.GET )
+//	public ResponseEntity<?> goupId_users(@PathVariable(value="groupId") Long groupId ) throws RestClientException, Exception{
+//		String url = URL + "/api/groups/" + groupId;
+//		return request.getObject().getForEntity(url, Map.class);
+//	}
 
 }

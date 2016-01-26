@@ -43,6 +43,7 @@ public abstract class AbstractFindRequest<CRES> {
     	return response;
     }
     
+    
     public ResponseEntity<CRES[]> find(Long id){
     	ResponseEntity<CRES[]> response = null;
     	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders() );
@@ -52,6 +53,8 @@ public abstract class AbstractFindRequest<CRES> {
     	
     	return response;
     }
+    
+  
     
     
     public ResponseEntity<CRES> findOne( Long id ){

@@ -23,7 +23,7 @@ public  class AbstractWriteRequest<CRES, CREQ > {
 	}
 	
 	public 
-	ResponseEntity<CRES> create( CREQ body ){
+	ResponseEntity<?> create( CREQ body ){
 		ResponseEntity<CRES> response = null;
     	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders(), body );
     	response = client.getRestTemplate().exchange(url + uri, HttpMethod.POST,  requestEntity,   responseClazz );

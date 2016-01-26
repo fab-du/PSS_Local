@@ -4,34 +4,49 @@ import java.util.Date;
 
 import org.springframework.data.annotation.LastModifiedDate;
 
-public class Group extends AbstractEntity{
-	String name, path;
-	public  Long version;
-	public @LastModifiedDate Date date;
+public class Group {
+	Long id; 
+	
+	String name;
+	
+	Long gvid;
+	
+	Date createdAt;
+
+	
+	public Group() {
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getPath() {
-		return path;
+
+	public Long getGvid() {
+		return gvid;
 	}
-	public void setPath(String path) {
-		this.path = path;
+
+	public void setGvid(Long gvid) {
+		this.gvid = gvid;
 	}
-	public Long getVersion() {
-		return version;
+
+	public Date getCreatedAt() {
+		return createdAt;
 	}
-	public void setVersion(Long version) {
-		this.version = version;
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	} 
-	
 	
 }
