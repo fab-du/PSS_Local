@@ -22,6 +22,7 @@ public abstract class AbstractFindRequest<CRES> {
     private String url;
     
     private String uri;
+    
     protected final RestClient client;
     
     protected final Class<CRES> responseClazz;
@@ -53,8 +54,6 @@ public abstract class AbstractFindRequest<CRES> {
     	
     	return response;
     }
-    
-  
     
     
     public ResponseEntity<CRES> findOne( Long id ){

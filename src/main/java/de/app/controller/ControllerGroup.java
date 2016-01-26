@@ -1,15 +1,6 @@
 package de.app.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-
-import javax.inject.Inject;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,14 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
-
-import com.google.gson.Gson;
-
-import de.app.RestRequest;
 import de.app.client.ClientGroup;
 import de.app.client.ClientUser;
 import de.app.model.*;
-import de.app.service.ServiceGroup;
 
 @RestController
 @RequestMapping(value="/api/groups")
@@ -56,39 +42,56 @@ public class ControllerGroup {
 	
 	@RequestMapping( value="/{groupId}/users", method = RequestMethod.GET )
 	public ResponseEntity<User[]> users( @PathVariable(value="groupId") Long groupId ){
-		clientUser.setUri( "/api/groups/" + groupId + "/" + "/users");
+		clientUser.setUri( "/api/groups/" + groupId + "/" + "users");
 		return clientUser.find(groupId);
 	}
-
-	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.GET )
-	public ResponseEntity<?> groupId_documents( @PathVariable(value="groupId") Long groupId ){
-		return null;
+	
+	@RequestMapping( value="/{groupId}/users", method = RequestMethod.POST )
+	public ResponseEntity<?> addUser( @PathVariable(value="groupId") Long groupId, @RequestBody User user ){
+		System.out.println( user.getId());
+		clientUser.Writer.setUri( "/api/groups/" + groupId + "/" + "users");
+		return clientUser.Writer.create(user, groupId);
 	}
 
-	@RequestMapping( value="/{groupId}/documents/addDocument", method = RequestMethod.POST )
-	public ResponseEntity<?> groupId_documents_addDocument( @PathVariable(value="groupId") Long groupId ){
-		return null;
-		
-	}
-
-
-	@RequestMapping( value="/{groupId}/documents/{documentId}", method = RequestMethod.GET )
-	public ResponseEntity<?> groupId_documents_documentId( @PathVariable(value="groupId") Long groupId,
-			@PathVariable(value="documentId") Long documentId){
+	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.GET)
+	public ResponseEntity<Document[]> documents( @PathVariable(value="groupId") Long groupId){
 		return null;
 	}
-
-	@RequestMapping( value="/{groupId}/documents/{documentId}/changeOwner", method = RequestMethod.POST )
-	public ResponseEntity<?> groupId_documents_documentId_changeOwner( @PathVariable(value="groupId") Long groupId,
-			@PathVariable(value="documentId") Long documentId){
+	
+	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.POST)
+	public ResponseEntity<?> addDocument( @PathVariable(value="groupId") Long groupId, @RequestBody Document document){
 		return null;
 	}
-
-	@RequestMapping( value="/{groupId}/documents/{documentId}/shareDocument", method = RequestMethod.POST )
-	public ResponseEntity<?> groupId_documents_documentId_shareDocument( @PathVariable(value="groupId") Long groupId,
-			@PathVariable(value="documentId") Long documentId){
-		return null;
-	}
+	
+//	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.GET )
+//	public ResponseEntity<?> groupId_documents( @PathVariable(value="groupId") Long groupId ){
+//		return null;
+//	}
+//
+//	@RequestMapping( value="/{groupId}/documents/addDocument", method = RequestMethod.POST )
+//	public ResponseEntity<?> groupId_documents_addDocument( @PathVariable(value="groupId") Long groupId ){
+//		return null;
+//		
+//	}
+//
+//
+//	@RequestMapping( value="/{groupId}/documents/{documentId}", method = RequestMethod.GET )
+//	public ResponseEntity<?> groupId_documents_documentId( @PathVariable(value="groupId") Long groupId,
+//			@PathVariable(value="documentId") Long documentId){
+//		return null;
+//	}
+//
+//	@RequestMapping( value="/{groupId}/documents/{documentId}/changeOwner", method = RequestMethod.POST )
+//	public ResponseEntity<?> groupId_documents_documentId_changeOwner( @PathVariable(value="groupId") Long groupId,
+//			@PathVariable(value="documentId") Long documentId){
+//		return null;
+//	}
+//
+//	@RequestMapping( value="/{groupId}/documents/{documentId}/shareDocument", method = RequestMethod.POST )
+//	public ResponseEntity<?> groupId_documents_documentId_shareDocument( @PathVariable(value="groupId") Long groupId,
+//			@PathVariable(value="documentId") Long documentId){
+//		return null;
+//	}
 
 	
 //	@RequestMapping(value="/{groupId}/users", method=RequestMethod.GET )

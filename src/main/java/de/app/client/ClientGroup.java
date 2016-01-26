@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import de.app.model.Group;
-import de.app.model.User;
 
 @Component
 public class ClientGroup extends AbstractFindRequest<Group>{
@@ -12,8 +11,6 @@ public class ClientGroup extends AbstractFindRequest<Group>{
 	public String uri = "/api/groups";
 	
 	public  AbstractWriteRequest<?, Group> Writer;
-
-
 	
 	@Autowired
 	public ClientGroup(RestClient client) {

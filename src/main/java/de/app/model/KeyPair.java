@@ -1,8 +1,5 @@
 package de.app.model;
 
-import java.util.Date;
-
-
 public class KeyPair extends AbstractEntity{
 	String pubkey;
 	

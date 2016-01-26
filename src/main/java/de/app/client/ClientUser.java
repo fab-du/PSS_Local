@@ -18,6 +18,11 @@ public class ClientUser extends AbstractFindRequest<User> {
 	@Value("${remote.users}")
 	String uri="/api/users";
 	
+	@Override
+	public void setUri(String uri) {
+		super.setUri(uri);
+	}
+	
 	@Autowired
 	public ClientUser(RestClient client) {
 		super(client, User.class, User[].class );
