@@ -4,10 +4,28 @@ import java.util.Date;
 
 import org.springframework.data.annotation.LastModifiedDate;
 
-public class Document extends AbstractEntity{
+public class Document {
+	Long id;
 	String name, path;
 	public Long version;
-	public @LastModifiedDate Date date;
+	public  Date date;
+	Date createdAt;
+	
+	
+	
+	
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}

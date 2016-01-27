@@ -40,7 +40,6 @@ public abstract class AbstractFindRequest<CRES> {
 
     	System.out.println( url + uri);
     	response = client.getRestTemplate().exchange(url + uri, HttpMethod.GET,  requestEntity,   findResponseClazz);
-    	
     	return response;
     }
     
@@ -59,6 +58,7 @@ public abstract class AbstractFindRequest<CRES> {
     public ResponseEntity<CRES> findOne( Long id ){
     	ResponseEntity<CRES> response = null;
     	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders() );
+    	System.out.println( url + uri);
     	response = client.getRestTemplate().exchange(url + uri + "/" + id, HttpMethod.GET,  requestEntity,   responseClazz, id);
     	return response;
     }

@@ -38,7 +38,7 @@ public class ControllerGroup {
 	ClientGroup clientGroup;
 	
 	@Autowired
-	ClientDocument cliendDocument;
+	ClientDocument clientDocument;
 
 	@Autowired 
 	ClientUser clientUser;
@@ -78,7 +78,8 @@ public class ControllerGroup {
 
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.GET)
 	public ResponseEntity<Document[]> documents( @PathVariable(value="groupId") Long groupId){
-		return null;
+		clientDocument.setUri("/api/groups/" + groupId + "/documents");
+		return clientDocument.find();
 	}
 	
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.POST)
@@ -86,7 +87,7 @@ public class ControllerGroup {
 		 serviceDocument.create(file);
 			
 			
-			String url = "http://localhost:8080/api/documents";
+			String url = "http://localhost:8080/api/groups/" + groupId + "/documents";
 			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -105,29 +106,20 @@ public class ControllerGroup {
 	    	return response;
 	}
 	
-//	@RequestMapping( value="/{groupId}/documents/{documentId}", method = RequestMethod.GET )
-//	public ResponseEntity<?> groupId_documents_documentId( @PathVariable(value="groupId") Long groupId,
-//			@PathVariable(value="documentId") Long documentId){
-//		return null;
-//	}
-//
-//	@RequestMapping( value="/{groupId}/documents/{documentId}/changeOwner", method = RequestMethod.POST )
-//	public ResponseEntity<?> groupId_documents_documentId_changeOwner( @PathVariable(value="groupId") Long groupId,
-//			@PathVariable(value="documentId") Long documentId){
-//		return null;
-//	}
-//
-//	@RequestMapping( value="/{groupId}/documents/{documentId}/shareDocument", method = RequestMethod.POST )
-//	public ResponseEntity<?> groupId_documents_documentId_shareDocument( @PathVariable(value="groupId") Long groupId,
-//			@PathVariable(value="documentId") Long documentId){
-//		return null;
-//	}
-
+	@RequestMapping( value="/{groupId}/documents/{documentId}", method = RequestMethod.GET )
+	public ResponseEntity<?> groupId_documents_documentId( @PathVariable(value="groupId") Long groupId,
+			@PathVariable(value="documentId") Long documentId){
+		String uri = "/api/groups/" + groupId + "/documents/";
+		clientDocument.setUri( uri );
+		return clientDocument.findOne(documentId);
+	}
 	
-//	@RequestMapping(value="/{groupId}/users", method=RequestMethod.GET )
-//	public ResponseEntity<?> goupId_users(@PathVariable(value="groupId") Long groupId ) throws RestClientException, Exception{
-//		String url = URL + "/api/groups/" + groupId;
-//		return request.getObject().getForEntity(url, Map.class);
-//	}
+
+	//TODO
+	@RequestMapping( value="/{groupId}/documents/{documentId}/shareDocument", method = RequestMethod.POST )
+	public ResponseEntity<?> groupId_documents_documentId_shareDocument( @PathVariable(value="groupId") Long groupId,
+			@PathVariable(value="documentId") Long documentId){
+		return null;
+	}
 
 }
