@@ -30,8 +30,7 @@ public class LocalApplication {
 	
 //	@Bean
 //	public CommonsMultipartResolver multipartResolver(){
-//		final CommonsMultipartResolver resolver = 
-//				new CommonsMultipartResolver(SpringApplication.);
+//		final CommonsMultipartResolver resolver = new CommonsMultipartResolver();
 //		resolver.setMaxUploadSize(500000);
 //		return resolver;
 //	}
@@ -57,6 +56,13 @@ public class LocalApplication {
 		RestTemplate template = new RestTemplate();
 		return new RestTemplate();
 	}
+	
+//	@Bean
+//	public CommonsMultipartResolver multipartResolver(){
+//		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+//		multipartResolver.setMaxUploadSize(5000000);
+//		return multipartResolver;
+//	}
 
     public static void main(String[] args) {
         SpringApplication.run(LocalApplication.class, args);

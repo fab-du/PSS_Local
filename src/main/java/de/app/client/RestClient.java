@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.httpclient.methods.MultipartPostMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -29,7 +30,6 @@ public class RestClient{
 		
 		List<HttpMessageConverter<?>> messageConverters = this.restTemplate.getMessageConverters();
 		//messageConverters.add( new MappingJackson2HttpMessageConverter());
-		
 	    for (HttpMessageConverter<?> converter : messageConverters) {
 	        if (converter instanceof MappingJackson2HttpMessageConverter) {
 	            MappingJackson2HttpMessageConverter jsonConverter = (MappingJackson2HttpMessageConverter) converter;

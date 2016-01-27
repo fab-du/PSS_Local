@@ -14,6 +14,7 @@ import java.util.Arrays;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
@@ -29,15 +31,55 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import de.app.RestRequest;
+import de.app.model.Group;
 import de.app.model.KeyPair;
 
+@Component
 public class ServiceDocument {
+
+	public
+	ResponseEntity<?> create( MultipartFile file ) throws IOException{
+		if ( file.isEmpty() )
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+		InputStream is = file.getInputStream();
+		
+		FileOutputStream fos = new FileOutputStream(new File(file.getOriginalFilename()));
+			int read = 0;
+			final byte[] bytes = new byte[1024];
+		
+			while((read=is.read(bytes)) != -1){
+				fos.write(bytes, 0, read);
+			}
+			
+			is.close();
+			fos.close();
+			return new ResponseEntity<>(HttpStatus.OK);
+	}
 	
 	
-	@Autowired
-	RestRequest rest;
+	public
+	ResponseEntity<?> create( MultipartFile file, Group group ) throws IOException{
+		if ( file.isEmpty() )
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-
+		InputStream is = file.getInputStream();
+		
+		FileOutputStream fos = new FileOutputStream(new File(file.getOriginalFilename()));
+			int read = 0;
+			final byte[] bytes = new byte[1024];
+		
+			while((read=is.read(bytes)) != -1){
+				fos.write(bytes, 0, read);
+			}
+			
+			is.close();
+			fos.close();
+			return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	
+	
 	private String decrypt_symkey( String enc_symkey, String passphrase, String enc_prikey, String prikey_salt ){
 		return null;
 	}
@@ -101,40 +143,21 @@ public class ServiceDocument {
         }	
 	}
 	
-	private String writeFile( MultipartFile file ){
-	    String name = file.getOriginalFilename();
-	    System.out.println("come here");
-        if (!file.isEmpty()) {
-            try {
-                byte[] bytes = file.getBytes();
 
-                BufferedOutputStream stream =
-                        new BufferedOutputStream(new FileOutputStream(new File(name)));
-                stream.write(bytes);
-                stream.close();
-                return "You successfully uploaded " + name + "!";
-            } catch (Exception e) {
-                return "You failed to upload " + name + " => " + e.getMessage();
-            }
-        } else {
-            return "You failed to upload " + name + " because the file was empty.";
-        }	
-	}
-	
 
-	public void fetchDocument( InputStream in , MultipartHttpServletRequest mRequest ) throws RestClientException, Exception{
-			HttpHeaders headers = new HttpHeaders();
-			headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
-		    HttpEntity<String> entity = new HttpEntity<String>(headers);
-
-		    ResponseEntity<byte[]> response = rest.getObject().exchange(
-		            "https://www.google.com/images/srpr/logo11w.png",
-		            HttpMethod.GET, entity, byte[].class, "1");
-
-		    if (response.getStatusCode() == HttpStatus.OK) {
-		        Files.write(Paths.get("google.png"), response.getBody());
-		    }
-	
-	}
+//	public void fetchDocument( InputStream in , MultipartHttpServletRequest mRequest ) throws RestClientException, Exception{
+//			HttpHeaders headers = new HttpHeaders();
+//			headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+//		    HttpEntity<String> entity = new HttpEntity<String>(headers);
+//
+//		    ResponseEntity<byte[]> response = rest.getObject().exchange(
+//		            "https://www.google.com/images/srpr/logo11w.png",
+//		            HttpMethod.GET, entity, byte[].class, "1");
+//
+//		    if (response.getStatusCode() == HttpStatus.OK) {
+//		        Files.write(Paths.get("google.png"), response.getBody());
+//		    }
+//	
+//	}
 
 }
