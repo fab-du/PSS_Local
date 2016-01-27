@@ -1,24 +1,53 @@
 package de.app.service;
 
-import de.app.model.form.FormRegister;
-
-
-
 import java.math.BigInteger;
-import java.util.Base64;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
-import com.nimbusds.*;
+
+import org.jose4j.keys.AesKey;
+import org.jose4j.lang.ByteUtil;
+
 import com.nimbusds.srp6.SRP6ClientCredentials;
 import com.nimbusds.srp6.SRP6ClientSession;
 import com.nimbusds.srp6.SRP6CryptoParams;
 import com.nimbusds.srp6.SRP6Exception;
 import com.nimbusds.srp6.SRP6VerifierGenerator;
 
+import de.app.model.User;
+import de.cryptone.salt.Salt;
+import de.cryptone.utils.Helper;
+import io.jsonwebtoken.impl.crypto.RsaProvider;
+
 public class ServiceUser {
 		SRP6ClientSession client;
 
-	public Map<String, String> register( Map<String, String> user ){
+	public Map<String, String> register( User user ) throws NoSuchAlgorithmException{
+		KeyPair keypair = RsaProvider.generateKeyPair(512 );
+		byte[] salt = ByteUtil.randomBytes(512);
+		Key symkey = new AesKey(salt);
+		
+		
+		
+
+		//Map<String, String> result =  new HashMap<String, String>(); 
+
+//		result.put("pubkey", keypair.getPubkey());
+//		result.put("prikey", keypair.getPrikey());
+//		result.put("pairkeySalt", keypair.getSalt());
+//		result.put("email", user.get("email"));
+//		result.put("firstname", user.get("firstname"));
+//		result.put("secondname", user.get("secondname"));
+
+//		result.put("company", user.get("company"));
+//		result.put("groupname", user.get("company") + "_" + "group");
+//
+//		Map<String, String> verifierAndSalt = 
+//		this.generateVerifierAndSalt( user.get("email"), user.get("password"));
+//		result.putAll(verifierAndSalt);
 		return null;
 	}
 

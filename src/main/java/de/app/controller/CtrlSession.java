@@ -132,9 +132,10 @@ public class CtrlSession {
 	@RequestMapping( value="/register", method = RequestMethod.POST )
 	@Produces("application/json")
 	public ResponseEntity<LinkedHashMap<String, String>> 
-		register( @RequestBody Map<String, String> newregister ) throws RestClientException, Exception{
-			Map<String, String> result = serviceuser.register( newregister );
-		return POST.simplePost("/session/register", result);
+		register( @RequestBody Map<String, String> newregister ){
+//			Map<String, String> result = serviceuser.register( newregister );
+//		return POST.simplePost("/session/register", result);
+		return null;
 	}
 
 	@RequestMapping( value="/logout", method = RequestMethod.POST )
