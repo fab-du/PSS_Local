@@ -18,12 +18,11 @@ angular
     'ngRoute',
     'ngMaterial',
     'ui.router',
-    /*
-     *'ngMockE2E',
-     */
+    'ngMockE2E',
     'ui.grid',
-    'ui.grid.selection',
+    'ui.grid.autoResize',
     'ngFileUpload',
+    'ui.grid.selection',
     'ngSanitize'
   ])
   .config(function ($routeProvider, $resourceProvider, $stateProvider ) {

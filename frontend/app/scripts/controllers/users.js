@@ -14,7 +14,6 @@ angular.module('cryptClientApp')
         Rest.User.find().$promise.then( function( users ){
             $scope.users = users; 
         });
-
     }
 
     init();

@@ -14,9 +14,9 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -45,6 +45,11 @@
 
     <md-toolbar layout="row" layout-align="center end" layout="row" class="md-thin">
         <div  ng-controller="SessionController" > 
+
+            <md-button ng-click="toggleNavBar()">
+                nav
+            </md-button>
+
             <md-button ng-if="!isLoggedIn" ui-sref="login" >
                 login
             </md-button>
@@ -81,54 +86,60 @@
     </div> 
     
 
-        <div flex  ng-if="isLoggedIn" layout="column">
+    <div flex  ng-if="isLoggedIn" layout="row">
 
-            <mg-sidenav layout="row" md-is-locked-open="$mdMedia('gt-md')" md-component-id="left" class="md-sidenav-left md-whiteframe-z2" ng-cloak>
-                        <md-list>
-                            <md-item>
-                                <md-button  ng-click="goHome()" class="menu" aria-label="home">
-                                    <md-icon md-svg-src="/images/48/home.svg" class="avatar"></md-icon>
-                                        Home
-                                </md-button>
-                            </md-item>
-                            
-                            <md-item>
-                                <md-button  ng-click="goUpload()" class="menu" aria-label="upload">
-                                    <md-icon md-svg-src="/images/18/upload.svg" class="avatar"></md-icon>
-                                        upload
-                                </md-button>
-                            </md-item>
-                        </md-list>
-            </md-sidenav>
-
-
-            <md-content flex id="content">
-                <ui-view></ui-view>
-            </md-content>
-
+        <div ng-show="navBarShow" flex="15" ng-hide="navBarHide" >
+            <nav  ng-cloak>
+                <md-list>
+                    <md-item>
+                        <md-button  ng-click="goHome()" class="menu" aria-label="home">
+                            <md-icon md-svg-src="/images/48/home.svg" class="avatar"></md-icon>
+                                Home
+                        </md-button>
+                    </md-item>
+                    
+                    <md-item>
+                        <md-button  ng-click="goUpload()" class="menu" aria-label="upload">
+                            <md-icon md-svg-src="/images/18/upload.svg" class="avatar"></md-icon>
+                                upload
+                        </md-button>
+                    </md-item>
+                </md-list>
+            </nav>
         </div>
 
-        <ui-view ng-if="!isLoggedIn" layout-align="center end" layout="row"></ui-view>
+
+        <div flex>
+            <md-content id="content">
+                <ui-view></ui-view>
+            </md-content>
+        </div>
+
+    </div>
+
+    <ui-view ng-if="!isLoggedIn" layout-align="center end" layout="row"></ui-view>
 
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-aria/angular-aria.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-messages/angular-messages.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-material/angular-material.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.js"></script>
     <script src="bower_components/angular-mocks/angular-mocks.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/spin.js/spin.js"></script>
+    <script src="bower_components/angular-spinner/angular-spinner.js"></script>
+    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
     <script src="bower_components/ng-file-upload-shim/ng-file-upload-shim.js"></script>
-    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -153,7 +164,7 @@
         <script src="scripts/directives/directive.js"></script>
         <script src="scripts/controllers/session.js"></script>
         <script src="scripts/services/auth_events.js"></script>
-        <script src="scripts/services/header.js"></script>
         <!-- endbuild -->
 </body>
 </html>
+

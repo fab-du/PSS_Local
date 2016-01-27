@@ -9,32 +9,45 @@
 angular.module('cryptClientApp')
 .directive('tab', function( ){
 return{
-    template : '<style ui-grid-style>{{ ui-style }}</style><div ui-grid=gridOptions class="grid" ui-grid-selection ></div>',
     restrict : 'E',
+    templateUrl : '/views/documents/widget.document.list.html',
     transclude : false,
     scope : {
         data : '=',
         crudOnSelect : '=', // display delete/add button on select.
         onSelect : '='
     },
-    link : function( scope, el ){
+    link : function( scope, el, attrs ){
+
 
         scope.gridOptions = {
             enableSelectAll: true,
             enableSelection: true,
             enableFiltering: true,
             showHeader : false,
-            selectionRowHeaderWidth: 35,
-            rowHeight: 35,
             showGridFooter:true
         };
 
         var data = [];
+        scope.details = [];
+        scope.selected = false;
+
         var selectHandler = function( row ){
-                                console.log( row );
+                                if( row.isSelected ){
+                                    scope.details.push( angular.toJson (row.entity) )
+                                    scope.selected = true;
+                                }
+                                else{
+                                    scope.details.pop( row.entity );
+                                }
+
+                                if ( scope.details.length === 0 ){
+                                    scope.selected = false;
+                                }
                             };
 
-        scope.$watch('data', function(){
+        scope.$watch('data', function( ){
+            console.log( attrs.data );
             scope.gridOptions.data = scope.data;
         });
 
@@ -65,11 +78,9 @@ return{
 };
 })
 .directive('accessLevel', function ( Auth ) {
-    //TODO
 return {
     restrict: 'A',
     link: function($scope, element, attrs) {
-
         function updateCSS() {
             if(isLoggedIn) {
                     element.css('display', 'none');
@@ -79,7 +90,6 @@ return {
                 }
             }
         }
-    
 };
 })
 .directive('uploader', function( ){
@@ -145,5 +155,39 @@ return {
         },
     };
 
+})
+
+.directive('matchFilter', function( $filter ){
+    return{
+        
+        restrict : 'E',
+        scope : {
+            data : '='
+        },
+        template :  ''
+                    + '<div id="selectBox" class="md-alert" ng-hide="closed" on-close="closed=true" ><div><input type="text" style="width:200px;" name="" id="" value="{{substring}}" ng-model="substring" /></div>'
+                    + '<div id="elements" ><div class="selectClass" ng-click="matchFilterSelect(it)" ng-repeat="it in data track by $email | filter:substring"> {{ it }} <hr style="background=lightblue"/>  </div></div></div>',
+
+        controller : function( $filter, $scope, $rootScope ){
+            $scope.closed = false;
+            $scope.substring= "";
+
+            $scope.matchFilterSelect  = function( el ){
+                $rootScope.selectedElement = el;
+                $scope.closed = true;
+            };
+        },
+        link : function(scope, el , attrs ){
+            var _selectBox = angular.element('#elements .selectClass');
+                _selectBox.on('click', function(ev){
+                    $scope.$emit( 'element:selected');
+
+                })
+
+                scope.$watch('substring', function( _new, _old ){
+            })
+
+        }
+    }
 });
 

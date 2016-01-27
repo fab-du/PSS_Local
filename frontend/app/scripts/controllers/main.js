@@ -10,7 +10,6 @@
 angular.module('cryptClientApp')
 
 .controller('MainController', function ( $q, $scope, $window, $rootScope, AUTH_EVENTS,  $state, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth ) {
-
     $scope.errors = "";
     $rootScope.isLoggedIn = false;
     $scope.$watch( "errors", function( newErrors , oldErrors ){
@@ -28,8 +27,7 @@ angular.module('cryptClientApp')
     };
 
     $scope.openLeftMenu = function(){
-        $mdSidenav("left").toggle().then( function(){
-        });
+        $mdSidenav("left").toggle();
     };
 
 
@@ -45,6 +43,20 @@ angular.module('cryptClientApp')
             $state.go( tablabel + "." + tabcontent );
         }
     };
+
+
+    $scope.navBarShow = true;
+    $scope.toggleNavBar = function(){
+        $scope.navBarHide = true;
+        var toggle = $scope.navBarShow;
+        $scope.navBarHide = toggle;
+        $scope.navBarShow = !toggle;
+    };
+
+    $scope.$watch('navBarShow', function(_new, _old){
+        console.log( _new )
+       $scope.navBarToggle = _new; 
+    });
 
 
     $scope.goHome = function( ){
@@ -72,46 +84,25 @@ angular.module('cryptClientApp')
 	$rootScope.$on(AUTH_EVENTS.notAuthenticated, function(){
         $rootScope.isLoggedIn = false;
         Storage.remove();
-        $window.location.href = "/#/session/login";
+        window.location.href = "/#/session/login"
     });
 	$rootScope.$on(AUTH_EVENTS.sessionTimeout, function(){
         console.log( AUTH_EVENTS.sessionTimeout );
         Storage.remove();
-        $window.location.href = "/";
+        window.location.href = "/"
     });
 	$rootScope.$on(AUTH_EVENTS.logoutSuccess, function(){
         $rootScope.isLoggedIn = false;
         Storage.remove();
-        $window.location.href = "/";
+        window.location.href = "/"
     });
 	$rootScope.$on(AUTH_EVENTS.loginSuccess, function(){
         $rootScope.isLoggedIn = Auth.isLoggedIn();
-        $window.location.href = "#/";
-    });
-
-	$rootScope.$on(AUTH_EVENTS.loginFailed, function(){
-        $window.location.href = "#/";
-        $rootScope.isLoggedIn = false;
-        Storage.remove();
-    });
-
-	$rootScope.$on(AUTH_EVENTS.registrationFailed, function(){
-        $window.location.href = "#/";
-        $rootScope.isLoggedIn = false;
-        Storage.remove();
-        showMessage("success-toast",  AUTH_EVENTS.registrationFailed );
-    });
-
-	$rootScope.$on(AUTH_EVENTS.registrationSuccess, function(){
-        $window.location.href = "#/";
-        $rootScope.isLoggedIn = false;
-        Storage.remove();
-        showMessage("success-toast",  AUTH_EVENTS.registrationSuccess );
+        window.location.href = "#/users";
     });
 
 	$rootScope.$on(AUTH_EVENTS.notFound, function(){
         showMessage("success-toast",  AUTH_EVENTS.notFound );
     });
-
 
 });
