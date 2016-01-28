@@ -18,7 +18,9 @@ angular
     'ngRoute',
     'ngMaterial',
     'ui.router',
-    'ngMockE2E',
+    /*
+     *'ngMockE2E',
+     */
     'ui.grid',
     'ui.grid.autoResize',
     'ngFileUpload',
@@ -37,23 +39,35 @@ angular
       .state('login', {
             url : "/session/login",
             controller : "LoginController",
-            templateUrl : "/views/session/login.html"
+            templateUrl : "/views/session/login.html",
+            templateProvider : function($templateCache){
+                var templ = $templateCache.get('/views/session/login.html');
+            }
       })
       .state('register', {
             controller : "RegisterController",
-            templateUrl : "/views/session/register.html"
+            templateUrl : "/views/session/register.html",
+            templateProvider : function($templateCache){
+                return $templateCache.get('/views/session/register.html');
+            }
       });
 
       $stateProvider
       .state('users', {
           url : '/users', 
           controller : "UsersController",
-          templateUrl : "/views/users.html"
+          templateUrl : "/views/users.html",
+            templateProvider : function($templateCache){
+                return $templateCache.get('/views/users.html');
+            }
       })
       .state('users.groups', {
           url : '/users_grp_admin',
           controller : 'UserGroupController',
-          templateUrl : '/views/groups/mygroups.html'
+          templateUrl : '/views/groups/mygroups.html',
+            templateProvider : function($templateCache){
+                return $templateCache.get('/views/groups/mygroups.html');
+            }
       })
       .state('users.userId', {
           url : '/:userId'
@@ -76,7 +90,10 @@ angular
       })
       .state('groups.admin', {
           url : '/groups_admin',
-          templateUrl : "/views/groups/my_groups.html"
+          templateUrl : "/views/groups/my_groups.html",
+            templateProvider : function($templateCache){
+                return $templateCache.get('/views/groups/my_groups.html');
+            }
       })
       .state('groups.groupId', {
           url : '/:groupId'
@@ -91,11 +108,17 @@ angular
       $stateProvider
       .state('documents', {
           url : '/documents',
-          templateUrl : "/views/documents.html"
+          templateUrl : "/views/documents.html",
+            templateProvider : function($templateCache){
+                return $templateCache.get('/views/documents.html');
+            }
       })
       .state('documents.upload', {
           url : '/documents/upload',
-          templateUrl : "/views/documents/documents.upload.html"
+          templateUrl : "/views/documents/documents.upload.html",
+            templateProvider : function($templateCache){
+                return $templateCache.get('/views/documents/documents.upload.html');
+            }
       })
       .state('documents.documentId', {
           url : '/:documentId'
@@ -119,7 +142,7 @@ angular
       $routeProvider.otherwise({redirectTo: '/'});
 
 })
-.run(function ($rootScope, AUTH_EVENTS, Auth, $templateCache) {
+.run(function ($rootScope, AUTH_EVENTS, Auth) {
     $rootScope.$on('$stateChangeStart', 
     function(){
         if( !Auth.isLoggedIn() ){
@@ -127,6 +150,5 @@ angular
         }
 
     });
-
-});
+})
 

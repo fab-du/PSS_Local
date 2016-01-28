@@ -28,7 +28,8 @@ api.login = function( user ){
     $http.post('/session/login', user).success(function( response, status , headers ){
         var authHeaders = headers();
 
-        Storage.set("currentUser", user.email );
+        Storage.set("currentUserEmail", response.email);
+        Storage.set("currentUserId", response.currentUserId);
         //Storage.putAll( authHeaders );
         $rootScope.$broadcast( AUTH_EVENTS.loginSuccess );
         q.resolve( status  );
@@ -43,10 +44,24 @@ api.login = function( user ){
 
 
 api.isLoggedIn =  function() {
-    var currentUser = Storage.get("currentUser");
-    var ret = currentUser !== null;
+    var currentUserEmail = Storage.get("currentUserEmail");
+    var currentUserId = Storage.get("currentUserId");
+    var ret = ((currentUserEmail !== null) &&( currentUserId !== null )) ;
     return  ret;
 }
+
+api.getCurrentUser = function(){
+    var currentUserEmail = Storage.get("currentUserEmail");
+    var currentUserId = Storage.get("currentUserId");
+    var ret = ((currentUserEmail !== null) &&( currentUserId !== null )) ;
+
+    if( ret === true ){
+        return { currentUserEmail : currentUserEmail, currentUserId: currentUserId };
+    }
+    else{
+        return null;
+    }
+};
 
 
 api.logout =  function(){

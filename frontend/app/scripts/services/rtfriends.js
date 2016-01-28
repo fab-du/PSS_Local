@@ -7,20 +7,22 @@
  * # REST - Resource : Friends
  */
 angular.module('cryptClientApp')
-.factory('RouteFriends', function () {
+.factory('RouteFriends', function ( Auth ) {
+
+var currentUser = Auth.getCurrentUser();
+var currentUserId = currentUser.currentUserId; 
 
 var routes = 
 {
-    url : '/api/friends/:friendId/:suffix',
+    url : '/api/:currentUserId/friends/:friendId/:suffix',
     defaults : { friendId : '@friendId', suffix : '' },
     actions : 
     {
-        find         : { method : 'GET' },
+        find         : { method : 'GET' , params : { currentUserId : currentUserId  } },
         findOne      : { method : 'GET' },
         addFriend    : { method : 'POST' },
-        validate     : { method : 'POST', params : { suffix  : 'validate' }},
-        revokeFriend : { method : 'POST', params : { suffix  : 'revoke' }},
-        addToGroup   : { method : 'POST', params : { suffix  : 'addToGroup', group : '@groupId' }}
+        revokeFriend : { method : 'POST', params : { currentUserId : currentUserId , suffix  : 'revoke' }},
+        addToGroup   : { method : 'POST', params : { currentUserId : currentUserId , suffix  : 'addToGroup', group : '@groupId' }}
     }
 
 };

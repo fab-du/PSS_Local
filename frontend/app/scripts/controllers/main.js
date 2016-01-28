@@ -9,7 +9,7 @@
  */
 angular.module('cryptClientApp')
 
-.controller('MainController', function ( $q, $scope, $window, $rootScope, AUTH_EVENTS,  $state, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth ) {
+.controller('MainController', function ( $q, $scope, $window, $rootScope, AUTH_EVENTS,  $state, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth, $mdDialog ) {
     $scope.errors = "";
     $rootScope.isLoggedIn = false;
     $scope.$watch( "errors", function( newErrors , oldErrors ){
@@ -22,7 +22,7 @@ angular.module('cryptClientApp')
     {
         "users"     : {label : "users"    , contents : ["friends", "groups", "search"]  },
         "documents" : {label : "documents", contents : ["private", "groups" ] },
-        "groups"    : {label : "groups"   , contents : ["admin", "member", "search" ] },
+        "groups"    : {label : "groups"   , contents : ["admin", "member", "search", "add" ] },
         "friends"   : {label : "friends"  , contents : ["find" ] },
     };
 
@@ -39,7 +39,11 @@ angular.module('cryptClientApp')
     };
 
     $scope.tabContentClick = function( tablabel, tabcontent ){
-        if( $rootScope.isLoggedIn ){
+        if( tabcontent === "add" && tablabel === "groups" ){
+            $scope.showAddGroup();
+        }
+
+        if( $rootScope.isLoggedIn && tabcontent !== "add" ){
             $state.go( tablabel + "." + tabcontent );
         }
     };
@@ -74,6 +78,33 @@ angular.module('cryptClientApp')
                 position: 'center left'
         });
     }
+
+
+    $scope.showAddGroup = showAddGroup;  
+
+    function showAddGroup( actionOnSuccess ){
+        var content = {
+            parent : angular.element('window'),
+            template:'<md-dialog aria-label="Mango (Fruit)"> <md-content class="md-padding"> <form name="newGroupForm"> <div layout layout-sm="column"> <md-input-container flex> <label>Groupname</label> <input ng-model="newgroup.name" placeholder="Placeholder text"> </md-input-container> </md-content> <div class="md-actions" layout="row"> <span flex></span> <md-button ng-click="closeDialog()"> Cancel </md-button> <md-button ng-click="success( newgroup )" class="md-primary"> Save </md-button> </div></md-dialog>',
+            controller : function ( $scope, $mdDialog ){
+                $scope.newgroup = {};
+
+                $scope.closeDialog = function () {
+                    $mdDialog.hide( );
+                };
+
+                $scope.success = function( newgroup ){
+                      console.log( newgroup );
+                      $mdDialog.hide( );
+                };
+
+            }
+        };
+
+        var dialog = $mdDialog.show( content );
+    }
+
+
 
 
     // auth message handler 
