@@ -40,12 +40,6 @@ public class Helper {
 		return gson.fromJson(jsonString, Map.class);
 	}
 	
-
-	public static String NullOrException( String message ) throws Exception{
-		if( AppProperties.getProperty("dev").trim().equals( new String("true").trim()) )
-			return null;
-			throw new Exception(message);
-	}
 	
 	public static PublicKey pubKeyFromString( String pubkey ){
 		byte[] pubkeyBytes = Base64.getDecoder().decode( pubkey.getBytes());

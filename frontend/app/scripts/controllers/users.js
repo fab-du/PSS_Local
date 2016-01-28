@@ -14,6 +14,22 @@ angular.module('cryptClientApp')
         Rest.User.find().$promise.then( function( users ){
             $scope.users = users; 
         });
+
+        Rest.Group.find().$promise.then( function( groups ){
+            $scope.groups = groups;
+        });
+
+        Rest.Group.find().$promise.then( function( groups ){
+            $scope.groups = groups;
+        });
+
+        Rest.Friend.find().$promise.then( function( friends ){
+            $scope.friends = friends;
+        });
+
+        Rest.Document.find().$promise.then( function( documents ){
+            $scope.documents  = documents; 
+        });
     }
 
     init();

@@ -25,7 +25,7 @@ angular
     'ui.grid.selection',
     'ngSanitize'
   ])
-  .config(function ($routeProvider, $resourceProvider, $stateProvider ) {
+  .config(function ($routeProvider, $resourceProvider, $stateProvider) {
 
 
       $stateProvider
@@ -119,7 +119,7 @@ angular
       $routeProvider.otherwise({redirectTo: '/'});
 
 })
-.run(function ($rootScope, AUTH_EVENTS, Auth) {
+.run(function ($rootScope, AUTH_EVENTS, Auth, $templateCache) {
     $rootScope.$on('$stateChangeStart', 
     function(){
         if( !Auth.isLoggedIn() ){

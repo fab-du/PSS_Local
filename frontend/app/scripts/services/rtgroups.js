@@ -24,7 +24,6 @@ var routes =
         users        : { method : 'GET',  params : { suffix : 'users' }}
     }, 
     opts : {}
-
 };
 
 return { routes : routes };
