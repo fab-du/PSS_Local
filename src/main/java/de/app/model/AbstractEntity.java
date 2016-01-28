@@ -2,11 +2,14 @@ package de.app.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 public class AbstractEntity {
 	
 	Long id;
 	
+	@JsonIgnore
 	Date createdAt;
 
 	public Long getId() {
@@ -24,7 +27,4 @@ public class AbstractEntity {
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
-	
-	
-
 }

@@ -14,27 +14,29 @@ public class User extends AbstractEntity{
 	 * 		 - email
 	 * 		 - company
 	 */
-	@NotBlank
-	String firstname, secondname,  company; 
+	String firstname;
+	String secondname;
+	
+	String company; 
 
 	@NotBlank
 	@Email
 	String email;
 	
+	@JsonIgnore
+	String password;
+	
+	@JsonIgnore
+	String passphrase;
+	
+	@JsonIgnore
 	boolean validated=false;
-
 	
-	public User() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	
+	public User() {	}
 
 	public boolean isValidated() {
 		return validated;
 	}
-
-
 
 	public void setValidated(boolean validated) {
 		this.validated = validated;
@@ -72,6 +74,30 @@ public class User extends AbstractEntity{
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
+
+	public String getPassphrase() {
+		return passphrase;
+	}
+
+
+
+	public void setPassphrase(String passphrase) {
+		this.passphrase = passphrase;
 	}
 	
 	

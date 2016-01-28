@@ -54,13 +54,13 @@ public class LocalApplication {
 	@Bean
 	public RestTemplate restTemplate(){
 		RestTemplate template = new RestTemplate();
-		return new RestTemplate();
+		return template;
 	}
+	
 	
 //	@Bean
 //	public CommonsMultipartResolver multipartResolver(){
 //		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-//		multipartResolver.setMaxUploadSize(5000000);
 //		return multipartResolver;
 //	}
 

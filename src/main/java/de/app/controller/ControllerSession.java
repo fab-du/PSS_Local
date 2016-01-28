@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Produces;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -28,7 +28,7 @@ import de.cryptone.key.KeyPair;
 
 @RestController
 @RequestMapping(value="/session")
-public class CtrlSession {
+public class ControllerSession {
 
 	@Autowired
 	RestRequest request;
@@ -44,11 +44,6 @@ public class CtrlSession {
 	@Produces("application/json")
 	public ResponseEntity<LinkedHashMap<String, String>>
 	login_challenge( @RequestBody Map<String, String> authdata, HttpServletRequest mRequest, HttpServletResponse response ) throws RestClientException, Exception{
-	
-		
-		boolean ret = false; 
-		
-		
 		
 		ResponseEntity<LinkedHashMap<String, String>> result = null;
 		String email = authdata.get("email"); 
@@ -103,6 +98,8 @@ public class CtrlSession {
 		ResponseEntity<LinkedHashMap<String, String>> endResponse = 
 		POST.simplePost("/session/login/authenticate", result1);
 
+		HttpHeaders headers = new HttpHeaders(); 
+		headers = endResponse.getHeaders();
 		LinkedHashMap<String, String> zwischenErg = endResponse.getBody();
 		
 		if ( zwischenErg == null ){
@@ -111,8 +108,7 @@ public class CtrlSession {
 			new ResponseEntity<LinkedHashMap<String,String>>(errorMessage, HttpStatus.UNAUTHORIZED );
 		}
 		zwischenErg.put("prikey", _keypair.get("priKey"));
-		org.springframework.http.HttpHeaders headers = endResponse.getHeaders();
-		return new ResponseEntity<LinkedHashMap<String, String>>( zwischenErg, request.getHeader(), HttpStatus.OK );
+		return new ResponseEntity<LinkedHashMap<String, String>>( zwischenErg, headers, HttpStatus.OK );
 	}
 	
 

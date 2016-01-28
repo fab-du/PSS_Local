@@ -1,13 +1,21 @@
 package de.app.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -86,7 +94,6 @@ public class ControllerGroup {
 	public ResponseEntity<?> addDocument( @PathVariable(value="groupId") Long groupId,@RequestParam("file") MultipartFile file ) throws IOException{
 		 serviceDocument.create(file);
 			
-			
 			String url = "http://localhost:8080/api/groups/" + groupId + "/documents";
 			
 			HttpHeaders headers = new HttpHeaders();
@@ -112,6 +119,25 @@ public class ControllerGroup {
 		String uri = "/api/groups/" + groupId + "/documents/";
 		clientDocument.setUri( uri );
 		return clientDocument.findOne(documentId);
+	}
+	
+	@RequestMapping( value="/{groupId}/documents/{documentId}/download", method = RequestMethod.GET )
+	public ResponseEntity<InputStreamResource> groupId_documents_documentId_download( @PathVariable(value="groupId") Long groupId,
+			@PathVariable(value="documentId") Long documentId, HttpServletResponse response) throws IOException{
+		File file = new File("deployment.jpg");
+//		InputStream is = new FileInputStream( file);
+//		response.setHeader("Content-Type", "application/jpg");
+//		response.setHeader("Content-Disposition", "attachment; filename='deployment.jpg'"); 
+//		IOUtils.copy(is, response.getOutputStream());
+//		response.flushBuffer();
+		
+		  HttpHeaders respHeaders = new HttpHeaders();
+		   // respHeaders.setContentType("application/jpg");
+		    respHeaders.setContentLength(12345678);
+		    respHeaders.setContentDispositionFormData("attachment", "deployment.jpg");
+		 InputStreamResource isr = new InputStreamResource(new FileInputStream(file));
+		    return new ResponseEntity<InputStreamResource>(isr,respHeaders, HttpStatus.OK);
+		
 	}
 	
 

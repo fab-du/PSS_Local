@@ -27,28 +27,30 @@ public class ServiceUser {
 
 	public Map<String, String> register( User user ) throws NoSuchAlgorithmException{
 		KeyPair keypair = RsaProvider.generateKeyPair(512 );
-		byte[] salt = ByteUtil.randomBytes(512);
-		Key symkey = new AesKey(salt);
+		byte[] _salt = ByteUtil.randomBytes(512);
+		Key symkey = new AesKey(_salt);
 		
-		
+		String pubKey = Helper.encode( keypair.getPublic().getEncoded());
+		String priKey = Helper.encode( keypair.getPrivate().getEncoded());
 		
 
-		//Map<String, String> result =  new HashMap<String, String>(); 
+	    Map<String, String> result =  new HashMap<String, String>(); 
 
-//		result.put("pubkey", keypair.getPubkey());
-//		result.put("prikey", keypair.getPrikey());
+		result.put("pubkey", pubKey);
+		result.put("prikey", priKey);
 //		result.put("pairkeySalt", keypair.getSalt());
-//		result.put("email", user.get("email"));
-//		result.put("firstname", user.get("firstname"));
-//		result.put("secondname", user.get("secondname"));
 
-//		result.put("company", user.get("company"));
-//		result.put("groupname", user.get("company") + "_" + "group");
-//
-//		Map<String, String> verifierAndSalt = 
-//		this.generateVerifierAndSalt( user.get("email"), user.get("password"));
-//		result.putAll(verifierAndSalt);
-		return null;
+		result.put("email", user.getEmail());
+		result.put("firstname", user.getFirstname());
+		result.put("secondname", user.getSecondname());
+
+		result.put("company", user.getCompany());
+		result.put("groupname", user.getCompany() + "_" + "group");
+
+		Map<String, String> verifierAndSalt = 
+		this.generateVerifierAndSalt( user.getEmail(), user.getPassword());
+		result.putAll(verifierAndSalt);
+		return result;
 	}
 
 	public Map<String, String> addUser( String useremail, String currentUserEmail, String pubkey ){
@@ -107,6 +109,5 @@ public class ServiceUser {
 			return null;
 		}
 	}
-
 
 }
