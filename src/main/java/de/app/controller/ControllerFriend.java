@@ -21,7 +21,7 @@ public class ControllerFriend {
 
 	@RequestMapping( method=RequestMethod.GET  )
 	public ResponseEntity<User[]> find(@PathVariable(value="userId") Long id){
-		return clientFriend.find( id );
+		return clientFriend.find(  id );
 	}
 	
 	@RequestMapping( value="/{friendId}", method=RequestMethod.GET )
@@ -37,9 +37,6 @@ public class ControllerFriend {
 
 	@RequestMapping( value="/{friendId}/revoke", method=RequestMethod.DELETE )
 	public ResponseEntity<?> revoke( @PathVariable(value="userId") Long userId, @PathVariable(value="friendId") Long friendId){
-		System.out.println( userId );
-		System.out.println( friendId );
-
 		return clientFriend.Writer.delete(userId, friendId, "/revoke");
 	}
 

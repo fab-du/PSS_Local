@@ -1,5 +1,7 @@
 package de.app.client;
 
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
 
@@ -37,20 +39,19 @@ public abstract class AbstractFindRequest<CRES> {
     public ResponseEntity<CRES[]> find(){
     	ResponseEntity<CRES[]> response = null;
     	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders() );
-
-    	System.out.println( url + uri);
     	response = client.getRestTemplate().exchange(url + uri, HttpMethod.GET,  requestEntity,   findResponseClazz);
     	return response;
     }
     
     
-    public ResponseEntity<CRES[]> find(Long id){
+    public ResponseEntity<CRES[]> find( Object ...uriVariableValues ) {
     	ResponseEntity<CRES[]> response = null;
     	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders() );
+    	URI _uri = client.getRestTemplate().getUriTemplateHandler().expand( url + uri, uriVariableValues);
+    	System.out.println( "fromm hrer");
 
-    	System.out.println( url + uri);
-    	response = client.getRestTemplate().exchange(url + uri, HttpMethod.GET,  requestEntity,   findResponseClazz, id);
-    	
+    	System.out.println( _uri.toString());
+    	response = client.getRestTemplate().exchange(_uri, HttpMethod.GET,  requestEntity,   findResponseClazz);
     	return response;
     }
     
@@ -63,12 +64,20 @@ public abstract class AbstractFindRequest<CRES> {
     	return response;
     }
     
-    public ResponseEntity<CRES> findOne( Long id , Long _id){
+    public ResponseEntity<CRES> findOne( Object ...uriVariableValues ){
     	ResponseEntity<CRES> response = null;
     	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders() );
-    	response = client.getRestTemplate().exchange(url + uri + "/" + _id, HttpMethod.GET,  requestEntity,   responseClazz, id, _id);
+    	URI _uri = client.getRestTemplate().getUriTemplateHandler().expand( url + uri, uriVariableValues);
+    	response = client.getRestTemplate().exchange(_uri, HttpMethod.GET,  requestEntity,   responseClazz);
     	return response;
     }
+//    
+//    public ResponseEntity<CRES> findOne( Long id , Long _id){
+//    	ResponseEntity<CRES> response = null;
+//    	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders() );
+//    	response = client.getRestTemplate().exchange(url + uri + "/" + _id, HttpMethod.GET,  requestEntity,   responseClazz, id, _id);
+//    	return response;
+//    }
     
     public Map<String, Long> createPathVariable( Long id ){
     	return Collections.singletonMap(ID_VAR, id); 

@@ -63,13 +63,13 @@ public class RequestFilter implements Filter {
 	@Autowired
 	RestRequest client;
 
-
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
 	    HttpServletResponse response = (HttpServletResponse) res;
 	    HttpServletRequest request = (HttpServletRequest) req;
 	    
+	    System.out.println( request.getRequestURI());
 	    
 	    /*
 	     * if Authorization Header is not set, and user attempt to

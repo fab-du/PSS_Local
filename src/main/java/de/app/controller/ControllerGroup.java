@@ -56,7 +56,7 @@ public class ControllerGroup {
 	
 	@RequestMapping( method = RequestMethod.GET )
 	public ResponseEntity<Group[]>  find(){
-		return clientGroup.find();
+		return clientGroup.find(null, null);
 	}
 	
 	@RequestMapping(value="/{groupId}",  method = RequestMethod.GET )
@@ -83,6 +83,11 @@ public class ControllerGroup {
 		clientUser.Writer.setUri( "/api/groups/" + groupId + "/" + "users");
 		return clientUser.Writer.create(user, groupId);
 	}
+	
+	@RequestMapping( value="/users/{userId}", method= RequestMethod.GET )
+	public ResponseEntity<Group[]>  find_where_user_group(@PathVariable(value="userId") Long userId ){
+		return clientGroup.find("users", userId);
+	}
 
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.GET)
 	public ResponseEntity<Document[]> documents( @PathVariable(value="groupId") Long groupId){
@@ -99,15 +104,9 @@ public class ControllerGroup {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 			 File _file = new File(file.getOriginalFilename());
-			 
 			LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-			
-			
 			map.add("file", new FileSystemResource(  _file.getAbsolutePath()));
-			
 			HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new    HttpEntity<LinkedMultiValueMap<String, Object>>(map);
-
-			
 			ResponseEntity<?> response = rest.getRestTemplate().exchange( url, HttpMethod.POST, requestEntity,
 	                ResponseEntity.class);
 	    	return response;

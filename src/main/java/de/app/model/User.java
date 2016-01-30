@@ -1,8 +1,5 @@
 package de.app.model;
 
-import java.util.List;
-import java.util.Set;
-
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
