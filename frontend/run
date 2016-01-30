@@ -1,0 +1,4 @@
+rm -rf /home/batie/Documents/STS/PSS_Local/target/classes/static
+ln -s /home/batie/Documents/STS/PSS_Local/frontend/app /home/batie/Documents/STS/PSS_Local/target/classes/static                                                                             ~/Documents/STS/PSS_Local/frontend
+ln -s /home/batie/Documents/STS/PSS_Local/frontend/bower_components /home/batie/Documents/STS/PSS_Local/target/classes/static/bower_components 
+
