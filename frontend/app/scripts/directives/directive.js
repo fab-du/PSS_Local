@@ -7,76 +7,6 @@
  * # directive
  */
 angular.module('cryptClientApp')
-.directive('tab', function( ){
-return{
-    restrict : 'E',
-    templateUrl : '/views/documents/widget.document.list.html',
-    transclude : false,
-    scope : {
-        data : '=',
-        crudOnSelect : '=', // display delete/add button on select.
-        onSelect : '='
-    },
-    link : function( scope, el, attrs ){
-
-
-        scope.gridOptions = {
-            enableSelectAll: true,
-            enableSelection: true,
-            enableFiltering: true,
-            showHeader : false,
-            showGridFooter:true
-        };
-
-        var data = [];
-        scope.details = [];
-        scope.selected = false;
-
-        var selectHandler = function( row ){
-                                if( row.isSelected ){
-                                    scope.details.push( angular.toJson (row.entity) )
-                                    scope.selected = true;
-                                }
-                                else{
-                                    scope.details.pop( row.entity );
-                                }
-
-                                if ( scope.details.length === 0 ){
-                                    scope.selected = false;
-                                }
-                            };
-
-        scope.$watch('data', function( ){
-            console.log( attrs.data );
-            scope.gridOptions.data = scope.data;
-        });
-
-        scope.$watch('onSelect', function(){
-            if( angular.isFunction( scope.onSelect ) ){
-                selectHandler = scope.onSelect;
-            }
-        });
-
-        scope.$watch('crudOnSelect', function(){
-            if( scope.crudOnSelect === "true" ){
-                console.log( "lkajsdf" )
-            }
-        });
-
-
-      scope.myStyle = '.grid { border: 1px solid blue }';
-
-
-        scope.gridOptions.onRegisterApi = function( gridApi ) {
-            scope.gridApi = gridApi;
-            gridApi.selection.on.rowSelectionChanged( scope, selectHandler );
-        };
-
-
-    }
-
-};
-})
 .directive('accessLevel', function ( Auth ) {
 return {
     restrict: 'A',
@@ -90,6 +20,211 @@ return {
                 }
             }
         }
+};
+})
+.directive('tabUser', function( ){
+return {
+    restrict : 'E',
+    template : '<h4> {{ title }} <h4> <hr/><table st-table="items" class="table table-striped" st-sticky-header>'                     +
+               '<thead>'                                                                           +
+               '<tr>'                                                                              +
+               '<th ng-repeat="header in headers">{{header}}'                                      +
+               '</th>'                                                                             +
+               '</tr>'                                                                             +
+               '</thead>'                                                                          +
+               '<tbody>'                                                                           +
+               '<tr st-select-row="row" st-select-mode="multiple"  ng-repeat="row in items" >'    +
+               '<td ng-repeat="header in headers">{{ row[header] }}</td>'+
+               '<td>'+
+               '<button class="btn btn-sm" popover-placement="top" type="button">'+
+               '<i class="glyphicon glyphicon-eye-open"></i>                                             '+
+               '</button>                                                                                '+
+               '<button class="btn btn-info btn-sm" popover-placement="top" type="button" ng-click="addFriend($index)">'+
+               '<i class="glyphicon glyphicon-plus"></i>                                             '+
+               '</button>                                                                                '+
+               '</td>'+
+               '</tbody>'+
+               '</table>',
+    scope        : {
+        title    : '@', // String binding
+        items    : '=', // two way data binding with parent scope
+        stTable  : '=items', // two way data binding with parent scope
+        onSelect : '&' // mehod
+    },
+    controller : function( $scope, Rest ){
+        $scope.headers = ['id', 'firstname', 'secondname', 'email'];
+        $scope.items = null; 
+
+        $scope.addFriend = function( index ){
+            Rest.Friend.addFriend( { id : $scope.items[index].id } ).$promise.then( function( ){
+                console.log("do this request");
+            });
+        };
+
+
+    },
+
+    link: function( scope, el, attrs ){
+
+        scope.$watch( 'items', function( _old, _new ){
+           if( _old !== null ){
+           }
+        });
+
+    }
+
+};
+})
+.directive('tabFriend', function(){
+return {
+    restrict : 'E',
+    template : '<h4> {{ title }} <h4> <hr/> <table st-table="items" class="table table-striped" st-sticky-header>'                     +
+               '<thead>'                                                                           +
+               '<tr>'                                                                              +
+               '<th ng-repeat="header in headers">{{header}}'                                      +
+               '</th>'                                                                             +
+               '</tr>'                                                                             +
+               '</thead>'                                                                          +
+               '<tbody>'                                                                           +
+               '<tr  st-select-row="row" st-select-mode="multiple"  ng-repeat="row in items" >'    +
+               '<td ng-repeat="header in headers">{{ row[header] }}</td>'+
+               '<td>'+
+               '<button class="btn btn-sm" popover-placement="top" type="button">'+
+               '<i class="glyphicon glyphicon-eye-open"></i>                                             '+
+               '</button>                                                                                '+
+               '<button class="btn btn-danger btn-sm" popover-placement="top" type="button" ng-click="revoke($index)">'+
+               '<i class="glyphicon glyphicon-minus"></i>                                             '+
+               '</button>                                                                                '+
+               '</td>'+
+               '</tbody>'+
+               '</table>',
+    scope : {
+        title    : '@', // String binding
+        items    : '=', // two way data binding with parent scope
+        stTable  : '=items', // two way data binding with parent scope
+        onSelect : '&' // mehod
+    },
+    controller : function( $scope , Rest ){
+        $scope.items = null; 
+        $scope.headers = ['id', 'firstname', 'secondname', 'email'];
+
+        $scope.revoke = function( index ){
+            console.log( index );
+            Rest.Friend.revoke( { }, { friendId : $scope.items[index].id } ).$promise.then( function( ){
+                if (index !== -1) {
+                    $scope.items.splice(index, 1);
+                }
+            });
+        };
+    },
+
+    link: function( scope, el, attrs ){
+
+        scope.$watch( 'items', function( _old, _new ){
+           if( _old !== null ){
+           }
+        });
+
+    }
+
+};
+})
+.directive('tabDocument', function(){
+return {
+    restrict : 'E',
+    template : '<table st-table="items" class="table table-striped" st-sticky-header>'                     +
+               '<thead>'                                                                           +
+               '<tr>'                                                                              +
+               '<th ng-repeat="header in headers">{{header}}'                                      +
+               '</th>'                                                                             +
+               '</tr>'                                                                             +
+               '</thead>'                                                                          +
+               '<tbody>'                                                                           +
+               '<tr  st-select-row="row" st-select-mode="multiple"  ng-repeat="row in items" >'    +
+               '<td ng-repeat="header in headers">{{ row[header] }}</td>'+
+               '<td>'+
+               '<button class="btn btn-sm" popover-placement="top" type="button">'+
+               '<i class="glyphicon glyphicon-eye-open"></i>                                             '+
+               '</button>                                                                                '+
+               '<button class="btn btn-success btn-sm" popover-placement="top" type="button">'+
+               '<i class="glyphicon glyphicon-share"></i>                                             '+
+               '</button>                                                                                '+
+               '<button class="btn btn-danger btn-sm" popover-placement="top" type="button">'+
+               '<i class="glyphicon glyphicon-minus"></i>                                             '+
+               '</button>                                                                                '+
+               '</td>'+
+               '</tbody>'+
+               '</table>',
+    scope : {
+        title    : '@', // String binding
+        items    : '=', // two way data binding with parent scope
+        stTable  : '=items', // two way data binding with parent scope
+        onSelect : '&' // mehod
+    },
+    controller : function( $scope ){
+        $scope.items = null; 
+        $scope.headers = [ "id", "path", "name", "created at" ];
+    },
+
+    link: function( scope, el, attrs ){
+
+        scope.$watch( 'items', function( _old, _new ){
+           if( _old !== null ){
+           }
+        });
+
+    }
+
+};
+})
+.directive('tabGroup', function(){
+return {
+    restrict : 'E',
+    template : '<h4> {{ title }} <h4> <hr/><table st-table="items" class="table table-striped" st-sticky-header>'                     +
+               '<thead>'                                                                           +
+               '<tr>'                                                                              +
+               '<th ng-repeat="header in headers">{{header}}'                                      +
+               '</th>'                                                                             +
+               '</tr>'                                                                             +
+               '</thead>'                                                                          +
+               '<tbody>'                                                                           +
+               '<tr  st-select-row="row" st-select-mode="multiple"  ng-repeat="row in items" >'    +
+               '<td ng-repeat="header in headers">{{ row[header] }}</td>'+
+               '<td>'+
+               '<button class="btn btn-sm" popover-placement="top" type="button"  ng-click="details(row)">'+
+               '<i class="glyphicon glyphicon-eye-open"></i>                                             '+
+               '</button>                                                                                '+
+               '<button class="btn btn-success btn-sm" popover-placement="top" type="button">'+
+               '<i class="glyphicon glyphicon-share"></i>                                             '+
+               '</button>                                                                                '+
+               '<button class="btn btn-danger btn-sm" popover-placement="top" type="button">'+
+               '<i class="glyphicon glyphicon-minus"></i>                                             '+
+               '</button>                                                                                '+
+               '</td>'+
+               '</tbody>'+
+               '</table>',
+    scope : {
+        title    : '@', // String binding
+        items    : '=', // two way data binding with parent scope
+        stTable  : '=items' // two way data binding with parent scope
+    },
+    controller : function( $scope, $state ){
+        $scope.items = null; 
+        $scope.headers = [ "id", "name"];
+        $scope.details = function( row ){
+             $state.go('groups.groupId', { groupId : row.id });
+        };
+    },
+
+    link: function( scope, el, attrs ){
+
+        scope.$watch( 'items', function( _old, _new ){
+           if( _old !== null ){
+           }
+        });
+
+    }
+
 };
 })
 .directive('uploader', function( ){
@@ -107,7 +242,6 @@ return {
 
             $scope.$watch( "files", function( _new, _old ){
                 if ( _new !== _old  && _new !== null ){
-                    console.log( _new[0] )
                     $scope.filesString.push( _new[0] );
                 }
             });
@@ -119,7 +253,7 @@ return {
                     if ( k !== index ){
                         ret.push( v );
                     }
-               })
+               });
                
                $scope.filesString = ret; 
             };
@@ -164,9 +298,8 @@ return {
         scope : {
             data : '='
         },
-        template :  ''
-                    + '<div id="selectBox" class="md-alert" ng-hide="closed" on-close="closed=true" ><div><input type="text" style="width:200px;" name="" id="" value="{{substring}}" ng-model="substring" /></div>'
-                    + '<div id="elements" ><div class="selectClass" ng-click="matchFilterSelect(it)" ng-repeat="it in data track by $email | filter:substring"> {{ it }} <hr style="background=lightblue"/>  </div></div></div>',
+        template :  '<div id="selectBox" class="md-alert" ng-hide="closed" on-close="closed=true" ><div><input type="text" style="width:200px;" name="" id="" value="{{substring}}" ng-model="substring" /></div>'+
+                     '<div id="elements" ><div class="selectClass" ng-click="matchFilterSelect(it)" ng-repeat="it in data track by $email | filter:substring"> {{ it }} <hr style="background=lightblue"/>  </div></div></div>',
 
         controller : function( $filter, $scope, $rootScope ){
             $scope.closed = false;

@@ -8,6 +8,31 @@
  *
  * Main module of the application.
  */
+
+/*
+ * Angular Independant 
+ *
+ * Problem : Angular Promise return a fairly sl*t Array as response. 
+ *           this response is bound with many promise related object
+ *           that we dont need and which cause some interface that only
+ *           need the Array AS-IS to break. 
+ * Solution : extends Array object with an function that can sort the Array
+ *            return from the promise.
+ */
+
+Array.prototype.sortPromise = function(){
+    var _self = this;
+    var response = new Array();
+
+    _self.forEach( function(item){
+        response.push( item );
+    });
+
+    return response;
+};
+
+
+
 angular
   .module('cryptClientApp', [
     'ngAnimate',
@@ -21,10 +46,8 @@ angular
     /*
      *'ngMockE2E',
      */
-    'ui.grid',
-    'ui.grid.autoResize',
+    'smart-table',
     'ngFileUpload',
-    'ui.grid.selection',
     'ngSanitize'
   ])
   .config(function ($routeProvider, $resourceProvider, $stateProvider) {
@@ -88,37 +111,28 @@ angular
           controller : 'GroupsController',
           templateUrl : '/views/groups.html'
       })
-      .state('groups.admin', {
-          url : '/groups_admin',
-          templateUrl : "/views/groups/my_groups.html",
-            templateProvider : function($templateCache){
-                return $templateCache.get('/views/groups/my_groups.html');
-            }
-      })
       .state('groups.groupId', {
-          url : '/:groupId'
+          url : '/:groupId',
+          template : '<div></div>',
+          controller  : function( $scope ){
+              console.log('come here');
+          }
       })
       .state('groups.groupId.documents', {
-          url : '/documents'
+          url : '/documents',
       })
       .state('groups.groupId.users', {
-          url : '/users'
+          url : '/users',
       });
 
       $stateProvider
       .state('documents', {
           url : '/documents',
-          templateUrl : "/views/documents.html",
-            templateProvider : function($templateCache){
-                return $templateCache.get('/views/documents.html');
-            }
+          templateUrl : "/views/documents.html"
       })
       .state('documents.upload', {
           url : '/documents/upload',
-          templateUrl : "/views/documents/documents.upload.html",
-            templateProvider : function($templateCache){
-                return $templateCache.get('/views/documents/documents.upload.html');
-            }
+          templateUrl : "/views/documents/documents.upload.html"
       })
       .state('documents.documentId', {
           url : '/:documentId'

@@ -1,9 +1,11 @@
 <div ng-cloak>
 
-   <h3> registered to Groups : </h3>
-   <tab data="my_groups"></tab>
+    <div flex="50" ng-show="groups">
+        <tab-group  title="public group"  items="groups"></tab-group>
+    </div>
 
-   <h3>  Public Groups : </h3>
-   <tab data="groups"></tab>
+    <div flex="50" ng-show="mygroups">
+        <tab-group  title="registered in groups: "  items="mygroups"></tab-group>
+    </div>
 
 </div>

@@ -150,4 +150,17 @@ span.name {
   padding-left:5px;
 }
 
-.grid { border: 1px solid grey }
+.st-selected { border: 1px solid grey; background: lightgreen; }
+
+table{
+    border-radius : 10px; 
+    margin-bottom : 10px; 
+}
+
+table thead {
+    background : grey; 
+}
+
+td{
+   height : 10px;
+}

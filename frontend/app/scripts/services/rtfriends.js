@@ -9,20 +9,17 @@
 angular.module('cryptClientApp')
 .factory('RouteFriends', function ( Auth ) {
 
-var currentUser = Auth.getCurrentUser();
-var currentUserId = currentUser.currentUserId; 
-
 var routes = 
 {
     url : '/api/:currentUserId/friends/:friendId/:suffix',
-    defaults : { friendId : '@friendId', suffix : '' },
+    defaults : { friendId : '@friendId', currentUserId: '@currentUserId', suffix : '' },
     actions : 
     {
-        find         : { method : 'GET' , params : { currentUserId : currentUserId  } },
+        find         : { method : 'GET',  isArray : true },
         findOne      : { method : 'GET' },
-        addFriend    : { method : 'POST' },
-        revokeFriend : { method : 'POST', params : { currentUserId : currentUserId , suffix  : 'revoke' }},
-        addToGroup   : { method : 'POST', params : { currentUserId : currentUserId , suffix  : 'addToGroup', group : '@groupId' }}
+        addFriend    : { method : 'POST'},
+        revoke       : { method : 'DELETE', params : {  suffix  : 'revoke' }},
+        addToGroup   : { method : 'POST', params : {  suffix  : 'addToGroup', group : '@groupId' }}
     }
 
 };

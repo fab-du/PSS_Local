@@ -14,6 +14,7 @@ var api = {};
 
 function register( user, success, error ){
     $http.post('/session/register', user).success(function(res) {
+        console.log(res);
         $state.go('login');
     }).error(error);
 }
@@ -25,8 +26,8 @@ function register( user, success, error ){
     **/
 api.login = function( user ){
     var q = $q.defer();
-    $http.post('/session/login', user).success(function( response, status , headers ){
-        var authHeaders = headers();
+    $http.post('/session/login', user).success(function( response, status ){
+        //var authHeaders = headers();
 
         Storage.set("currentUserEmail", response.email);
         Storage.set("currentUserId", response.currentUserId);
@@ -39,7 +40,7 @@ api.login = function( user ){
     });
 
     return q.promise;
-}
+};
 
 
 
@@ -48,7 +49,7 @@ api.isLoggedIn =  function() {
     var currentUserId = Storage.get("currentUserId");
     var ret = ((currentUserEmail !== null) &&( currentUserId !== null )) ;
     return  ret;
-}
+};
 
 api.getCurrentUser = function(){
     var currentUserEmail = Storage.get("currentUserEmail");
@@ -95,7 +96,7 @@ api.register = function( user, success, error ){
         if( key === 'company') {
           count++;
         }
-    })    
+    });
 
     if( count === 6 ){
         return register( user, success, error );

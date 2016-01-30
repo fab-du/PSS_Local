@@ -8,19 +8,21 @@
  * Controller of the cryptClientApp
  */
 angular.module('cryptClientApp')
-.controller('GroupsController', function ( Rest, Storage, $scope  ) {
+.controller('GroupsController', function ( Rest, Storage, $scope, Auth  ) {
 
     function init(){
+
+            if( !Auth.isLoggedIn() ){
+               return;
+            } 
+
             Rest.Group.find().$promise.then( function( groups ){
-                Storage.set( "groups", groups );
                 $scope.groups = groups;
             });
-        
-            Rest.Group.find( { gv : Storage.get('currentUser').id } ).$promise.then( function( my_groups ){
-                Storage.set( "my_groups", my_groups );
-                $scope.my_groups = my_groups;
-            });
 
+            Rest.Group.mygroups( { suffix : Auth.getCurrentUser().currentUserId } ).$promise.then( function( mygroups ){
+                $scope.mygroups = mygroups;
+            });
     }
 
 

@@ -11,28 +11,35 @@
 /*
  *angular.module('cryptClientApp')
  *.run(function($httpBackend) {
- *
  *        var users= [
  *            {
  *                id : 2,
  *                email : "tux@tux.com",
+ *                firstname : "tux",
+ *                secondname : "tux",
  *                password : "pass",
  *                friends : [ 3, 4 ]
  *            },
  *            {
  *                id : 3,
  *                email : "linux@linux.com",
+ *                firstname :  "linux",
+ *                secondname : "linux",
  *                password : "pass",
  *                friends : [ 2 ]
  *            },
  *            {
  *                id : 4,
  *                password : "pass",
+ *                firstname :  "fabrice",
+ *                secondname : "fabrice",
  *                email : "fabrice@fabrice.com"
  *            },
  *            {
  *                id : 5,
  *                password : "pass",
+ *                firstname :  "levinas",
+ *                secondname : "levinas",
  *                email : "levinas@levinas.com"
  *            }
  *        ];
@@ -40,8 +47,8 @@
  *        function userExists( cred ){
  *            var ret = false;
  *
- *            angular.forEach( users, function( v , k ){
- *                if( v.email == cred.email && v.password == cred.password  ){
+ *            angular.forEach( users, function( v  ){
+ *                if( v.email === cred.email && v.password === cred.password  ){
  *                    ret = true;
  *                }
  *            });
@@ -52,6 +59,11 @@
  *    $httpBackend.whenGET("/api/users").respond(  function(){
  *
  *        return [200, users, {}];
+ *    });
+ *
+ *    $httpBackend.when( "GET", "/api/:currentUserId/friends").respond(  function( ){
+ *
+ *        return [200, users , {}];
  *    });
  *
  *    $httpBackend.whenGET( "/api/groups" ).respond(  function(method, url, params  ){
@@ -92,21 +104,21 @@
  *
  *    $httpBackend.whenPOST('/session/login').respond( function( method, url, data ){
  *            var cred = { };
- *            cred = angular.fromJson( data )
+ *            cred = angular.fromJson( data );
  *            var ret = userExists( cred );
  *            if ( ret ){
- *                return [ 200, { email : "tux@tux.com", currentUserId : "2"  }, {} ]
+ *                return [ 200, { email : "tux@tux.com", currentUserId : "2"  }, {} ];
  *            }
  *            else{
  *                return [401, {}, {}];
  *            }
  *    });
  *
- *    $httpBackend.whenPOST('/session/register').respond( function( method, url, params ){
+ *    $httpBackend.whenPOST('/session/register').respond( function( ){
  *
  *    });
  *
- *    $httpBackend.whenPOST('/session/logout').respond( function( method, url, params ){
+ *    $httpBackend.whenPOST('/session/logout').respond( function(){
  *
  *    });
  *
@@ -141,5 +153,5 @@
  *    $httpBackend.whenGET(/images\//).passThrough();
  *    
  *});
- *
  */
+

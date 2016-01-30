@@ -15,7 +15,6 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
-    <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <!-- endbower -->
     <!-- endbuild -->
@@ -46,8 +45,8 @@
     <md-toolbar layout="row" layout-align="center end" layout="row" class="md-thin">
         <div  ng-controller="SessionController" > 
 
-            <md-button ng-click="toggleNavBar()">
-                nav
+            <md-button ng-click="toggleNavBar()" ng-if="isLoggedIn">
+               <i class="glyphicon glyphicon-menu-hamburger"></i> 
             </md-button>
 
             <md-button ng-if="!isLoggedIn" ui-sref="login" >
@@ -68,6 +67,13 @@
             <ng-messages when="error">
                 {{ error }}
             </ng-messages>
+
+        <div>
+            <md-button ng-click="toggleNavBarRight()" ng-if="isLoggedIn">
+                <i class="glyphicon glyphicon-user"></i> 
+            </md-button>
+        </div>
+
     </md-toolbar>
 
 
@@ -135,11 +141,13 @@
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/spin.js/spin.js"></script>
     <script src="bower_components/angular-spinner/angular-spinner.js"></script>
-    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
     <script src="bower_components/ng-file-upload-shim/ng-file-upload-shim.js"></script>
+    <script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
+    <script src="bower_components/lr-sticky-header/lrStickyHeader.js"></script>
+    <script src="bower_components/smart-table-sticky-header/stStickyHeader.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

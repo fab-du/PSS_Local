@@ -9,7 +9,7 @@
  */
 angular.module('cryptClientApp')
 
-.controller('MainController', function ( $q, $scope, $window, $rootScope, AUTH_EVENTS,  $state, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth, $mdDialog ) {
+.controller('MainController', function ( $q, $scope, $window, $rootScope, AUTH_EVENTS,  $state, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth, $mdDialog, Rest ) {
     $scope.errors = "";
     $rootScope.isLoggedIn = false;
     $scope.$watch( "errors", function( newErrors , oldErrors ){
@@ -93,9 +93,19 @@ angular.module('cryptClientApp')
                     $mdDialog.hide( );
                 };
 
-                $scope.success = function( newgroup ){
-                      console.log( newgroup );
-                      $mdDialog.hide( );
+                $scope.success = function( groupname ){
+                    if( groupname === null || groupname === undefined ){
+                        return null;
+                    }
+
+                    if(  Auth.isLoggedIn() ){
+                        var currentUserId = Auth.getCurrentUser().currentUserId;
+                        var obj = { gvid : currentUserId, name : groupname.name };
+                        console.log( obj )
+                        Rest.Group.create( obj ).$promise.then( function(){
+                        });
+                    }
+                    $mdDialog.hide( );
                 };
 
             }

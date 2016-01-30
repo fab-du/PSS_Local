@@ -1,20 +1,16 @@
-<div ng-cloak>
-    <h3>  System Users  </h3>
-    <tab data="users"> </tab>
+<div ng-cloak layout="column" >
+
+<div flex="50" ng-show="users">
+        <tab-user  title="users" on-select="onSelect()"  items="users"></tab-user>
 </div>
 
-<div ng-cloak>
-    <h3>  Friends  </h3>
-    <tab data="friends"> </tab>
+<div flex="50" ng-show="friends">
+    <tab-friend  title="friends" on-select="onSelect()"  items="friends"></tab-friend>
 </div>
 
-<div ng-cloak>
-    <h3>  Groups  </h3>
-    <tab data="groups"> </tab>
+<div flex="50" ng-show="documents">
+    <tab-document  title="documents" on-select="onSelect()"  items="documents"></tab-document>
 </div>
 
-<div ui-view>
-
 </div>
-
 
