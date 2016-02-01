@@ -9,7 +9,14 @@
  */
 angular.module('cryptClientApp')
 
-.controller('MainController', function ( $q, $scope, $window, $rootScope, AUTH_EVENTS,  $state, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth, $mdDialog, Rest ) {
+.controller('MainController', function ( $q, $scope, usSpinnerService, $window, $timeout,  $rootScope, AUTH_EVENTS,  $state, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth, $mdDialog, Rest ) {
+
+   var timo= $timeout( function(){
+        usSpinnerService.spin('spinner-1');
+    }, 40000 ).then( function(){ usSpinnerService.stop('spinner-1');})
+
+    console.log( timo )
+
     $scope.errors = "";
     $rootScope.isLoggedIn = false;
     $scope.$watch( "errors", function( newErrors , oldErrors ){
@@ -24,10 +31,6 @@ angular.module('cryptClientApp')
         "documents" : {label : "documents", contents : ["private", "groups" ] },
         "groups"    : {label : "groups"   , contents : ["admin", "member", "search", "add" ] },
         "friends"   : {label : "friends"  , contents : ["find" ] },
-    };
-
-    $scope.openLeftMenu = function(){
-        $mdSidenav("left").toggle();
     };
 
 
@@ -49,18 +52,56 @@ angular.module('cryptClientApp')
     };
 
 
-    $scope.navBarShow = true;
-    $scope.toggleNavBar = function(){
-        $scope.navBarHide = true;
-        var toggle = $scope.navBarShow;
-        $scope.navBarHide = toggle;
-        $scope.navBarShow = !toggle;
+    $scope.navBarShowL = true;
+    $scope.navBarShowR = !$scope.navBarShowL;
+    /*
+     * navbar : 0 left, 1 right
+     * */
+    $scope.toggleNavBar = function( navbar ){
+
+        if( navbar === 0 ){
+            var toggle = $scope.navBarShowL;
+            $scope.navBarHideL = true;
+            $scope.navBarHideL = toggle;
+            $scope.navBarHideR = true;
+            $scope.navBarShowL = !toggle;
+        }
+
+        if ( navbar === 1 ){
+            var toggle = $scope.navBarShowR;
+            $scope.navBarHide = true;
+            $scope.navBarHideR = toggle;
+            $scope.navBarHideL = true;
+            $scope.navBarShowR = !toggle;
+        }
     };
 
-    $scope.$watch('navBarShow', function(_new, _old){
-        console.log( _new )
-       $scope.navBarToggle = _new; 
+
+    // watchers 
+    $scope.friends = [];
+    $scope.mygroups = [];
+
+    $rootScope.$watch('isLoggedIn', function(n,o){
+        if ( n === true ){
+            var currentUserId = Auth.getCurrentUser().currentUserId;
+            Rest.Friend.find( { currentUserId : currentUserId  } ).$promise.then( function( friends ){
+                $scope.friends = friends;
+            });
+
+            Rest.Group.mygroups( { suffix : currentUserId} ).$promise.then( function( mygroups ){
+                $scope.mygroups = mygroups;
+            });
+           $state.reload();
+        } 
     });
+
+
+
+    /*
+     *$scope.$watch('navBarShow', function(_new, _old){
+     *   $scope.navBarToggle = _new; 
+     *});
+     */
 
 
     $scope.goHome = function( ){
@@ -101,8 +142,8 @@ angular.module('cryptClientApp')
                     if(  Auth.isLoggedIn() ){
                         var currentUserId = Auth.getCurrentUser().currentUserId;
                         var obj = { gvid : currentUserId, name : groupname.name };
-                        console.log( obj )
                         Rest.Group.create( obj ).$promise.then( function(){
+                            $state.reload();
                         });
                     }
                     $mdDialog.hide( );

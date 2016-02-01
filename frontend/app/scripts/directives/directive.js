@@ -55,9 +55,9 @@ return {
         $scope.headers = ['id', 'firstname', 'secondname', 'email'];
         $scope.items = null; 
 
-        $scope.addFriend = function( index ){
+        $scope.addFriend = function( index, $state ){
             Rest.Friend.addFriend( { id : $scope.items[index].id } ).$promise.then( function( ){
-                console.log("do this request");
+                $state.reload();
             });
         };
 
@@ -65,7 +65,6 @@ return {
     },
 
     link: function( scope, el, attrs ){
-
         scope.$watch( 'items', function( _old, _new ){
            if( _old !== null ){
            }
@@ -236,7 +235,7 @@ return {
             cryptfiles : '=',
             uploader : '=',
         },
-        controller : function( $scope, $compile, Upload ){
+        controller : function( $scope, $compile, usSpinnerService,Upload ){
             $scope.files = [];
             $scope.filesString = [];
 
@@ -247,45 +246,39 @@ return {
             });
 
             $scope.removeFile = function( index ){
-               var ret = [];
-               var values = $scope.filesString; 
-               angular.forEach( values , function( v, k ){
-                    if ( k !== index ){
-                        ret.push( v );
-                    }
-               });
-               
-               $scope.filesString = ret; 
+               $scope.filesString.pop(index); 
             };
 
-            $scope.upload = function(){
-/*
- *                angular.forEach(files, function(file) {
- *                    file.upload = Upload.upload({
- *                        url: '/api/addDocuments',
- *                        data: {file: file}
- *                    });
- *
- *                    file.upload.then(function (response) {
- *                        $timeout(function () {
- *                            file.result = response.data;
- *                        });
- *                    }, function (response) {
- *                        if (response.status > 0)
- *                            $scope.errorMsg = response.status + ': ' + response.data;
- *                    }, function (evt) {
- *                        file.progress = Math.min(100, parseInt(100.0 * 
- *                                                evt.loaded / evt.total));
- *                    });
- *                });
- */
+            $scope.upload  = function( index ){
+                var file = $scope.filesString[ index ];
 
+                var promise = Upload.upload({
+                    url: '/api/groups/2/documents',
+                    data: {file: file}
+                });
+
+                // start upload-indicator
+                usSpinnerService.spin('spinner-upload-' + index);
+
+                promise.then( function( res ){
+                    console.log( res.data.file )
+                    usSpinnerService.stop('spinner-upload-' + index);
+                }, function( err){
+                    console.log( err );
+                    usSpinnerService.stop('spinner-upload-' + index);
+                });
+
+            }
+
+            $scope.uploadAll = function(){
+                angular.forEach($scope.filesString, function(file, index) {
+                    $scope.upload( index );
+                });
             };
 
         },
 
         link : function(  scope, element, attributs){
-
         },
     };
 

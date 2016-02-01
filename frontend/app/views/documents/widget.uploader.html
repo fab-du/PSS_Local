@@ -36,7 +36,7 @@
                 <td>{{ file.size  }} </td>
                 <td>{{ file.type  }} </td>
                 <td> 
-                    <button ng-click="upload( $index )"class="btn btn-success"> <span class="glyphicon glyphicon-upload" ></span> </button>
+                    <button ng-click="upload( $index )"class="btn btn-success"> <span us-spinner spinner-key="spinner-upload-{{$index}}" class="glyphicon glyphicon-upload" ></span> </button>
                     <button ng-click="removeFile( $index )" class="btn btn-danger">X</button>
                 </td>
             </tr>
@@ -46,7 +46,7 @@
 
 <div class="form-group" ng-if="filesString">        
     <div>
-    <button type="submit" ng-click="upload()" class="btn btn-success">Upload All</button>
+    <button type="submit" ng-click="uploadAll()" class="btn btn-success">Upload All</button>
     </div>
 </div>
 

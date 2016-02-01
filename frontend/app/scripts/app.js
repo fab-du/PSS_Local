@@ -43,15 +43,15 @@ angular
     'ngRoute',
     'ngMaterial',
     'ui.router',
-    /*
-     *'ngMockE2E',
-     */
+    'ngMockE2E',
     'smart-table',
+    'angularSpinner',
     'ngFileUpload',
     'ngSanitize'
   ])
-  .config(function ($routeProvider, $resourceProvider, $stateProvider) {
+  .config(function ($routeProvider, $resourceProvider, $stateProvider, usSpinnerConfigProvider) {
 
+    usSpinnerConfigProvider.setDefaults({color: '#5CB85C', radius:1});
 
       $stateProvider
       .state('main', {

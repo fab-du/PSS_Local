@@ -22,6 +22,7 @@ var routes =
         create       : { method : 'POST' },
         addFriend    : { method : 'POST' },
         documents    : { method : 'GET',  params : { suffix : 'documents' }},
+        uploadDoc    : { method : 'POST',  params : { suffix : 'documents' }},
         users        : { method : 'GET',  params : { suffix : 'users' }}
     }, 
     opts : {}

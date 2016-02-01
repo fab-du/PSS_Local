@@ -45,7 +45,7 @@
     <md-toolbar layout="row" layout-align="center end" layout="row" class="md-thin">
         <div  ng-controller="SessionController" > 
 
-            <md-button ng-click="toggleNavBar()" ng-if="isLoggedIn">
+            <md-button ng-click="toggleNavBar(0)" ng-if="isLoggedIn">
                <i class="glyphicon glyphicon-menu-hamburger"></i> 
             </md-button>
 
@@ -69,7 +69,8 @@
             </ng-messages>
 
         <div>
-            <md-button ng-click="toggleNavBarRight()" ng-if="isLoggedIn">
+            <md-button ng-click="toggleNavBar(1)" ng-if="isLoggedIn">
+                online
                 <i class="glyphicon glyphicon-user"></i> 
             </md-button>
         </div>
@@ -94,7 +95,7 @@
 
     <div flex  ng-if="isLoggedIn" layout="row">
 
-        <div ng-show="navBarShow" flex="15" ng-hide="navBarHide" >
+        <div ng-show="navBarShowL" flex="15" ng-hide="navBarHideL" >
             <nav  ng-cloak>
                 <md-list>
                     <md-item>
@@ -121,10 +122,40 @@
             </md-content>
         </div>
 
+        <div ng-show="navBarShowR"  flex="15" ng-hide="navBarHideR" >
+
+               <table st-table="friends" class="table table-striped" st-sticky-header>
+                  <thead>                                                                           
+                    <tr>                                                                              
+                        <th> Friend Email
+                        </th>                                                                             
+                    </tr>                                                                             
+                  </thead>                                                                          
+                  <tbody>
+                        <tr  st-select-row="row" st-select-mode="multiple"  ng-repeat="row in friends" >
+                            <td> {{ row.email }} </td>
+                        <tr>
+                  </tbody>
+                </table>
+
+               <table st-table="mygroups" class="table table-striped" st-sticky-header>
+                  <thead>                                                                           
+                    <tr>                                                                              
+                        <th> Registered in groups
+                        </th>                                                                             
+                    </tr>                                                                             
+                  </thead>                                                                          
+                  <tbody>
+                        <tr  st-select-row="row" st-select-mode="multiple"  ng-repeat="row in mygroups" >
+                            <td> {{ row.name }} </td>
+                        <tr>
+                  </tbody>
+                </table>
+        </div>
+
     </div>
 
     <ui-view ng-if="!isLoggedIn" layout-align="center end" layout="row"></ui-view>
-
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
