@@ -167,11 +167,6 @@ return {
 
     link: function( scope, el, attrs ){
 
-        scope.$watch( 'items', function( _old, _new ){
-           if( _old !== null ){
-           }
-        });
-
     }
 
 };
@@ -187,7 +182,7 @@ return {
                '</tr>'                                                                             +
                '</thead>'                                                                          +
                '<tbody>'                                                                           +
-               '<tr  st-select-row="row" st-select-mode="multiple"  ng-repeat="row in items" >'    +
+               '<tr ng-repeat="row in items" >'    +
                '<td ng-repeat="header in headers">{{ row[header] }}</td>'+
                '<td>'+
                '<button class="btn btn-sm" popover-placement="top" type="button"  ng-click="details(row)">'+
@@ -217,10 +212,24 @@ return {
 
     link: function( scope, el, attrs ){
 
-        scope.$watch( 'items', function( _old, _new ){
-           if( _old !== null ){
-           }
-        });
+        scope.$watch('items', function(n, o){
+            if( n !== o  ){
+/*
+ *                var parent = $( angular.element( el ) );
+ *                var trs = parent.find( 'tr' );
+ *
+ *                angular.forEach( trs , function( v, k ){
+ *                    angular.element( v ).on('click', function( ev ){
+ *                        angular.element( ev.target )
+ *                        .add('div')
+ *                        .addClass('jumbotron');
+ *                                                        
+ *                    })
+ *                });
+ */
+
+            }
+        })
 
     }
 
