@@ -132,8 +132,8 @@
                     </tr>                                                                             
                   </thead>                                                                          
                   <tbody>
-                        <tr  st-select-row="row" st-select-mode="multiple"  ng-repeat="row in friends" >
-                            <td> {{ row.email }} </td>
+                        <tr ng-repeat="row in friends" >
+                            <td ng-drag="true" ng-drag-data='row' ng-drag-success='dragSuccess($data, $event)'> {{ row.email }} </td>
                         <tr>
                   </tbody>
                 </table>
@@ -146,8 +146,8 @@
                     </tr>                                                                             
                   </thead>                                                                          
                   <tbody>
-                        <tr  st-select-row="row" st-select-mode="multiple"  ng-repeat="row in mygroups" >
-                            <td> {{ row.name }} </td>
+                        <tr ng-repeat="row in mygroups" >
+                            <td ng-drop="true" ng-drop-success="dropSuccess($data, $event, row)" > {{ row.name }} </td>
                         <tr>
                   </tbody>
                 </table>
@@ -170,13 +170,15 @@
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
     <script src="bower_components/spin.js/spin.js"></script>
     <script src="bower_components/angular-spinner/angular-spinner.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/lrDragNDrop/lrDragNDrop.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
     <script src="bower_components/ng-file-upload-shim/ng-file-upload-shim.js"></script>
-    <script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
+    <script src="bower_components/ngDraggable/ngDraggable.js"></script>
     <script src="bower_components/lr-sticky-header/lrStickyHeader.js"></script>
     <script src="bower_components/smart-table-sticky-header/stStickyHeader.js"></script>
     <!-- endbower -->

@@ -95,6 +95,19 @@ angular.module('cryptClientApp')
         } 
     });
 
+    $scope.dragSuccess = function( data, ev ){
+        console.log( ev.event )
+    }
+
+    $scope.dropSuccess = function( data, ev, _self ){
+        console.log( _self );
+        /*
+         *console.log( ev.event );
+         */
+        /*
+         *console.log( data );
+         */
+    }
 
 
     /*

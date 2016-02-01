@@ -44,6 +44,8 @@ angular
     'ngMaterial',
     'ui.router',
     'ngMockE2E',
+    'lrDragNDrop',
+    'ngDraggable',
     'smart-table',
     'angularSpinner',
     'ngFileUpload',
