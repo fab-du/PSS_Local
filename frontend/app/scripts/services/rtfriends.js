@@ -11,7 +11,7 @@ angular.module('cryptClientApp')
 
 var routes = 
 {
-    url : '/api/:currentUserId/friends/:friendId/:suffix',
+    url : '/api/:currentUserId/friends/:friendId/:suffix/:param',
     defaults : { friendId : '@friendId', currentUserId: '@currentUserId', suffix : '' },
     actions : 
     {
@@ -19,7 +19,7 @@ var routes =
         findOne      : { method : 'GET' },
         addFriend    : { method : 'POST'},
         revoke       : { method : 'DELETE', params : {  suffix  : 'revoke' }},
-        addToGroup   : { method : 'POST', params : {  suffix  : 'addToGroup', group : '@groupId' }}
+        addToGroup   : { method : 'PUT', params : {  suffix  : 'addToGroup', param : '@param' }}
     }
 
 };

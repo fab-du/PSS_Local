@@ -1,15 +1,21 @@
 <div ng-cloak layout="column" >
 
-<div flex="50" ng-show="users">
-        <tab-user  title="users" on-select="onSelect()"  items="users"></tab-user>
+<div flex="50" layout="row" ng-show="users">
+        <div flex="60">
+            <tab-user  title="users" on-select="onSelect()"  items="users"></tab-user>
+        </div>
 </div>
 
-<div flex="50" ng-show="friends">
-    <tab-friend  title="friends" on-select="onSelect()"  items="friends"></tab-friend>
+<div flex="50" layout="row" ng-show="friends">
+    <div flex="60">
+        <tab-friend  title="friends" on-select="onSelect()"  items="friends"></tab-friend>
+    </div>
 </div>
 
-<div flex="50" ng-show="documents">
-    <tab-document  title="documents" on-select="onSelect()"  items="documents"></tab-document>
+<div flex="50" layout="row" ng-show="documents">
+    <div flex="60">
+        <tab-document  title="documents" on-select="onSelect()"  items="documents"></tab-document>
+    </div>
 </div>
 
 </div>

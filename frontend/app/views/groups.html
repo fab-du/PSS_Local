@@ -1,11 +1,20 @@
-<div ng-cloak>
+<div layout="column" ng-cloak>
 
-    <div flex="50" row ng-show="groups">
-        <tab-group  title="public group"  items="groups"></tab-group>
+    <div flex="50" layout="row" ng-show="groups">
+        <div flex="60">
+            <tab-group  title="public group"  items="groups"></tab-group>
+        </div>
+
+        <!--
+           -<div ui-view="groupDetail"></div>
+           -->
+        <ui-view flex="30"></ui-view>
     </div>
 
-    <div flex="50" ng-show="mygroups">
-        <tab-group  title="registered in groups: "  items="mygroups"></tab-group>
+    <div flex="50" layout="row" ng-show="mygroups">
+        <div>
+            <tab-group  title="registered in groups: "  items="mygroups"></tab-group>
+        </div>
     </div>
 
 </div>

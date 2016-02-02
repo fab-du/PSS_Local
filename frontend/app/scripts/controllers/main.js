@@ -96,25 +96,14 @@ angular.module('cryptClientApp')
     });
 
     $scope.dragSuccess = function( data, ev ){
-        console.log( ev.event )
     }
 
     $scope.dropSuccess = function( data, ev, _self ){
-        console.log( _self );
-        /*
-         *console.log( ev.event );
-         */
-        /*
-         *console.log( data );
-         */
+        console.log(_self)
+        console.log(_self.id)
+        Rest.Friend.addToGroup( { friendId : data.id, currentUserId : Auth.getCurrentUser().currentUserId, param : _self.id  }).$promise.then( function(resp){ } )
+        
     }
-
-
-    /*
-     *$scope.$watch('navBarShow', function(_new, _old){
-     *   $scope.navBarToggle = _new; 
-     *});
-     */
 
 
     $scope.goHome = function( ){

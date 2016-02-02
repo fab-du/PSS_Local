@@ -43,8 +43,9 @@ angular
     'ngRoute',
     'ngMaterial',
     'ui.router',
-    'ngMockE2E',
-    'lrDragNDrop',
+    /*
+     *'ngMockE2E',
+     */
     'ngDraggable',
     'smart-table',
     'angularSpinner',
@@ -89,10 +90,7 @@ angular
       .state('users.groups', {
           url : '/users_grp_admin',
           controller : 'UserGroupController',
-          templateUrl : '/views/groups/mygroups.html',
-            templateProvider : function($templateCache){
-                return $templateCache.get('/views/groups/mygroups.html');
-            }
+          templateUrl : '/views/groups/mygroups.html'
       })
       .state('users.userId', {
           url : '/:userId'
@@ -111,14 +109,12 @@ angular
       .state('groups', {
           url : '/groups',
           controller : 'GroupsController',
-          templateUrl : '/views/groups.html'
+          templateUrl : '/views/groups.html',
       })
       .state('groups.groupId', {
-          url : '/:groupId',
-          template : '<div></div>',
-          controller  : function( $scope ){
-              console.log('come here');
-          }
+          url        : '/:groupId',
+          template   : '<div>{{ group }}</div>',
+          controller : 'GroupDetailsController'
       })
       .state('groups.groupId.documents', {
           url : '/documents',

@@ -33,7 +33,7 @@ return {
                '</tr>'                                                                             +
                '</thead>'                                                                          +
                '<tbody>'                                                                           +
-               '<tr st-select-row="row" st-select-mode="multiple"  ng-repeat="row in items" >'    +
+               '<tr ng-repeat="row in items" >'    +
                '<td ng-repeat="header in headers">{{ row[header] }}</td>'+
                '<td>'+
                '<button class="btn btn-sm" popover-placement="top" type="button">'+
@@ -51,12 +51,13 @@ return {
         stTable  : '=items', // two way data binding with parent scope
         onSelect : '&' // mehod
     },
-    controller : function( $scope, Rest ){
+    controller : function( $scope, Rest, Auth, $state ){
         $scope.headers = ['id', 'firstname', 'secondname', 'email'];
         $scope.items = null; 
 
-        $scope.addFriend = function( index, $state ){
-            Rest.Friend.addFriend( { id : $scope.items[index].id } ).$promise.then( function( ){
+        $scope.addFriend = function( index ){
+            console.log( $scope.items[index].id);
+            Rest.Friend.addFriend( { currentUserId :  Auth.getCurrentUser().currentUserId }, { id : $scope.items[index].id } ).$promise.then( function( ){
                 $state.reload();
             });
         };
@@ -85,7 +86,7 @@ return {
                '</tr>'                                                                             +
                '</thead>'                                                                          +
                '<tbody>'                                                                           +
-               '<tr  st-select-row="row" st-select-mode="multiple"  ng-repeat="row in items" >'    +
+               '<tr ng-repeat="row in items" >'    +
                '<td ng-repeat="header in headers">{{ row[header] }}</td>'+
                '<td>'+
                '<button class="btn btn-sm" popover-placement="top" type="button">'+
@@ -103,13 +104,12 @@ return {
         stTable  : '=items', // two way data binding with parent scope
         onSelect : '&' // mehod
     },
-    controller : function( $scope , Rest ){
+    controller : function( $scope , Rest, Auth ){
         $scope.items = null; 
         $scope.headers = ['id', 'firstname', 'secondname', 'email'];
 
         $scope.revoke = function( index ){
-            console.log( index );
-            Rest.Friend.revoke( { }, { friendId : $scope.items[index].id } ).$promise.then( function( ){
+            Rest.Friend.revoke( {  }, { friendId : $scope.items[index].id, currentUserId : Auth.getCurrentUser().currentUserId } ).$promise.then( function( ){
                 if (index !== -1) {
                     $scope.items.splice(index, 1);
                 }
@@ -139,7 +139,7 @@ return {
                '</tr>'                                                                             +
                '</thead>'                                                                          +
                '<tbody>'                                                                           +
-               '<tr  st-select-row="row" st-select-mode="multiple"  ng-repeat="row in items" >'    +
+               '<tr ng-repeat="row in items" >'    +
                '<td ng-repeat="header in headers">{{ row[header] }}</td>'+
                '<td>'+
                '<button class="btn btn-sm" popover-placement="top" type="button">'+
@@ -214,20 +214,6 @@ return {
 
         scope.$watch('items', function(n, o){
             if( n !== o  ){
-/*
- *                var parent = $( angular.element( el ) );
- *                var trs = parent.find( 'tr' );
- *
- *                angular.forEach( trs , function( v, k ){
- *                    angular.element( v ).on('click', function( ev ){
- *                        angular.element( ev.target )
- *                        .add('div')
- *                        .addClass('jumbotron');
- *                                                        
- *                    })
- *                });
- */
-
             }
         })
 

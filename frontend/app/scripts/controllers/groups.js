@@ -27,5 +27,12 @@ angular.module('cryptClientApp')
 
 
     init();
-});
+})
+.controller('GroupDetailsController', function( Rest, $filter, Storage, $scope, $stateParams,  Auth){
+    var groups = $scope.groups; 
+
+    $scope.group = $filter('getById')( groups, "id",  $stateParams.groupId );
+
+
+})
 
