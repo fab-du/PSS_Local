@@ -8,17 +8,15 @@
  * Service in the cryptClientApp.
  */
 angular.module('cryptClientApp')
-.factory('Auth', function ($http, $state, $q, AUTH_EVENTS, Storage,  $rootScope ) {
+.factory('Auth', function ($http, $state, $filter, $q, AUTH_EVENTS, Storage,  $rootScope ) {
 var api = {};
 
 
 function register( user, success, error ){
     $http.post('/session/register', user).success(function(res) {
-        console.log(res);
         $state.go('login');
     }).error(error);
 }
-
 
 /*
     * Follow SRP Working-flow. ie :
@@ -63,6 +61,26 @@ api.getCurrentUser = function(){
         return null;
     }
 };
+
+api.isGroupMember = function( groupUsers ){
+    var isLoggedIn = api.isLoggedIn();
+
+    if( !isLoggedIn || groupUsers === null ){
+        return false;
+    }
+
+    var ret = $filter('getById')( groupUsers, 'id',  api.getCurrentUser().currentUserId );
+    return ( ret !== null );
+}
+
+api.isGv = function( group ){
+    var isLoggedIn = api.isLoggedIn();
+
+    if( !isLoggedIn || group === null ){
+        return false;
+    }
+    return group['gvid'] === api.getCurrentUser().currentUserId;
+}
 
 
 api.logout =  function(){

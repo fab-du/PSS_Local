@@ -11,25 +11,25 @@
 angular.module('cryptClientApp')
 .filter('getById', function () {
   return function(input, keyname, value ) {
-      var ret = false;
-      var obj;
+      var obj=null;
       angular.forEach( input, function( v ){
-          console.log( v[ keyname ] )
-          
         if( v[ keyname ].toString().trim() === value.toString().trim() ){
-            console.log( v[ keyname ] )
-            ret = true;
             obj = v;
-            return;
         }
-      })
+      });
 
-      if( ret ){
-          return obj;
-      }
-      else{
-          return null;
-      }
+     return obj;
   }
-});
+})
+.filter('isGv', function( Auth ){
+    return function( group ){
+        return Auth.isGv( group );
+    }
+})
+.filter('isGroupMember', function( Auth ){
+    return function( group ){
+        var ret = Auth.isGroupMember( group )
+        return Auth.isGroupMember( group );
+    }
+})
 

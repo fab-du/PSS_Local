@@ -230,7 +230,7 @@ return {
             cryptfiles : '=',
             uploader : '=',
         },
-        controller : function( $scope, $compile, usSpinnerService,Upload ){
+        controller : function( $scope, $mdToast, $timeout, $compile, $filter, Auth, usSpinnerService,Upload ){
             $scope.files = [];
             $scope.filesString = [];
 
@@ -246,9 +246,12 @@ return {
 
             $scope.upload  = function( index ){
                 var file = $scope.filesString[ index ];
+                var currentUserId = '';
+
+                var url = "/api/groups/" + 85 + "/documents";
 
                 var promise = Upload.upload({
-                    url: '/api/groups/2/documents',
+                    url: url,
                     data: {file: file}
                 });
 
@@ -256,10 +259,31 @@ return {
                 usSpinnerService.spin('spinner-upload-' + index);
 
                 promise.then( function( res ){
-                    console.log( res.data.file )
-                    usSpinnerService.stop('spinner-upload-' + index);
+
+                    $timeout( function(){
+                        var index = null;
+                        angular.forEach( $scope.filesString, function(v, k){
+                            if ( v.name === res.data.name ) {
+                                index = k;
+                            }
+                        });
+
+                        console.log( index );
+                        if( index !== null ){
+                            $scope.removeFile( index );
+                        }
+
+                        usSpinnerService.stop('spinner-upload-' + index);
+
+                        $mdToast.show({
+                                template: '<md-toast class="md-toast success">' + res.data.name + " uploaded in "+ res.data.path + '</md-toast>',
+                                hideDelay: 4000,
+                                position: 'center left'
+                        });
+
+                    }, 1000 );
+
                 }, function( err){
-                    console.log( err );
                     usSpinnerService.stop('spinner-upload-' + index);
                 });
 

@@ -113,7 +113,7 @@ angular
       })
       .state('groups.groupId', {
           url        : '/:groupId',
-          template   : '<div>{{ group }}</div>',
+          templateUrl: '/views/groups/groupdetails.html',
           controller : 'GroupDetailsController'
       })
       .state('groups.groupId.documents', {

@@ -21,9 +21,9 @@ var routes =
         mygroups     : { method : 'GET', params : { prefix : 'users', suffix : '@suffix' }, isArray : true  },
         create       : { method : 'POST' },
         addFriend    : { method : 'POST' },
-        documents    : { method : 'GET',  params : { suffix : 'documents' }},
+        documents    : { method : 'GET',  params : { prefix:'@prefix', suffix : 'documents' }},
         uploadDoc    : { method : 'POST',  params : { suffix : 'documents' }},
-        users        : { method : 'GET',  params : { suffix : 'users' }}
+        users        : { method : 'GET',  params : { suffix : 'users', prefix:'@prefix' } , isArray : true}
     }, 
     opts : {}
 };

@@ -28,11 +28,29 @@ angular.module('cryptClientApp')
 
     init();
 })
-.controller('GroupDetailsController', function( Rest, $filter, Storage, $scope, $stateParams,  Auth){
-    var groups = $scope.groups; 
+.controller('GroupDetailsController', function( Rest, $filter, Storage, $scope, $stateParams,   Auth){
+    Rest.Group.findOne({ groupId : $stateParams.groupId }).$promise.then( function( group ){
+        console.log( group );
+        var _group = group;
+        _group['createdAt'] = $filter('date')( group['createdAt'] );
 
-    $scope.group = $filter('getById')( groups, "id",  $stateParams.groupId );
+        Rest.Group.users({ prefix : $stateParams.groupId }).$promise.then( function( users ){
+            $scope.currentGroupUsers = users; 
+            var gvid = _group.gvid;
+            _group.gvid = null;
+            var gv = $filter('getById')( users, 'id', gvid );
+            _group.gvid = gv.email; 
+            _group.users = users.length;     
+        });
 
+        Rest.Group.documents({ prefix : $stateParams.groupId }).$promise.then( function( documents ){
+            $scope.currentGroupDocuments = documents; 
+            var _documents = document.length; 
+            _group.documents = documents; 
+        });
 
-})
+        $scope.group = _group; 
+    });
+
+});
 

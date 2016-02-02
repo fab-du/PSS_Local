@@ -1,0 +1,25 @@
+<div style="margin-left=10px">
+<table st-table="group" class="table table-striped" st-sticky-header>
+    <thead>                                                                           
+    <tr>                                                                              
+        <th> <h5>Group:</h5> {{ group.name }}
+        </th>                                                                             
+    </tr>                                                                             
+    </thead>                                                                          
+    <tbody>
+        <tr ng-repeat="( k, v) in group" >
+            <td> {{ k }} : <span class="badge"> {{v}} </span> </td>
+        <tr>
+
+        <tr>
+            <td> documents </td>
+        </tr>
+
+        <tr>
+            <td> <md-button ng-if="currentGroupUsers | isGroupMember">  add User </md-button> 
+                  <md-button ng-if="currentGroupUsers| isGroupMember"> upload   </md-button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
