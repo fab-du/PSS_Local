@@ -28,7 +28,7 @@ public class ControllerFriend {
 	public ResponseEntity<?> findOne( @PathVariable(value="userId") Long userId, @PathVariable(value="friendId") Long friendId ){
 		return clientFriend.findOne( userId, friendId, null, null);
 	}
-
+	
 	@RequestMapping( method=RequestMethod.POST)
 	public ResponseEntity<?> create( @PathVariable("userId") Long userId, @RequestBody User user ){
 		return clientFriend.Writer.create( user, userId, null, null, null);

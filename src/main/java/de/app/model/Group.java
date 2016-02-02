@@ -2,7 +2,6 @@ package de.app.model;
 
 import java.util.Date;
 
-import org.springframework.data.annotation.LastModifiedDate;
 
 public class Group {
 	Long id; 
@@ -12,8 +11,8 @@ public class Group {
 	Long gvid;
 	
 	Date createdAt;
-
 	
+
 	public Group() {
 	}
 	

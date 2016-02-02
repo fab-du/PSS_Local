@@ -1,5 +1,8 @@
 package de.app.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -29,7 +32,26 @@ public class User extends AbstractEntity{
 	@JsonIgnore
 	boolean validated=false;
 	
-	public User() {	}
+	Set<UserGroup> users = new HashSet<UserGroup>();
+	
+	Set<Friendship> friends = new HashSet<Friendship>();
+	
+
+	public Set<UserGroup> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<UserGroup> users) {
+		this.users = users;
+	}
+
+	public Set<Friendship> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(Set<Friendship> friends) {
+		this.friends = friends;
+	}
 
 	public boolean isValidated() {
 		return validated;
@@ -38,8 +60,6 @@ public class User extends AbstractEntity{
 	public void setValidated(boolean validated) {
 		this.validated = validated;
 	}
-
-
 
 	public String getFirstname() {
 		return firstname;
@@ -73,30 +93,20 @@ public class User extends AbstractEntity{
 		this.email = email;
 	}
 
-
-
 	public String getPassword() {
 		return password;
 	}
-
-
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-
-
 	public String getPassphrase() {
 		return passphrase;
 	}
-
-
 
 	public void setPassphrase(String passphrase) {
 		this.passphrase = passphrase;
 	}
 	
-	
-
 }

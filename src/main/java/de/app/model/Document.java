@@ -5,14 +5,13 @@ import java.util.Date;
 import org.springframework.data.annotation.LastModifiedDate;
 
 public class Document {
+	
+	
 	Long id;
 	String name, path;
 	public Long version;
 	public  Date date;
 	Date createdAt;
-	
-	
-	
 	
 	public Date getCreatedAt() {
 		return createdAt;

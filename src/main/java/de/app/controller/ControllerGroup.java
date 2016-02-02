@@ -66,7 +66,6 @@ public class ControllerGroup {
 		return clientGroup.Writer.create(group, null, null, null, null);
 	}
 
-	
 	@RequestMapping( value="/{groupId}/users", method = RequestMethod.GET )
 	public ResponseEntity<User[]> users( @PathVariable(value="groupId") Long groupId ){
 		clientUser.setUri( "/api/groups/" + groupId + "/" + "users");
@@ -90,8 +89,8 @@ public class ControllerGroup {
 	
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.POST)
 	public ResponseEntity<?> addDocument( @PathVariable(value="groupId") Long groupId,@RequestParam("file") MultipartFile file ) throws IOException{
-		 serviceDocument.create(file);
-			
+		 	serviceDocument.create(file);
+		 	
 			String url = "http://localhost:8080/api/groups/" + groupId + "/documents";
 			
 			HttpHeaders headers = new HttpHeaders();
@@ -100,16 +99,13 @@ public class ControllerGroup {
 			LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 			map.add("file", new FileSystemResource(  _file.getAbsolutePath()));
 			HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new    HttpEntity<LinkedMultiValueMap<String, Object>>(map);
-			ResponseEntity<?> response = rest.getRestTemplate().exchange( url, HttpMethod.POST, requestEntity,
-	                ResponseEntity.class);
+			ResponseEntity<Document> response = rest.getRestTemplate().exchange( url, HttpMethod.POST, requestEntity, Document.class);
 	    	return response;
 	}
 	
 	@RequestMapping( value="/{groupId}/documents/{documentId}", method = RequestMethod.GET )
 	public ResponseEntity<?> groupId_documents_documentId( @PathVariable(value="groupId") Long groupId,
 			@PathVariable(value="documentId") Long documentId){
-		String uri = "/api/groups/" + groupId + "/documents/";
-		clientDocument.setUri( uri );
 		return clientDocument.findOne(groupId, "documents", documentId);
 	}
 	

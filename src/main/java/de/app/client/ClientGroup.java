@@ -8,7 +8,7 @@ import de.app.model.Group;
 @Component
 public class ClientGroup extends AbstractFindRequest<Group>{
 
-	public String uri = "/api/groups/{suffix1}/{suffix2}/{suffix3}/{suffix4}/";
+	private String uri = "/api/groups/{suffix1}/{suffix2}/{suffix3}/{suffix4}/";
 	
 	public  AbstractWriteRequest<?, Group> Writer;
 	
@@ -19,10 +19,4 @@ public class ClientGroup extends AbstractFindRequest<Group>{
 		Writer = new AbstractWriteRequest<>(client, Object.class, Group.class );
 		Writer.setUri(uri);
 	}
-	
-	
-	public AbstractWriteRequest<?, Group> getWriter(){
-		return this.Writer;
-	}
-
 }

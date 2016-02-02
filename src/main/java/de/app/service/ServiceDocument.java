@@ -132,22 +132,5 @@ public class ServiceDocument {
           return; 
         }	
 	}
-	
-
-
-//	public void fetchDocument( InputStream in , MultipartHttpServletRequest mRequest ) throws RestClientException, Exception{
-//			HttpHeaders headers = new HttpHeaders();
-//			headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
-//		    HttpEntity<String> entity = new HttpEntity<String>(headers);
-//
-//		    ResponseEntity<byte[]> response = rest.getObject().exchange(
-//		            "https://www.google.com/images/srpr/logo11w.png",
-//		            HttpMethod.GET, entity, byte[].class, "1");
-//
-//		    if (response.getStatusCode() == HttpStatus.OK) {
-//		        Files.write(Paths.get("google.png"), response.getBody());
-//		    }
-//	
-//	}
 
 }

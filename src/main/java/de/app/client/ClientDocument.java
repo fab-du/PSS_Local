@@ -7,19 +7,15 @@ import de.app.model.Document;
 @Component
 public class ClientDocument extends AbstractFindRequest<Document>{
 	
-	public final static String URI = "/api/documents";
+	private String uri = "/api/{prefix}/documents/{suffix1}/{suffix2}";
 	
 	public final AbstractWriteRequest<?, Document> Writer;
 	
 	@Autowired
 	public ClientDocument(RestClient client) {
 		super(client, Document.class, Document[].class);
-		this.setUri( URI );
+		this.setUri( uri );
 		Writer = new AbstractWriteRequest<>(client, Object.class, Document.class );
+		Writer.setUri(uri);
 	}
-	
-	public AbstractWriteRequest<?, Document> getWriter(){
-		return this.Writer;
-	}
-	
 }

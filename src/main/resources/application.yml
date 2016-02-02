@@ -2,17 +2,9 @@ app:
     name: CryptLocal
     description: CryptoLocal Server
 server:
-    port: 0
+    port: 8081
 multipart:
     maxFileSize: 128KB
     maxRequestSize: 128KB
-remote:
-    url: http://localhost:8080
-    users: /api/users
-    document: /api/documents
-    groups: /api/groups
-    friends: /api/friends
-login:
-    challenge: /session/login/challenge
 
  
