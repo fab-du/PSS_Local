@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ClientFriend extends ClientUser{
-	
-	@Value("${remote.users}")
-	String uri="/api/{currentUserId}/friends";
+	String uri="/api/{preffix1}/friends/{suffix1}/{suffix2}/{suffix3}";
 
 	@Autowired
 	public ClientFriend(RestClient client) {

@@ -8,7 +8,7 @@ import de.app.model.Group;
 @Component
 public class ClientGroup extends AbstractFindRequest<Group>{
 
-	public String uri = "/api/groups/{_var}/{__var}/";
+	public String uri = "/api/groups/{suffix1}/{suffix2}/{suffix3}/{suffix4}/";
 	
 	public  AbstractWriteRequest<?, Group> Writer;
 	

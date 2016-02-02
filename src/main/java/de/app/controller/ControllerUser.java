@@ -28,12 +28,12 @@ public class ControllerUser {
 	
 	@RequestMapping( method = RequestMethod.GET )
 	public ResponseEntity<User[]> find() throws RestClientException, Exception{
-		return clientUser.find();
+		return clientUser.find(null, null);
 	}
 	
 	@RequestMapping(value="/{userId}",  method = RequestMethod.GET )
-	public ResponseEntity<User> find(@PathVariable(value="userId") Long id) throws RestClientException, Exception{
-		return clientUser.findOne( id );
+	public ResponseEntity<User> find(@PathVariable(value="userId") Long userId) throws RestClientException, Exception{
+		return clientUser.findOne( userId, null );
 	}
 
 	@RequestMapping(value="/{userId}/validate", method = RequestMethod.POST )

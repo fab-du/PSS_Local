@@ -4,13 +4,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 
-public  class AbstractWriteRequest<CRES, CREQ > {
+public  class AbstractWriteRequest<CRES, CREQ > extends CRUDHelper{
 	
-    private final String url = "http://localhost:8080";
-    private String uri = "";
     
+    private String url = "http://localhost:8080/";
+
     protected final RestClient client;
     
     protected final Class<CRES> responseClazz;
@@ -22,48 +21,57 @@ public  class AbstractWriteRequest<CRES, CREQ > {
 		this.requestClazz = requestClazz;	
 	}
 	
-	public 
-	ResponseEntity<?> create( CREQ body ){
+	private 
+	ResponseEntity<CRES> crud( CREQ body, HttpMethod method, Object ...uriVariableValues){
 		ResponseEntity<CRES> response = null;
-    	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders(), body );
-    	response = client.getRestTemplate().exchange(url + uri, HttpMethod.POST,  requestEntity,   responseClazz );
+    	HttpEntity<CREQ> requestEntity = this.getHttpEntity( this.client.getHeaders(), body );
+    	response= this.makeRequest( this.buildUrl(client,url, this.getUri(), uriVariableValues), method, client, requestEntity, responseClazz);
 		return response; 
 	}
 	
 	public 
-	ResponseEntity<CRES> create( CREQ body, Long id ){
-		ResponseEntity<CRES> response = null;
-    	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders(), body );
-    	System.out.println( url + uri);
-    	response = client.getRestTemplate().exchange(url + uri, HttpMethod.POST,  requestEntity,   responseClazz , id);
-		return response; 
+	ResponseEntity<CRES> create( CREQ body , Object ...uriVariableValues){
+		return this.crud(body, HttpMethod.POST, uriVariableValues);
 	}
 	
-	public void update(){
+	public 
+	ResponseEntity<CRES> create(  Object ...uriVariableValues){
+		return this.crud(null, HttpMethod.POST, uriVariableValues);
 	}
 	
-	public ResponseEntity<?>  delete(Long id, Long _id, String suffix ){
-		ResponseEntity<?> response = null;
-    	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders());
-    	System.out.println( url + uri + "/" + _id);
-    	response = client.getRestTemplate().exchange(url + uri + "/" + _id + suffix, HttpMethod.DELETE,  requestEntity,   ResponseEntity.class, id, _id);
-		return response; 
+	public 
+	ResponseEntity<CRES> put( CREQ body , Object ...uriVariableValues){
+		return this.crud(body, HttpMethod.PUT, uriVariableValues);
 	}
 	
-	
-	public void setUri( String uri ){
-		this.uri = uri;
+	public 
+	ResponseEntity<CRES> put( Object ...uriVariableValues){
+		return this.crud(null, HttpMethod.PUT, uriVariableValues);
 	}
 	
-
+	public 
+	ResponseEntity<CRES> delete( CREQ body , Object ...uriVariableValues){
+		return this.crud(body, HttpMethod.DELETE, uriVariableValues);
+	}
 	
-    HttpEntity<?> getHttpEntity( HttpHeaders headers ){
-   	 HttpEntity<?> requestEntity = new HttpEntity<>( headers );
-   	 return requestEntity;
-   }
+	public 
+	ResponseEntity<CRES> delete( Object ...uriVariableValues){
+		return this.crud(null, HttpMethod.DELETE, uriVariableValues);
+	}
+	
+	public 
+	ResponseEntity<CRES> update( CREQ body , Object ...uriVariableValues){
+		return this.crud(body, HttpMethod.PATCH, uriVariableValues);
+	}
+	
+	public 
+	ResponseEntity<CRES> update( Object ...uriVariableValues){
+		return this.crud(null, HttpMethod.PATCH, uriVariableValues);
+	}
+	
     
-    HttpEntity<?> getHttpEntity( HttpHeaders headers, CREQ body ){
+    HttpEntity<CREQ> getHttpEntity( HttpHeaders headers, CREQ body ){
       	 HttpEntity<CREQ> requestEntity = new HttpEntity<CREQ>( body, headers );
       	 return requestEntity;
-      }
+    }
 }

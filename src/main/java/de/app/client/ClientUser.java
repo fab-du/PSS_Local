@@ -1,7 +1,6 @@
 package de.app.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import de.app.model.User;
@@ -10,13 +9,9 @@ import de.app.model.User;
 @Component
 public class ClientUser extends AbstractFindRequest<User> {
 	
-
-	
-	
 	public  AbstractWriteRequest<?, User> Writer;
 	
-	@Value("${remote.users}")
-	String uri="/api/users";
+	String uri="/api/users/{suffix1}/{suffix2}";
 	
 	@Override
 	public void setUri(String uri) {

@@ -2,13 +2,10 @@ package de.app.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
@@ -56,43 +53,39 @@ public class ControllerGroup {
 	
 	@RequestMapping( method = RequestMethod.GET )
 	public ResponseEntity<Group[]>  find(){
-		return clientGroup.find(null, null);
+		return clientGroup.find(null, null, null, null);
 	}
 	
 	@RequestMapping(value="/{groupId}",  method = RequestMethod.GET )
 	public ResponseEntity<Group>  findOne(@PathVariable(value="groupId") Long groupId){
-		return clientGroup.findOne(groupId);
+		return clientGroup.findOne(groupId, null, null, null);
 	}
 
 	@RequestMapping( method = RequestMethod.POST )
 	public ResponseEntity<?> create( @RequestBody Group group ) throws RestClientException, Exception{
-		System.out.println( group.toString());
-		return clientGroup.Writer.create(group);
+		return clientGroup.Writer.create(group, null, null, null, null);
 	}
 
 	
 	@RequestMapping( value="/{groupId}/users", method = RequestMethod.GET )
 	public ResponseEntity<User[]> users( @PathVariable(value="groupId") Long groupId ){
 		clientUser.setUri( "/api/groups/" + groupId + "/" + "users");
-		return clientUser.find(groupId);
+		return clientUser.find(groupId, "users", null, null);
 	}
 	
 	@RequestMapping( value="/{groupId}/users", method = RequestMethod.POST )
 	public ResponseEntity<?> addUser( @PathVariable(value="groupId") Long groupId, @RequestBody User user ){
-		System.out.println( user.getId());
-		clientUser.Writer.setUri( "/api/groups/" + groupId + "/" + "users");
-		return clientUser.Writer.create(user, groupId);
+		return clientUser.Writer.create(user, groupId, null, null, null);
 	}
 	
 	@RequestMapping( value="/users/{userId}", method= RequestMethod.GET )
 	public ResponseEntity<Group[]>  find_where_user_group(@PathVariable(value="userId") Long userId ){
-		return clientGroup.find("users", userId);
+		return clientGroup.find("users", userId, null, null);
 	}
 
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.GET)
 	public ResponseEntity<Document[]> documents( @PathVariable(value="groupId") Long groupId){
-		clientDocument.setUri("/api/groups/" + groupId + "/documents");
-		return clientDocument.find();
+		return clientDocument.find(groupId, "documents", null, null);
 	}
 	
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.POST)
@@ -117,7 +110,7 @@ public class ControllerGroup {
 			@PathVariable(value="documentId") Long documentId){
 		String uri = "/api/groups/" + groupId + "/documents/";
 		clientDocument.setUri( uri );
-		return clientDocument.findOne(documentId);
+		return clientDocument.findOne(groupId, "documents", documentId);
 	}
 	
 	@RequestMapping( value="/{groupId}/documents/{documentId}/download", method = RequestMethod.GET )
