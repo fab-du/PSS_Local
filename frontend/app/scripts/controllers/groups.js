@@ -20,7 +20,7 @@ angular.module('cryptClientApp')
                 $scope.groups = groups;
             });
 
-            Rest.Group.mygroups( { suffix : Auth.getCurrentUser().currentUserId } ).$promise.then( function( mygroups ){
+            Rest.Group.mygroups( { suffix1 : Auth.getCurrentUser().currentUserId } ).$promise.then( function( mygroups ){
                 $scope.mygroups = mygroups;
             });
     }
@@ -34,7 +34,7 @@ angular.module('cryptClientApp')
         var _group = group;
         _group['createdAt'] = $filter('date')( group['createdAt'] );
 
-        Rest.Group.users({ prefix : $stateParams.groupId }).$promise.then( function( users ){
+        Rest.Group.users({ groupId : $stateParams.groupId }).$promise.then( function( users ){
             $scope.currentGroupUsers = users; 
             var gvid = _group.gvid;
             _group.gvid = null;
@@ -43,14 +43,23 @@ angular.module('cryptClientApp')
             _group.users = users.length;     
         });
 
-        Rest.Group.documents({ prefix : $stateParams.groupId }).$promise.then( function( documents ){
+        Rest.Group.documents({ groupId : $stateParams.groupId }).$promise.then( function( documents ){
             $scope.currentGroupDocuments = documents; 
-            var _documents = document.length; 
-            _group.documents = documents; 
+            var _documents = documents.length; 
+            _group.documents = _documents; 
         });
 
         $scope.group = _group; 
     });
+
+
+    $scope.addUserToGroup = function( group ){
+
+    };
+
+    $scope.uploadDocumentToGroup = function( group ){
+        
+    };
 
 });
 

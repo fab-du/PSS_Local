@@ -12,18 +12,17 @@ angular.module('cryptClientApp')
 
 var routes = 
 {
-    url : '/api/groups/:prefix/:groupId/:suffix',
-    defaults : { groupId : '@groupId', suffix : '', prefix : '' },
+    url : '/api/groups/:groupId/:suffix1/:suffix2',
+    defaults : { groupId : '@groupId', suffix1 : '', suffix2 : '' },
     actions : 
     {
         find         : { method : 'GET', isArray : true  },
         findOne      : { method : 'GET'  },
-        mygroups     : { method : 'GET', params : { prefix : 'users', suffix : '@suffix' }, isArray : true  },
+        mygroups     : { method : 'GET', params : { groupId : 'users', suffix1 : '@suffix1' }, isArray : true  },
         create       : { method : 'POST' },
         addFriend    : { method : 'POST' },
-        documents    : { method : 'GET',  params : { prefix:'@prefix', suffix : 'documents' }},
-        uploadDoc    : { method : 'POST',  params : { suffix : 'documents' }},
-        users        : { method : 'GET',  params : { suffix : 'users', prefix:'@prefix' } , isArray : true}
+        documents    : { method : 'GET',  params : {  suffix1 : 'documents' }, isArray: true},
+        users        : { method : 'GET',  params : {  suffix1 : 'users' } , isArray : true}
     }, 
     opts : {}
 };

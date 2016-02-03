@@ -12,12 +12,8 @@
         <tr>
 
         <tr>
-            <td> documents </td>
-        </tr>
-
-        <tr>
-            <td> <md-button ng-if="currentGroupUsers | isGroupMember">  add User </md-button> 
-                  <md-button ng-if="currentGroupUsers| isGroupMember"> upload   </md-button>
+            <td> <md-button class="md-primary md-raised" ng-click="addUserToGroup( group )" ng-if="currentGroupUsers | isGroupMember">  add User </md-button> 
+                  <md-button class="md-primary md-raised" ng-click="uploadDocumentToGroup(group)" ng-if="currentGroupUsers| isGroupMember">  upload   </md-button>
             </td>
         </tr>
     </tbody>

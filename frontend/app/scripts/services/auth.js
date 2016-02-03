@@ -29,6 +29,11 @@ api.login = function( user ){
 
         Storage.set("currentUserEmail", response.email);
         Storage.set("currentUserId", response.currentUserId);
+
+        //TODO this muss comme from server
+        //85 hard coded just for dev purpose
+        Storage.set("currentUserGroupId", "85" );
+
         //Storage.putAll( authHeaders );
         $rootScope.$broadcast( AUTH_EVENTS.loginSuccess );
         q.resolve( status  );
@@ -52,10 +57,15 @@ api.isLoggedIn =  function() {
 api.getCurrentUser = function(){
     var currentUserEmail = Storage.get("currentUserEmail");
     var currentUserId = Storage.get("currentUserId");
-    var ret = ((currentUserEmail !== null) &&( currentUserId !== null )) ;
+    var currentUserGroupId = Storage.get("currentUserGroupId");
+    var ret = ((currentUserEmail !== null) &&
+               ( currentUserId !== null )  &&
+               ( currentUserGroupId !==null));
 
     if( ret === true ){
-        return { currentUserEmail : currentUserEmail, currentUserId: currentUserId };
+        return { currentUserEmail : currentUserEmail, 
+                 currentUserId: currentUserId,
+                 currentUserGroupId : currentUserGroupId};
     }
     else{
         return null;

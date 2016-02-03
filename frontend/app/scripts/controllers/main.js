@@ -88,21 +88,15 @@ angular.module('cryptClientApp')
                 $scope.friends = friends;
             });
 
-            Rest.Group.mygroups( { suffix : currentUserId} ).$promise.then( function( mygroups ){
+            Rest.Group.mygroups( { suffix1 : Auth.getCurrentUser().currentUserId } ).$promise.then( function( mygroups ){
                 $scope.mygroups = mygroups;
             });
            $state.reload();
         } 
     });
 
-    $scope.dragSuccess = function( data, ev ){
-    }
-
     $scope.dropSuccess = function( data, ev, _self ){
-        console.log(_self)
-        console.log(_self.id)
         Rest.Friend.addToGroup( { friendId : data.id, currentUserId : Auth.getCurrentUser().currentUserId, param : _self.id  }).$promise.then( function(resp){ } )
-        
     }
 
 
@@ -171,7 +165,6 @@ angular.module('cryptClientApp')
         window.location.href = "/#/session/login"
     });
 	$rootScope.$on(AUTH_EVENTS.sessionTimeout, function(){
-        console.log( AUTH_EVENTS.sessionTimeout );
         Storage.remove();
         window.location.href = "/"
     });

@@ -11,34 +11,31 @@ angular.module('cryptClientApp')
 .controller('UsersController', function ( $scope, $rootScope, $state, Rest, Auth ) {
 
     function init(){
+        $rootScope.$watch('isLoggedIn', function(isLoggedIn){
+            if( isLoggedIn === true ){
+                var currentUserId = Auth.getCurrentUser().currentUserId;
+
+                Rest.Group.find().$promise.then( function( groups ){
+                    if( groups ){
+                        $scope.groups = groups.sortPromise();
+                    }
+                    $scope.groups = [];
+                });
+
+                $scope.onSelect = function(){
+                    console.log('selected');
+                };
+
+                Rest.User.find().$promise.then( function( users ){
+                    $scope.users = users;
+                });
 
 
-
-        if( Auth.isLoggedIn() ){
-            var currentUserId = Auth.getCurrentUser().currentUserId;
-
-            Rest.Group.find( ).$promise.then( function( groups ){
-                if( groups ){
-                    $scope.groups = groups.sortPromise();
-                    console.log($scope.groups)
-                }
-                $scope.groups = [];
-            });
-
-            $scope.onSelect = function(){
-                console.log('selected');
-            };
-
-            Rest.User.find().$promise.then( function( users ){
-                $scope.users = users.sortPromise(); 
-            });
-
-
-            Rest.Friend.find( { currentUserId : currentUserId  } ).$promise.then( function( friends ){
-                $scope.friends = friends.sortPromise();
-            });
-        }
-
+                Rest.Friend.find( { currentUserId : currentUserId  } ).$promise.then( function( friends ){
+                    $scope.friends = friends;
+                });
+            }
+        });
     }
 
     init();

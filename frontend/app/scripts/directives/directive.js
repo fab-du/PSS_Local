@@ -227,12 +227,20 @@ return {
         transclude : true,
         templateUrl : '/views/documents/widget.uploader.html',
         scope : {
-            cryptfiles : '=',
-            uploader : '=',
+            groupFiles : '='
         },
-        controller : function( $scope, $mdToast, $timeout, $compile, $filter, Auth, usSpinnerService,Upload ){
+        controller : function( $scope, $rootScope, $mdToast, Rest, $timeout, $compile, $filter, Auth, usSpinnerService,Upload ){
+            
+
             $scope.files = [];
             $scope.filesString = [];
+
+            if ( angular.isUndefined( $scope.groupFiles ) ){
+                Rest.Group.documents({ groupId : Auth.getCurrentUser().currentUserGroupId  }).$promise.then( function( documents ){
+                    $scope.groupFiles = documents;
+                    console.log( $scope.groupFiles )
+                });
+            }
 
             $scope.$watch( "files", function( _new, _old ){
                 if ( _new !== _old  && _new !== null ){
@@ -297,7 +305,8 @@ return {
 
         },
 
-        link : function(  scope, element, attributs){
+        link : function($scope, element, attributs){
+            $scope.$watch('groupFiles')
         },
     };
 
