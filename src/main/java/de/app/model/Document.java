@@ -2,11 +2,7 @@ package de.app.model;
 
 import java.util.Date;
 
-import org.springframework.data.annotation.LastModifiedDate;
-
 public class Document {
-	
-	
 	Long id;
 	String name, path;
 	public Long version;
@@ -49,5 +45,4 @@ public class Document {
 	public void setDate(Date date) {
 		this.date = date;
 	} 
-	
 }

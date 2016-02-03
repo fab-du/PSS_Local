@@ -20,7 +20,6 @@ import de.app.model.form.FormMisc;
 @RestController
 @RequestMapping(value="/api/users")
 public class ControllerUser {
-
 	
 	@Autowired
 	ClientUser clientUser;
@@ -28,12 +27,12 @@ public class ControllerUser {
 	
 	@RequestMapping( method = RequestMethod.GET )
 	public ResponseEntity<User[]> find() throws RestClientException, Exception{
-		return clientUser.find(null, null);
+		return clientUser.find(null, null, null, null);
 	}
 	
 	@RequestMapping(value="/{userId}",  method = RequestMethod.GET )
 	public ResponseEntity<User> find(@PathVariable(value="userId") Long userId) throws RestClientException, Exception{
-		return clientUser.findOne( userId, null );
+		return clientUser.findOne( null,null, userId, null );
 	}
 
 	@RequestMapping(value="/{userId}/validate", method = RequestMethod.POST )

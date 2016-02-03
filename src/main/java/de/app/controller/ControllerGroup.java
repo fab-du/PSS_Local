@@ -68,8 +68,7 @@ public class ControllerGroup {
 
 	@RequestMapping( value="/{groupId}/users", method = RequestMethod.GET )
 	public ResponseEntity<User[]> users( @PathVariable(value="groupId") Long groupId ){
-		clientUser.setUri( "/api/groups/" + groupId + "/" + "users");
-		return clientUser.find(groupId, "users", null, null);
+		return clientUser.find("groups", groupId, null, null);
 	}
 	
 	@RequestMapping( value="/{groupId}/users", method = RequestMethod.POST )
@@ -84,7 +83,7 @@ public class ControllerGroup {
 
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.GET)
 	public ResponseEntity<Document[]> documents( @PathVariable(value="groupId") Long groupId){
-		return clientDocument.find(groupId, "documents", null, null);
+		return clientDocument.find(groupId, null);
 	}
 	
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.POST)

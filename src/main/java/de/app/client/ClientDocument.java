@@ -7,7 +7,7 @@ import de.app.model.Document;
 @Component
 public class ClientDocument extends AbstractFindRequest<Document>{
 	
-	private String uri = "/api/{prefix}/documents/{suffix1}/{suffix2}";
+	private String uri = "/api/groups/{preffix}/documents/{suffix2}";
 	
 	public final AbstractWriteRequest<?, Document> Writer;
 	
