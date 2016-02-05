@@ -6,11 +6,14 @@ import java.util.Date;
 import org.springframework.data.annotation.LastModifiedDate;
 
 public class KeySym extends AbstractEntity{
-	String symkey;
 
+	String symkey;
+	
+	String salt; 
 
 	public Long version;
 	public @LastModifiedDate Date date;
+	
 	public String getSymkey() {
 		return symkey;
 	}
@@ -28,6 +31,11 @@ public class KeySym extends AbstractEntity{
 	}
 	public void setDate(Date date) {
 		this.date = date;
+	}
+	public String getSalt() {
+		return salt;
+	}
+	public void setSalt(String salt) {
+		this.salt = salt;
 	} 
-	
 }

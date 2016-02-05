@@ -1,6 +1,7 @@
 package de.app.model;
 
 public class KeyPair extends AbstractEntity{
+	
 	String pubkey;
 	
 	String prikey;
@@ -30,7 +31,5 @@ public class KeyPair extends AbstractEntity{
 	public void setSalt(String salt) {
 		this.salt = salt;
 	}
-	
-	
 }
 

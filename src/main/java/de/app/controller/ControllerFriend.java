@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.app.model.User;
+import de.app.service.ServiceFriend;
 import de.app.client.ClientFriend;
+import de.app.client.ClientUser;
 
 
 @RestController
@@ -18,6 +20,12 @@ public class ControllerFriend {
 	
 	@Autowired
 	ClientFriend clientFriend;
+	
+	@Autowired
+	ClientUser clientUser;
+	
+	@Autowired
+	ServiceFriend serviceFriend;
 
 	@RequestMapping( method=RequestMethod.GET  )
 	public ResponseEntity<User[]> find(@PathVariable(value="userId") Long userId){
@@ -31,7 +39,7 @@ public class ControllerFriend {
 	
 	@RequestMapping( method=RequestMethod.POST)
 	public ResponseEntity<?> create( @PathVariable("userId") Long userId, @RequestBody User user ){
-		return clientFriend.Writer.create( user, userId, null, null, null);
+		return serviceFriend.addFriend(userId, user.getId() );
 	}
 
 

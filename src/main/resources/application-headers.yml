@@ -1,0 +1,10 @@
+commons:
+    produces: application/json
+    consumes: application/json
+security: 
+    hash : 
+        name: hash    
+    x-content-security: 
+        name: X-Content-Security
+        value: script-src 'self'
+

@@ -5,26 +5,27 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+//import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 
 @SpringBootApplication
 public class LocalApplication {
 
-	@Bean()
-	public ServletContextTemplateResolver templateResolver() {
-	    final ServletContextTemplateResolver resolver =
-	            new ServletContextTemplateResolver();
-	    resolver.setSuffix(".html");
-	    resolver.setTemplateMode("HTML5");
-	    resolver.setCacheable(false);
-	    resolver.setCharacterEncoding("UTF-8");
-	    return resolver;
-	}
-	
+//	@Bean()
+//	public ServletContextTemplateResolver templateResolver() {
+//	    final ServletContextTemplateResolver resolver =
+//	            new ServletContextTemplateResolver();
+//	    resolver.setSuffix(".html");
+//	    resolver.setTemplateMode("HTML5");
+//	    resolver.setCacheable(false);
+//	    resolver.setCharacterEncoding("UTF-8");
+//	    return resolver;
+//	}
+//	
 	/*
 	 * Resolve for data up/down-load
 	 */
+	
 	
 //	@Bean
 //	public CommonsMultipartResolver multipartResolver(){

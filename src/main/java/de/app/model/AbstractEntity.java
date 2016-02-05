@@ -5,7 +5,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
-public class AbstractEntity {
+public class AbstractEntity extends AbstractSecureModel{
 	
 	Long id;
 	

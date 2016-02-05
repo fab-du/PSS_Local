@@ -1,21 +1,12 @@
 package de.app.model;
 
-public class Friendship {
-	Long id; 
+public class Friendship extends AbstractSecureModel{
 	
 	Long friendId;
 	
 	User users;
 	
 	String signature;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Long getFriendId() {
 		return friendId;

@@ -2,8 +2,9 @@ package de.app.model;
 
 import java.util.Date;
 
-public class Document {
-	Long id;
+public class Document extends AbstractSecureModel{
+	
+	
 	String name, path;
 	public Long version;
 	public  Date date;
@@ -15,12 +16,7 @@ public class Document {
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+
 	public String getName() {
 		return name;
 	}
