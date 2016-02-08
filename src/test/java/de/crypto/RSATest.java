@@ -23,7 +23,7 @@ public class RSATest {
 		symKeys = new ArrayList<String>();
 		AESCrypto aes = new AESCrypto();
 		for (int i = 0; i < KEY; i++) {
-			symKeys.add( aes.generateKey());
+			//symKeys.add( aes.generateKey());
 		}
 	}
 	
