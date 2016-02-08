@@ -24,8 +24,11 @@ function register( user, success, error ){
     **/
 api.login = function( user ){
     var q = $q.defer();
-    $http.post('/session/login', user).success(function( response, status ){
-        //var authHeaders = headers();
+    $http.post('/session/login', user).success(function( response, status, headers ){
+        /*
+         *var authHeaders = headers();
+         *console.log( authHeaders );
+         */
 
         Storage.set("currentUserEmail", response.email);
         Storage.set("currentUserId", response.currentUserId);
