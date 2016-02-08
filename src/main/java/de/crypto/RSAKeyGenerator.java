@@ -14,7 +14,7 @@ public  class RSAKeyGenerator {
 	
 	String algo = "RSA";
 	String algoPB = "SHA1withRSA";
-	int keysize = 1024;
+	int keysize = 512;
 	
 	
 	public KeyPair generate( String password ) throws BatieCryptoExc{

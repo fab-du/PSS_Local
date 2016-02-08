@@ -31,6 +31,7 @@ import de.app.client.ClientUser;
 import de.app.client.RestClient;
 import de.app.model.*;
 import de.app.service.ServiceDocument;
+import de.app.service.ServiceGroup;
 
 @RestController
 @RequestMapping(value="/api/groups")
@@ -51,6 +52,9 @@ public class ControllerGroup {
 	@Autowired
 	ServiceDocument serviceDocument;
 	
+	@Autowired
+	ServiceGroup serviceGroup;
+	
 	@RequestMapping( method = RequestMethod.GET )
 	public ResponseEntity<Group[]>  find(){
 		return clientGroup.find(null, null, null, null);
@@ -63,7 +67,7 @@ public class ControllerGroup {
 
 	@RequestMapping( method = RequestMethod.POST )
 	public ResponseEntity<?> create( @RequestBody Group group ) throws RestClientException, Exception{
-		return clientGroup.Writer.create(group, null, null, null, null);
+		return serviceGroup.create(group);
 	}
 
 	@RequestMapping( value="/{groupId}/users", method = RequestMethod.GET )

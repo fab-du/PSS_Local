@@ -1,10 +1,16 @@
 package de.app;
 
+import java.util.List;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
+
+import de.app.client.HeaderInterceptor;
+import de.app.client.SignatureInterceptor;
 //import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 
@@ -34,6 +40,9 @@ public class LocalApplication {
 //		return resolver;
 //	}
 	
+	
+
+
 	@Bean
 	public HttpHeaders headers(){
 		return new HttpHeaders();
@@ -53,6 +62,10 @@ public class LocalApplication {
 	@Bean
 	public RestTemplate restTemplate(){
 		RestTemplate template = new RestTemplate();
+		List<ClientHttpRequestInterceptor> interceptors = template.getInterceptors();
+		//interceptors.add( new SignatureInterceptor());
+		interceptors.add( new HeaderInterceptor());
+		template.setInterceptors(interceptors);
 		return template;
 	}
 	

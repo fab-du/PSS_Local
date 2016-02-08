@@ -27,10 +27,7 @@ public class ServiceFriend {
 		
 		Signature sign = new Signature(); 
 		
-		String signature = sign.primitive()
-							   .privateKey( userKeyPair.getPrikey())
-							   .data(friendKeyPair.getPubkey())
-							   .sign();
+		String signature = sign.sign( userKeyPair.getPrikey(), friendKeyPair.getPubkey()); 
 		
 		System.out.println(signature);
 		friendship.setSignature( signature );

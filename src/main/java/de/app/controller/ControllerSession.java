@@ -22,11 +22,10 @@ import com.nimbusds.srp6.SRP6CryptoParams;
 import com.nimbusds.srp6.SRP6VerifierGenerator;
 
 import de.app.Post;
-import de.app.RestRequest;
+import de.app.client.RestClient;
 import de.app.exceptions.BatieCryptoExc;
 import de.app.service.ServiceUser;
 import de.cryptone.key.KeyPair;
-import de.crypto.RSACrypto;
 import de.crypto.RSAKeyGenerator;
 
 @RestController
@@ -34,7 +33,7 @@ import de.crypto.RSAKeyGenerator;
 public class ControllerSession {
 
 	@Autowired
-	RestRequest request;
+	RestClient request;
 
 	@Autowired 
 	Post POST;

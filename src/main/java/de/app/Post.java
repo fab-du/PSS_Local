@@ -17,13 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Preconditions;
 
+import de.app.client.RestClient;
+
 
 @Service
 @Transactional
 public class Post {
 
 	@Autowired
-	RestRequest rest;
+	RestClient rest;
 
 	public final String URL = "http://localhost:8080";
 
@@ -47,13 +49,13 @@ public class Post {
 			return new ResponseEntity<LinkedHashMap<String,String>>( HttpStatus.UNAUTHORIZED );
 		}
 		 
-		 HttpEntity<?> requestEntity = new HttpEntity<Object>(body, this.rest.getHeader());
+		 HttpEntity<?> requestEntity = new HttpEntity<Object>(body, this.rest.getHeaders());
 		 
 		 	
 			@SuppressWarnings("unused")
 			Object postForObject = null;
 			try {
-				Object obj = rest.getObject().
+				Object obj = rest.getRestTemplate().
 					postForEntity(URL + uri, requestEntity, LinkedHashMap.class);
 
 				@SuppressWarnings("unchecked")
@@ -69,8 +71,6 @@ public class Post {
 						System.out.println( el.getValue().toString());
 					}
 					
-					
-					this.rest.setHeaders( resp.getHeaders() );
 				}
 				
 				return resp;

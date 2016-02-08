@@ -6,6 +6,7 @@ public class Group extends AbstractEntity{
 	
 	Long gvid;
 	
+	KeySym groupkey;
 
 	public Group() {
 	}
@@ -26,4 +27,11 @@ public class Group extends AbstractEntity{
 		this.gvid = gvid;
 	}
 
+	public KeySym getGroupkey() {
+		return groupkey;
+	}
+
+	public void setGroupkey(KeySym groupkey) {
+		this.groupkey = groupkey;
+	}
 }

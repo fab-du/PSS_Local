@@ -2,7 +2,7 @@ package de.app.model;
 
 import java.util.Date;
 
-public class Document extends AbstractSecureModel{
+public class Document extends AbstractEntity{
 	
 	
 	String name, path;

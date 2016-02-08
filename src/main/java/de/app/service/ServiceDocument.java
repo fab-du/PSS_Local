@@ -23,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import de.app.model.Group;
 import de.app.model.KeyPair;
+import de.app.model.KeySym;
+import de.crypto.AESCrypto;
 
 @Component
 public class ServiceDocument {
@@ -37,9 +39,14 @@ public class ServiceDocument {
 		FileOutputStream fos = new FileOutputStream(new File(file.getOriginalFilename()));
 			int read = 0;
 			final byte[] bytes = new byte[1024];
-		
+			byte[] encryptedBytes = new byte[1024];
+			
+			AESCrypto aesCrypto = new AESCrypto();
+			KeySym aesKey = aesCrypto.generateKey();
+			
 			while((read=is.read(bytes)) != -1){
-				fos.write(bytes, 0, read);
+				encryptedBytes = aesCrypto.encrypt(aesKey.getSymkey(), bytes);
+				fos.write(encryptedBytes, 0, read);
 			}
 			
 			is.close();
@@ -90,14 +97,6 @@ public class ServiceDocument {
 		  HttpEntity<MultiValueMap<String, Object>> requestEntity =
 		          new HttpEntity<MultiValueMap<String, Object>>(parts, headers);
 
-	}
-
-	public void changeOwner( Long currentOwnerId, Long newOwnerId, Long documentId ){
-		
-	}
-
-	public void shareDocument( Long documentId, Long newOwnerId ){
-		
 	}
 
 	public void encrypt( String key, File inputfile, File outputfile ){

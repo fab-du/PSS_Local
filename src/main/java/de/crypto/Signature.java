@@ -21,70 +21,23 @@ public class Signature {
 	
 	public static String ALGORITHM = "MD5"; 
 	
-	boolean primitive = false;
-	int keylenght;
-	String  prikey; 
-	String  pubkey;
-	
-	Object obj;
-	String signature;
-	
-	public Signature primitive(){
-		primitive = true;
-		return this;
-	}
-	
-	public Signature signature( String signature ){
-		this.signature = signature;
-		return this;
-	}
-	
-	@Config( keylenght = 1024)
-	private int keylenght(){
-		return this.keylenght;
-	}
-	
-	public Signature privateKey( String prikey ){
-		this.prikey = prikey;
-		return this;
-	}
-	
-	public Signature publickey( String pubkey ){
-		this.pubkey = pubkey;
-		return this;
-	}
-	
-	public Signature data( Object obj ){
-		this.obj = obj;
-		return this;
-	}
 	
 	
-	public String sign() {
-		
-		if( this.prikey == null ){
-			return null; 
-		}
-		else if( this.obj == null ){
-			return null;
-		}
-		else{}
+	public String sign( String privatekey , Object obj) {
 		
 		java.security.Signature sign;
 		Map<String, String> result = new HashMap<String, String>();
 		
 		try {
 			sign = java.security.Signature.getInstance("SHA256withRSA"); 
-			if( primitive == true ){
-				String _obj = (String) this.obj;
-				sign.initSign( Helper.priKeyFromString( this.prikey ) );
+				String _obj = (String) obj;
+				sign.initSign( Helper.priKeyFromString( privatekey ) );
 				sign.update(_obj.getBytes());
 				byte[] signature = sign.sign();
 				
 				result.put("iss", _obj);
 				result.put("signature", Helper.encode(signature));
 				return Helper.toJson(result);
-			}
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 			return null;
@@ -95,22 +48,11 @@ public class Signature {
 			e.printStackTrace();
 			return null;
 		}
-		return null;
 	}
 
 	
-	public boolean verify() {
+	public boolean verify(String publicKey , Object obj) {
 
-		if( this.pubkey == null ){
-			return false; 
-		}
-		else if( this.obj == null ){
-			return false;
-		}
-		else if( this.signature == null){
-			return false;
-		}
-		else{}
 
 		boolean ret = false;
 		
@@ -120,13 +62,11 @@ public class Signature {
 		
 			try {
 				sign = java.security.Signature.getInstance("SHA256withRSA");
-				if( primitive == true ){
-					String _obj = (String) this.obj;
-					sign.initVerify( Helper.pubKeyFromString( this.pubkey ));
+					String _obj = (String) obj;
+					sign.initVerify( Helper.pubKeyFromString( publicKey ));
 					sign.update( _obj.getBytes() );
-					byte[] fromBase64 = Helper.decode( this.signature );
+					byte[] fromBase64 = Helper.decode( _obj );
 					ret = sign.verify( fromBase64 );
-				}
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			} catch (InvalidKeyException e) {
