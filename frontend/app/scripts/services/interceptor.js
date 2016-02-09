@@ -18,34 +18,6 @@ return {
 
 request : function( config ){
 
-if( config.headers.Authorization === undefined ){
-    config.headers.Authorization = "SRP";
-}
-
-if( config.headers["WWW-Authenticate"] === undefined ){
-    config.headers["WWW-Authenticate"] = "SRP";
-}
-
-if( config.headers["hash-algorithm"] === undefined ){
-    config.headers["hash-algorithm"] = "SHA256";
-}
-
-if( config.headers.realm === undefined ){
-    config.headers.realm = "realm";
-}
-
-if( config.headers.expires_in === undefined ){
-    config.headers.expires_in  = Storage.get("expires_in") || 0;
-}
-
-if( config.headers.token_type === undefined ){
-    config.headers.token_type  = "bearer";
-}
-
-if( config.headers.access_token === undefined ){
-    config.headers.access_token  = "xsrh";
-}
-
 if( config.headers.client_public_key === undefined ) {
     config.headers.client_public_key  = Storage.get('client_public_key')|| "";
 }
@@ -54,14 +26,13 @@ if( config.headers.server_public_key === undefined ) {
     config.headers.server_public_key  = Storage.get('server_public_key') || "" ;
 }
 
-
     return config;
 },
 
 response : function( res ){
 
-    if( (  res.headers( 'x-xsrf-token'))  ) {
-        Storage.set( res.headers( 'x-xsrf-token'));
+    if( (  res.headers( 'X-XSRF-TOKEN'))  ) {
+        Storage.set( res.headers( 'X-XSRF-TOKEN'));
     }
 
     if(  res.headers( 'client_public_key') ) {

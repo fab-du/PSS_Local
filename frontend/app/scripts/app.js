@@ -52,9 +52,16 @@ angular
     'ngFileUpload',
     'ngSanitize'
   ])
-  .config(function ($routeProvider, $resourceProvider, $stateProvider, usSpinnerConfigProvider) {
+  .config(function ($routeProvider, $resourceProvider, $httpProvider, $stateProvider, usSpinnerConfigProvider) {
 
     usSpinnerConfigProvider.setDefaults({color: '#5CB85C', radius:1});
+
+    $httpProvider.defaults.xsrfHeaderName = "X-XSRFToken";
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.headers["hash-algorithm"] = { "hash-algorithm" : "SHA256" };
+    $httpProvider.defaults.headers.Authorization = "SRP";
+    $httpProvider.defaults.headers["WWW-Authenticate"] = "SRP";
+    $httpProvider.defaults.headers.realm = "realm";
 
       $stateProvider
       .state('main', {
