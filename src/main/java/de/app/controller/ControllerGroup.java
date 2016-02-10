@@ -3,11 +3,17 @@ package de.app.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URLConnection;
+import java.nio.file.Paths;
+import java.nio.file.Files;
+
+import java.util.Arrays;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.eclipse.jetty.http.HttpHeader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +21,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import de.app.client.ClientDocument;
 import de.app.client.ClientGroup;
@@ -92,18 +98,8 @@ public class ControllerGroup {
 	
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.POST)
 	public ResponseEntity<?> addDocument( @PathVariable(value="groupId") Long groupId,@RequestParam("file") MultipartFile file ) throws IOException{
-		 	serviceDocument.create(file);
-		 	
 			String url = "http://localhost:8080/api/groups/" + groupId + "/documents";
-			
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-			 File _file = new File(file.getOriginalFilename());
-			LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-			map.add("file", new FileSystemResource(  _file.getAbsolutePath()));
-			HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new    HttpEntity<LinkedMultiValueMap<String, Object>>(map);
-			ResponseEntity<Document> response = rest.getRestTemplate().exchange( url, HttpMethod.POST, requestEntity, Document.class);
-	    	return response;
+			return serviceDocument.create(file, url);
 	}
 	
 	@RequestMapping( value="/{groupId}/documents/{documentId}", method = RequestMethod.GET )
@@ -113,22 +109,23 @@ public class ControllerGroup {
 	}
 	
 	@RequestMapping( value="/{groupId}/documents/{documentId}/download", method = RequestMethod.GET )
-	public ResponseEntity<InputStreamResource> groupId_documents_documentId_download( @PathVariable(value="groupId") Long groupId,
+	public ResponseEntity<?> groupId_documents_documentId_download( @PathVariable(value="groupId") Long groupId,
 			@PathVariable(value="documentId") Long documentId, HttpServletResponse response) throws IOException{
-		File file = new File("deployment.jpg");
-//		InputStream is = new FileInputStream( file);
-//		response.setHeader("Content-Type", "application/jpg");
-//		response.setHeader("Content-Disposition", "attachment; filename='deployment.jpg'"); 
-//		IOUtils.copy(is, response.getOutputStream());
-//		response.flushBuffer();
-		
-		  HttpHeaders respHeaders = new HttpHeaders();
-		   // respHeaders.setContentType("application/jpg");
-		    respHeaders.setContentLength(12345678);
-		    respHeaders.setContentDispositionFormData("attachment", "deployment.jpg");
-		 InputStreamResource isr = new InputStreamResource(new FileInputStream(file));
-		    return new ResponseEntity<InputStreamResource>(isr,respHeaders, HttpStatus.OK);
-		
+			
+			String url = "http://localhost:8080/api/groups/10/documents/1/download";
+			  HttpHeaders headers = new HttpHeaders();
+			    headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+			    
+			    HttpEntity<String> entity = new HttpEntity<String>(headers);
+			    
+			    ResponseEntity<byte[]> res = 
+			    		rest.getRestTemplate().exchange(url,HttpMethod.GET, entity, byte[].class, "1");
+			
+				return ResponseEntity
+						.ok()
+						.headers( res.getHeaders() )
+						.contentLength(res.getBody().length)
+						.body( res.getBody());
 	}
 	
 

@@ -8,6 +8,7 @@ import org.apache.commons.httpclient.methods.MultipartPostMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -37,6 +38,7 @@ public class RestClient{
 	            jsonConverter.setSupportedMediaTypes(ImmutableList.of(new MediaType("application", "json", MappingJackson2HttpMessageConverter.DEFAULT_CHARSET), new MediaType("text", "javascript", MappingJackson2HttpMessageConverter.DEFAULT_CHARSET)));
 	        }
 	    }
+	    messageConverters.add( new ByteArrayHttpMessageConverter());
 		this.restTemplate.setMessageConverters(messageConverters);
 		
 		this.headers = headers;

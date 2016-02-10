@@ -1,5 +1,10 @@
 package de.crypto;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -71,50 +76,45 @@ public class AESCrypto {
 		return Base64.getEncoder().encodeToString(raw);
 	}
 	
-	public byte[] encrypt( final String secretkey, final byte[] message ){
+	private void chifferImp( final String secretkey, File file, int modus){
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		
 		Cipher cipher = null;
-		byte[] raw = null;
-
 		Key key = this.symkeyFromString(secretkey);
 
-		if (key == null)
-			return null;
+		if (key == null) return;
+		
 		try {
-			cipher = Cipher.getInstance("AES/ECB/PKCS7Padding", "BC");
-			cipher.init(Cipher.ENCRYPT_MODE, key);
-			raw = cipher.doFinal(message);
+			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding", "BC");
+			cipher.init(modus, key);
 
+			BufferedInputStream bis = new BufferedInputStream( new FileInputStream(file));
+			File result = new File(file.getName() + ".enc");
+			BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream(result));
+			
+			byte[] readed = new byte[64];
+			
+			while( (bis.read(readed)) != -1 ){
+				byte[] encrypted = cipher.update(readed, 0, 64);
+				bos.write(encrypted);
+			}
+			
+			bis.close();
+			bos.close();
+			
 		} catch (Exception e) {
-			return null;
+			System.out.println(e.getMessage());
+			return;
 		}
 
-		if (raw == null)
-			return null;
-				return raw;
 	}
 
-	public String decrypt(final String secretkey, final String message) {
-		Cipher cipher = null;
-		String clearText = null;
-		byte[] stringBytes = null;
-
-		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-
-		Key key = this.symkeyFromString(secretkey);
-		if (key == null)
-			return null;
-
-		try {
-			cipher = Cipher.getInstance("AES/ECB/NoPadding", "BC");
-			cipher.init(Cipher.DECRYPT_MODE, key);
-			byte[] raw = Base64.getDecoder().decode(message);
-			stringBytes = cipher.doFinal(raw);
-			clearText = new String(stringBytes, "UTF8");
-		} catch (Exception e) {
-			return null;
-		}
-
-		return clearText;
+	public void decrypt(final String secretkey, File file) {
+		this.chifferImp(secretkey, file, Cipher.DECRYPT_MODE);
 	}
+	
+	public void encrypt( final String secretkey, File file ){
+		this.chifferImp(secretkey, file, Cipher.ENCRYPT_MODE);
+	}
+	
 }
