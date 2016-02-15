@@ -1,10 +1,4 @@
-app:
-    name: CryptLocal
-    description: CryptoLocal Server
 server:
-    port: 8081
-multipart:
-    maxFileSize: 128KB
-    maxRequestSize: 128KB
+  port: 8081
 
  

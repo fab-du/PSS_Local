@@ -25,12 +25,10 @@ public class PostRequestFilter extends HandlerInterceptorAdapter{
 		
 		System.out.println( status );
     	if ( status >= 500 && status < 600 ){
-    		//response.reset();
-    		//response.setStatus(200);
-			//request.getServletContext().getRequestDispatcher("/custom_error").forward(request, response);
     	}
 		
 	}
+	
 	
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

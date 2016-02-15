@@ -65,23 +65,22 @@ public class RequestFilter implements Filter {
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {}
 
-
-
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
+//		
+//		String xsrf = req.getHeader(X_XSRF_TOKEN);
+//		System.out.println(xsrf);
+//		if ( xsrf == null || xsrf == "" ){
+//	     	SecureRandom random = new SecureRandom();
+//		    String xsrfToken = new BigInteger(64, random ).toString();
+//		    System.out.println(xsrfToken);
+//		    res.setHeader( X_XSRF_TOKEN , xsrfToken);	
+//		}
 		
-		String xsrf = req.getHeader(X_XSRF_TOKEN);
-		System.out.println(xsrf);
-		if ( xsrf == null || xsrf == "" ){
-	     	SecureRandom random = new SecureRandom();
-		    String xsrfToken = new BigInteger(64, random ).toString();
-		    System.out.println(xsrfToken);
-		    res.setHeader( X_XSRF_TOKEN , xsrfToken);	
-		}
 		
 		Enumeration<String> headernames = req.getHeaderNames();
 		
@@ -90,7 +89,7 @@ public class RequestFilter implements Filter {
 			String headername = headernames.nextElement();
 			String headervalue = req.getHeader( headername );
 			System.out.println( headername + "-----" + headervalue);
-			restClient.setHeader(headername, headervalue);
+			//restClient.setHeader(headername, headervalue);
 		}
 		
 		chain.doFilter(request, response);

@@ -7,7 +7,6 @@ import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -71,6 +70,5 @@ public class Helper {
 
 		return privatekey;
 	}
-	
 }
 

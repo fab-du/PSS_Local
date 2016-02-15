@@ -1,12 +1,7 @@
 package de.app.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URLConnection;
-import java.nio.file.Paths;
-import java.nio.file.Files;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import javax.servlet.http.HttpServletResponse;
@@ -128,7 +123,6 @@ public class ControllerGroup {
 						.body( res.getBody());
 	}
 	
-
 	//TODO
 	@RequestMapping( value="/{groupId}/documents/{documentId}/shareDocument", method = RequestMethod.POST )
 	public ResponseEntity<?> groupId_documents_documentId_shareDocument( @PathVariable(value="groupId") Long groupId,
