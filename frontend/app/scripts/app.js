@@ -43,6 +43,7 @@ angular
     'ngRoute',
     'ngMaterial',
     'ui.router',
+    'angular-storage',
     /*
      *'ngMockE2E',
      */

@@ -8,7 +8,7 @@
  * Service in the cryptClientApp.
  */
 angular.module('cryptClientApp')
-.factory('Auth', function ($http, $state, $filter, $q, AUTH_EVENTS, Storage,  $rootScope ) {
+.factory('Auth', function ($http, $state, $filter, $q, AUTH_EVENTS, Storage, store,  $rootScope ) {
 var api = {};
 
 
@@ -25,10 +25,8 @@ function register( user, success, error ){
 api.login = function( user ){
     var q = $q.defer();
     $http.post('/session/login', user).success(function( response, status, headers ){
-        /*
-         *var authHeaders = headers();
-         *console.log( authHeaders );
-         */
+        
+        console.log(response)
 
         Storage.set("currentUserEmail", response.email);
         Storage.set("currentUserId", response.currentUserId);
@@ -84,7 +82,7 @@ api.isGroupMember = function( groupUsers ){
 
     var ret = $filter('getById')( groupUsers, 'id',  api.getCurrentUser().currentUserId );
     return ( ret !== null );
-}
+};
 
 api.isGv = function( group ){
     var isLoggedIn = api.isLoggedIn();
@@ -93,7 +91,7 @@ api.isGv = function( group ){
         return false;
     }
     return group['gvid'] === api.getCurrentUser().currentUserId;
-}
+};
 
 
 api.logout =  function(){
