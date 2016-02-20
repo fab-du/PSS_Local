@@ -67,6 +67,8 @@ public class ControllerSession {
 			new ResponseEntity<LinkedHashMap<String,String>>(errorMessage, HttpStatus.UNAUTHORIZED );
 		}
 		
+		System.out.println("Body not null");
+		
 		Map<String, String> result1 = serviceuser.step2( body );
 
 		if( result1  == null ){
@@ -94,32 +96,26 @@ public class ControllerSession {
 		
 		ResponseEntity<LinkedHashMap<String, String>> endResponse = 
 		POST.simplePost("/session/login/authenticate", result1);
-
-		HttpHeaders headers = new HttpHeaders(); 
-		headers = endResponse.getHeaders();
-		LinkedHashMap<String, String> zwischenErg = endResponse.getBody();
-		
-		if ( zwischenErg == null ){
-			LinkedHashMap<String, String> errorMessage = new LinkedHashMap<String, String>();
-			return new ResponseEntity<LinkedHashMap<String,String>>(errorMessage, HttpStatus.UNAUTHORIZED );
+		if( endResponse.getStatusCode().equals(HttpStatus.OK)) {
+			HttpHeaders responseHeaders = endResponse.getHeaders();
+			String authorization = responseHeaders.get("Authorization").toString();
+			System.out.println(authorization);
+			request.setHeader("Authorization", authorization);
 		}
-		zwischenErg.put("prikey", _keypair.get("priKey"));
-		return new ResponseEntity<LinkedHashMap<String, String>>( zwischenErg, headers, HttpStatus.OK );
+		return endResponse;
+
+//		HttpHeaders headers = new HttpHeaders(); 
+//		headers = endResponse.getHeaders();
+//		LinkedHashMap<String, String> zwischenErg = endResponse.getBody();
+//		
+//		if ( zwischenErg == null ){
+//			LinkedHashMap<String, String> errorMessage = new LinkedHashMap<String, String>();
+//			return new ResponseEntity<LinkedHashMap<String,String>>(errorMessage, HttpStatus.UNAUTHORIZED );
+//		}
+//		zwischenErg.put("prikey", _keypair.get("priKey"));
+//		return new ResponseEntity<LinkedHashMap<String, String>>( zwischenErg, headers, HttpStatus.OK );
 	}
 	
-
-	@RequestMapping( value="/login/authenticate", method = RequestMethod.POST )
-	public ResponseEntity<LinkedHashMap<String, String>> 
-		login( @RequestBody Map<String, String> authdata  ) throws RestClientException, Exception{
-
-			ResponseEntity<LinkedHashMap<String, String>> result = null;
-			try {
-				result = POST.simplePost("/session/login/authenticate", authdata);
-				return result;
-			} catch (Exception e) {
-				return new ResponseEntity<LinkedHashMap<String,String>>( HttpStatus.UNAUTHORIZED );
-			}
-	}
 
 	@RequestMapping( value="/register", method = RequestMethod.POST )
 	@Produces("application/json")

@@ -71,6 +71,8 @@ public class RequestFilter implements Filter {
 		
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
+		
+		System.out.println( req.getHeader("Authorization"));
 //		
 //		String xsrf = req.getHeader(X_XSRF_TOKEN);
 //		System.out.println(xsrf);
@@ -82,15 +84,15 @@ public class RequestFilter implements Filter {
 //		}
 		
 		
-		Enumeration<String> headernames = req.getHeaderNames();
-		
-		if(this.isApiUri( req.getRequestURI()) )
-		while( headernames.hasMoreElements() ){
-			String headername = headernames.nextElement();
-			String headervalue = req.getHeader( headername );
-			System.out.println( headername + "-----" + headervalue);
-			//restClient.setHeader(headername, headervalue);
-		}
+//		Enumeration<String> headernames = req.getHeaderNames();
+//		
+//		if(this.isApiUri( req.getRequestURI()) )
+//		while( headernames.hasMoreElements() ){
+//			String headername = headernames.nextElement();
+//			String headervalue = req.getHeader( headername );
+//			System.out.println( headername + "-----" + headervalue);
+//			restClient.setHeader(headername, headervalue);
+//		}
 		
 		chain.doFilter(request, response);
 	}

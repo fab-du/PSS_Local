@@ -20,13 +20,11 @@ public class PostRequestFilter extends HandlerInterceptorAdapter{
 			ModelAndView modelAndView) throws Exception {
 		super.postHandle(request, response, handler, modelAndView);
 		
-		
 		int status = response.getStatus();
 		
 		System.out.println( status );
     	if ( status >= 500 && status < 600 ){
     	}
-		
 	}
 	
 	

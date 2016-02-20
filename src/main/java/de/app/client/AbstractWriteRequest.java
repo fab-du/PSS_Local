@@ -26,7 +26,7 @@ public  class AbstractWriteRequest<CRES, CREQ > extends CRUDHelper{
 		ResponseEntity<CRES> response = null;
     	HttpEntity<CREQ> requestEntity = this.getHttpEntity( this.client.getHeaders(), body );
     	response= this.makeRequest( this.buildUrl(client,url, this.getUri(), uriVariableValues), method, client, requestEntity, responseClazz);
-		return response; 
+    	return response; 
 	}
 	
 	public 
