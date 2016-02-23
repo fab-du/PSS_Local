@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +17,8 @@ import com.nimbusds.srp6.SRP6Exception;
 import com.nimbusds.srp6.SRP6VerifierGenerator;
 
 import de.app.model.User;
-import de.cryptone.salt.Salt;
+import de.app.model.form.FormAuthentication;
+import de.app.model.form.FormChallengeResponse;
 import de.cryptone.utils.Helper;
 import io.jsonwebtoken.impl.crypto.RsaProvider;
 
@@ -53,36 +53,23 @@ public class ServiceUser {
 		return result;
 	}
 
-	public Map<String, String> addUser( String useremail, String currentUserEmail, String pubkey ){
-			Map<String, String> result = new HashMap<String, String>(); 
-			result.put("host", currentUserEmail );
-			result.put("newuserEmail", useremail );
-			return result;
-	}
-
 
 	public Map<String, String> generateVerifierAndSalt( String email, String password ){
 		Map<String, String> result = new HashMap<String, String>();
 		
-//		Returns an SRP-6a crypto parameters instance with precomputed 
-//		512-bit prime 'N', matching 'g' value and "SHA-1" hash algorithm.
-//		Returns: SRP-6a crypto parameters instance with 512-bit prime 'N', 
-//		matching 'g' value and "SHA-1" hash algorithm.
+		//	Returns an SRP-6a crypto parameters instance with precomputed 
+		//	512-bit prime 'N', matching 'g' value and "SHA-1" hash algorithm.
+		//	Returns: SRP-6a crypto parameters instance with 512-bit prime 'N', 
+		//	matching 'g' value and "SHA-1" hash algorithm.
 		SRP6CryptoParams config = SRP6CryptoParams.getInstance();	
-
 		// Create verifier generator
 		SRP6VerifierGenerator gen = new SRP6VerifierGenerator(config);
-
 		// Random 16 byte salt 's'
 		BigInteger salt = new BigInteger(SRP6VerifierGenerator.generateRandomSalt());
-
 		// Compute verifier 'v'
 		BigInteger verifier = gen.generateVerifier(salt, email, password);
-
-
 		String s = salt.toString();
 		String v = verifier.toString();
-
 		result.put("verifier", v);
 		result.put("salt", s);
 		return result;
@@ -93,19 +80,11 @@ public class ServiceUser {
 		client.step1(email, password );
 	}
 
-	public Map<String, String> step2( Map<String, String> saltAndB ){
-		try {
-			SRP6ClientCredentials cred = client.step2( SRP6CryptoParams.getInstance(), 
-					new BigInteger( saltAndB.get("salt") ),
-					new BigInteger( saltAndB.get("B")) );
-			Map<String, String> ret = new HashMap<String, String>();
-			ret.put( "A" , cred.A.toString() );
-			ret.put( "M1", cred.M1.toString() );
-			return ret;
-
+	public FormAuthentication step2( FormChallengeResponse saltAndB ){
+	 try{
+			SRP6ClientCredentials cred = client.step2( SRP6CryptoParams.getInstance(), new BigInteger(saltAndB.getSalt()),new BigInteger(saltAndB.getB()));
+			return new FormAuthentication( cred.A.toString(), cred.M1.toString());
 		} catch (SRP6Exception e) {
-			System.out.println("From Step 2");
-			System.out.println(e.getMessage());
 			return null;
 		}
 	}

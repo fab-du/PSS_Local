@@ -21,10 +21,9 @@ public abstract class CRUDHelper {
 	}
 	
 	HttpEntity<?> getHttpEntity( HttpHeaders headers ){
-		 HttpEntity<?> requestEntity = new HttpEntity<>( headers );
+		 HttpEntity<?> requestEntity = new HttpEntity<>(headers);
 		 return requestEntity;
 	}
-	
 	
 	public void setUri( String uri ){
 		this.uri = uri;

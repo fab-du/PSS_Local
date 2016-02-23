@@ -1,15 +1,26 @@
 package de.app.model.form;
 
+import javax.validation.constraints.NotNull;
+
 public class FormRegister {
 
+	@NotNull
 	String email;
+	@NotNull
 	String firstname;
+	@NotNull
 	String secondname;
+	@NotNull
 	String company;
+	@NotNull
+	String password;
+	
 	String passphrase;
-
 	String verifier;
 	String salt;
+	String pubkey;
+	String prikey; 
+	
 	public String getEmail() {
 		return email;
 	}
@@ -34,6 +45,13 @@ public class FormRegister {
 	public void setCompany(String company) {
 		this.company = company;
 	}
+	
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public String getPassphrase() {
 		return passphrase;
 	}
@@ -52,13 +70,17 @@ public class FormRegister {
 	public void setSalt(String salt) {
 		this.salt = salt;
 	}
-
-
-	@Override
-	public String toString() {
-		return "FormRegister [email=" + email + ", firstname=" + firstname + ", secondname=" + secondname + ", company="
-				+ company + ", passphrase=" + passphrase + ", verifier=" + verifier + ", salt=" + salt + "]";
+	public String getPubkey() {
+		return pubkey;
 	}
-	
+	public void setPubkey(String pubkey) {
+		this.pubkey = pubkey;
+	}
+	public String getPrikey() {
+		return prikey;
+	}
+	public void setPrikey(String prikey) {
+		this.prikey = prikey;
+	}
 
 }

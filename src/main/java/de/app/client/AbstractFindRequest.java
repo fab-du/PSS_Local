@@ -1,6 +1,5 @@
 package de.app.client;
 
-import java.net.URI;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +27,6 @@ public abstract class AbstractFindRequest<CRES> extends CRUDHelper{
     public ResponseEntity<CRES[]> find( Object ...uriVariableValues ) {
     	ResponseEntity<CRES[]> response = null;
     	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders() );
-    	URI _uri = this.buildUrl(client, url, this.getUri(), uriVariableValues);
-    	System.out.println( _uri.toString());
     	response = this.makeRequest( this.buildUrl(client, url, this.getUri(), uriVariableValues), HttpMethod.GET, client, requestEntity, findResponseClazz);
     	return response;
     }

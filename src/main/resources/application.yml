@@ -1,4 +1,12 @@
 server:
   port: 8081
 
+client:
+    uri:
+        session:
+            register: /session/register
+            logout: /session/logout
+            login:
+                challenge: /session/login/challenge
+                authenticate: /session/login/authenticate
  

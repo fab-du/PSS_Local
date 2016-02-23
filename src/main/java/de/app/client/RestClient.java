@@ -1,22 +1,16 @@
 package de.app.client;
 
 import java.util.List;
-
 import javax.annotation.PostConstruct;
-
-import org.apache.commons.httpclient.methods.MultipartPostMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jersey.repackaged.com.google.common.collect.ImmutableList;
 
 @Component
@@ -40,7 +34,6 @@ public class RestClient{
 	    }
 	    messageConverters.add( new ByteArrayHttpMessageConverter());
 		this.restTemplate.setMessageConverters(messageConverters);
-		
 		this.headers = headers;
 		headers.add("Content-Type", "application/json");
 	}

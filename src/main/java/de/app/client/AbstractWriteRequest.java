@@ -6,12 +6,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 public  class AbstractWriteRequest<CRES, CREQ > extends CRUDHelper{
-	
     
     private String url = "http://localhost:8080/";
-
     protected final RestClient client;
-    
     protected final Class<CRES> responseClazz;
     protected final Class<CREQ> requestClazz;
 
@@ -70,7 +67,7 @@ public  class AbstractWriteRequest<CRES, CREQ > extends CRUDHelper{
 	}
 	
     
-    HttpEntity<CREQ> getHttpEntity( HttpHeaders headers, CREQ body ){
+    HttpEntity<CREQ> getHttpEntity( HttpHeaders headers,  CREQ body ){
       	 HttpEntity<CREQ> requestEntity = new HttpEntity<CREQ>( body, headers );
       	 return requestEntity;
     }
