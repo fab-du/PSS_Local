@@ -4,6 +4,7 @@ package de.app.controller;
 import java.io.IOException;
 import java.util.Arrays;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -125,5 +127,9 @@ public class ControllerGroup {
 			@PathVariable(value="documentId") Long documentId){
 		return null;
 	}
-
+	
+	@ExceptionHandler({Exception.class})
+	public void exceptionHandler( HttpServletRequest request, Exception exception){
+		System.out.println( exception.getMessage());
+	}
 }

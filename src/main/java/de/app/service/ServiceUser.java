@@ -1,14 +1,11 @@
 package de.app.service;
 
 import java.math.BigInteger;
-import java.security.Key;
-import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jose4j.keys.AesKey;
-import org.jose4j.lang.ByteUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.nimbusds.srp6.SRP6ClientCredentials;
 import com.nimbusds.srp6.SRP6ClientSession;
@@ -16,43 +13,16 @@ import com.nimbusds.srp6.SRP6CryptoParams;
 import com.nimbusds.srp6.SRP6Exception;
 import com.nimbusds.srp6.SRP6VerifierGenerator;
 
-import de.app.model.User;
+import de.app.client.RestClient;
 import de.app.model.form.FormAuthentication;
 import de.app.model.form.FormChallengeResponse;
-import de.cryptone.utils.Helper;
-import io.jsonwebtoken.impl.crypto.RsaProvider;
 
+@Service
 public class ServiceUser {
-		SRP6ClientSession client;
 
-	public Map<String, String> register( User user ) throws NoSuchAlgorithmException{
-		KeyPair keypair = RsaProvider.generateKeyPair(512 );
-		byte[] _salt = ByteUtil.randomBytes(512);
-		Key symkey = new AesKey(_salt);
-		
-		String pubKey = Helper.encode( keypair.getPublic().getEncoded());
-		String priKey = Helper.encode( keypair.getPrivate().getEncoded());
-		
-
-	    Map<String, String> result =  new HashMap<String, String>(); 
-
-		result.put("pubkey", pubKey);
-		result.put("prikey", priKey);
-//		result.put("pairkeySalt", keypair.getSalt());
-
-		result.put("email", user.getEmail());
-		result.put("firstname", user.getFirstname());
-		result.put("secondname", user.getSecondname());
-
-		result.put("company", user.getCompany());
-		result.put("groupname", user.getCompany() + "_" + "group");
-
-		Map<String, String> verifierAndSalt = 
-		this.generateVerifierAndSalt( user.getEmail(), user.getPassword());
-		result.putAll(verifierAndSalt);
-		return result;
-	}
-
+	@Autowired
+	RestClient restClient;
+	SRP6ClientSession client;
 
 	public Map<String, String> generateVerifierAndSalt( String email, String password ){
 		Map<String, String> result = new HashMap<String, String>();
@@ -87,6 +57,12 @@ public class ServiceUser {
 		} catch (SRP6Exception e) {
 			return null;
 		}
+	}
+	
+	public void saveAuthenticationToken( String authenticationToken ) throws Exception{
+		if( authenticationToken == null )
+			throw new Exception("Malformed Token");
+			restClient.setHeader("Authentication", authenticationToken);
 	}
 
 }

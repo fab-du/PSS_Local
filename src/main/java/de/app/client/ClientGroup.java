@@ -2,7 +2,6 @@ package de.app.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import de.app.model.Group;
 
 @Component

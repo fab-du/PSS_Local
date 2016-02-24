@@ -7,8 +7,6 @@ import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
-
-import org.apache.hadoop.mapred.gethistory_jsp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
-
 import com.nimbusds.srp6.SRP6CryptoParams;
 import com.nimbusds.srp6.SRP6VerifierGenerator;
 
@@ -38,7 +35,8 @@ public class ControllerSession {
 
 	@Autowired
 	ClientSession clientSession;
-	ServiceUser serviceuser = new ServiceUser();
+	@Autowired
+	ServiceUser serviceuser;
 
 	@RequestMapping( value="/login", method = RequestMethod.POST )
 	@Produces("application/json")
@@ -101,4 +99,5 @@ public class ControllerSession {
 		errorMessage.put("message", "Error while trying loggin in");
 		return new ResponseEntity<Map<String,String>>(errorMessage, HttpStatus.BAD_REQUEST);
 	}
+	
 }

@@ -62,5 +62,4 @@ public class ControllerDocument {
 	public void exceptionHandler( HttpServletRequest request, Exception exception){
 		System.out.println( exception.getMessage());
 	}
-
 }

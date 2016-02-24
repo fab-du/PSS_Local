@@ -17,5 +17,4 @@ public class BatieCryptoExc extends Exception{
 	public BatieCryptoExc( String message, Throwable cause ){
 		super(message, cause);
 	}
-	
 }

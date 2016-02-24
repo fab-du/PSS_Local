@@ -1,7 +1,10 @@
 package de.app.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,5 +55,9 @@ public class ControllerFriend {
 	public ResponseEntity<?> friendId_users_userId_addToGroup( @PathVariable(value="userId") Long userId, @PathVariable(value="friendId") Long friendId, @PathVariable(value="groupId") Long groupId ){
 		return  clientFriend.Writer.put(userId, friendId,"addToGroup", groupId );
 	}
-
+	
+	@ExceptionHandler({Exception.class})
+	public void exceptionHandler( HttpServletRequest request, Exception exception){
+		System.out.println( exception.getMessage());
+	}
 }

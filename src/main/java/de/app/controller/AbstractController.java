@@ -17,8 +17,6 @@ public abstract class AbstractController {
 	
 	public abstract void create();
 	
-	
-	
 	public void setUri( String uri ){
 		this.uri = uri;
 	}
