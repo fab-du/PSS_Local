@@ -15,8 +15,6 @@ angular.module('cryptClientApp')
         usSpinnerService.spin('spinner-1');
     }, 40000 ).then( function(){ usSpinnerService.stop('spinner-1');})
 
-    console.log( timo )
-
     $scope.errors = "";
     $rootScope.isLoggedIn = false;
     $scope.$watch( "errors", function( newErrors , oldErrors ){
@@ -58,7 +56,6 @@ angular.module('cryptClientApp')
      * navbar : 0 left, 1 right
      * */
     $scope.toggleNavBar = function( navbar ){
-
         if( navbar === 0 ){
             var toggle = $scope.navBarShowL;
             $scope.navBarHideL = true;
@@ -150,8 +147,6 @@ angular.module('cryptClientApp')
 
         var dialog = $mdDialog.show( content );
     }
-
-
 
 
     // auth message handler 

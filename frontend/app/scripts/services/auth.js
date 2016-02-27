@@ -1,16 +1,8 @@
 'use strict';
 
-/**
- * @ngdoc service
- * @name cryptClientApp.Auth
- * @description
- * # Auth
- * Service in the cryptClientApp.
- */
 angular.module('cryptClientApp')
 .factory('Auth', function ($http, $state, $filter, $q, AUTH_EVENTS, Storage, store,  $rootScope ) {
 var api = {};
-
 
 function register( user, success, error ){
     $http.post('/session/register', user).success(function(res) {
@@ -18,22 +10,19 @@ function register( user, success, error ){
     }).error(error);
 }
 
-/*
-    * Follow SRP Working-flow. ie :
-    * Challenge -> Authenticate -> Authorize
-    **/
+/****
+ * Follow SRP Working-flow. ie :
+ * Challenge -> Authenticate -> Authorize
+ **/
 api.login = function( user ){
     var q = $q.defer();
     $http.post('/session/login', user).success(function( response, status, headers ){
         
-        console.log(response)
-
-        Storage.set("currentUserEmail", response.email);
-        Storage.set("currentUserId", response.currentUserId);
-
-        //TODO this muss comme from server
-        //85 hard coded just for dev purpose
-        Storage.set("currentUserGroupId", "85" );
+        store.set("currentUserEmail", response.email);
+        store.set("currentUserId", response.currentUserId);
+        store.set("token", headers("authorization"));
+        store.set("currentUserId", response.currentUserId );
+        store.set("evidence", response.evidence );
 
         //Storage.putAll( authHeaders );
         $rootScope.$broadcast( AUTH_EVENTS.loginSuccess );
@@ -49,24 +38,24 @@ api.login = function( user ){
 
 
 api.isLoggedIn =  function() {
-    var currentUserEmail = Storage.get("currentUserEmail");
-    var currentUserId = Storage.get("currentUserId");
+    var currentUserEmail = store.get("currentUserEmail");
+    var currentUserId = store.get("currentUserId");
     var ret = ((currentUserEmail !== null) &&( currentUserId !== null )) ;
     return  ret;
 };
 
 api.getCurrentUser = function(){
-    var currentUserEmail = Storage.get("currentUserEmail");
-    var currentUserId = Storage.get("currentUserId");
-    var currentUserGroupId = Storage.get("currentUserGroupId");
-    var ret = ((currentUserEmail !== null) &&
-               ( currentUserId !== null )  &&
-               ( currentUserGroupId !==null));
+    var currentUserEmail   = store.get("currentUserEmail");
+    var currentUserId      = store.get("currentUserId");
+    /*
+     *var currentUserGroupId = store.get("currentUserGroupId");
+     */
+    var ret = ((currentUserEmail    !== null) &&
+               ( currentUserId      !== null) )
 
     if( ret === true ){
         return { currentUserEmail : currentUserEmail, 
-                 currentUserId: currentUserId,
-                 currentUserGroupId : currentUserGroupId};
+                 currentUserId: currentUserId }
     }
     else{
         return null;
@@ -93,46 +82,24 @@ api.isGv = function( group ){
     return group['gvid'] === api.getCurrentUser().currentUserId;
 };
 
-
 api.logout =  function(){
-    Storage.remove();
+    store.remove("currentUserId");
+    store.remove("currentUserEmail");
+    store.remove("token");
+    store.remove("evidence");
+    console.log( "commmeee errreee to logout" );
+
+    $http.post('/session/logout', {} ).success( function( res ){
+        console.log( "logout success" );
+    })
+    .error( function( err ){
+        console.log( err );
+    });
 };
 
 
 api.register = function( user, success, error ){
-    var count = 0;
-
-    angular.forEach( user , function(value, key){
-
-        if( key === 'email' ){
-            count++;
-        }  
-
-        if( key === 'password') {
-          count++;
-        }
-
-        if( key === 'passphrase'){
-           count++;
-        } 
-
-        if( key === 'firstname'){
-           count++;
-        } 
-        if( key === 'secondname') {
-          count++;
-        }
-        if( key === 'company') {
-          count++;
-        }
-    });
-
-    if( count === 6 ){
-        return register( user, success, error );
-    }
-    else{
-        $rootScope.$broadcast( AUTH_EVENTS.loginFailed );
-    }
+    return register( user, success, error );
 };
 
 return api;

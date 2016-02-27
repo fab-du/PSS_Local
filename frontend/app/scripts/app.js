@@ -44,9 +44,6 @@ angular
     'ngMaterial',
     'ui.router',
     'angular-storage',
-    /*
-     *'ngMockE2E',
-     */
     'ngDraggable',
     'smart-table',
     'angularSpinner',
@@ -79,11 +76,9 @@ angular
             }
       })
       .state('register', {
+            url : "/session/register",
             controller : "RegisterController",
-            templateUrl : "/views/session/register.html",
-            templateProvider : function($templateCache){
-                return $templateCache.get('/views/session/register.html');
-            }
+            templateUrl : "/views/session/register.html"
       });
 
       $stateProvider

@@ -8,7 +8,7 @@
  * Service in the cryptClientApp.
  */
 angular.module('cryptClientApp')
-.factory('Interceptor', function($q, $location, Storage, store, $rootScope, AUTH_EVENTS ){
+.factory('Interceptor', function($q, $location, store, $rootScope, AUTH_EVENTS ){
 return {
 
 /*
@@ -17,6 +17,11 @@ return {
 */
 
 request : function( config ){
+    console.log( config.headers["Authorization"] )
+    if ( store.get("token")){
+        config.headers["Authorization"] = store.get("token");
+    }
+
     return config;
 },
 
@@ -33,7 +38,6 @@ responseError: function( response ) {
         403: AUTH_EVENTS.notAuthorized,
         419: AUTH_EVENTS.sessionTimeout,
         440: AUTH_EVENTS.sessionTimeout,
-
         404: AUTH_EVENTS.notFound,
 
       }[response.status], response);
