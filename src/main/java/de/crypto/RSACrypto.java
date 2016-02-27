@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -15,22 +16,27 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.interfaces.PBEKey;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+
 import de.cryptone.utils.Helper;
 
 public class RSACrypto {
-
+	
 	private KeyPair generatePairkey() {
 		KeyPairGenerator keyPairGen = null;
 		KeyPair keyPair = null;
 		try {
 			keyPairGen = KeyPairGenerator.getInstance("RSA");
-			 SecureRandom secRandom = SecureRandom.getInstanceStrong();
-			keyPairGen.initialize(1024, secRandom);
+			keyPairGen.initialize(1024);
 			keyPair = keyPairGen.generateKeyPair();
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
+			return null;
 		}
-
 		return keyPair;
 	}
 
@@ -39,6 +45,36 @@ public class RSACrypto {
 		KeyPair keypair = this.generatePairkey();
 		String prikey = Helper.encode(keypair.getPrivate().getEncoded());
 		String pubkey = Helper.encode(keypair.getPublic().getEncoded());
+		_keypair.setPrikey(prikey);
+		_keypair.setPubkey(pubkey);
+		return _keypair;
+	}
+	
+	private Map<String, Object> generateSecretFromPassphrase( String passphrase ) throws NoSuchAlgorithmException, InvalidKeySpecException{
+		Map<String, Object> result= new HashMap<>();
+		SecureRandom rand = SecureRandom.getInstance("SHA1PRNG");
+		byte[] salt = new byte[16];
+		rand.nextBytes(salt);
+		PBEKeySpec password = new PBEKeySpec(passphrase.toCharArray(), salt, 1000, 128);
+		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+		PBEKey key = (PBEKey) factory.generateSecret(password);
+		SecretKey encKey = new SecretKeySpec(key.getEncoded(), "AES");
+		result.put("secret", encKey);
+		result.put("salt", Helper.encode(salt));
+		return result;
+	}
+	
+	public de.app.model.KeyPair generateKey( String passphrase ) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		de.app.model.KeyPair _keypair = new de.app.model.KeyPair();
+		AESCrypto aes = new AESCrypto();
+		
+		KeyPair keypair = this.generatePairkey();
+		
+		Map<String, Object> ret = this.generateSecretFromPassphrase(passphrase);
+		SecretKey secretkey = (SecretKey) ret.get("secret");
+		String prikey = aes.encrypt( Helper.encode(secretkey.getEncoded()), Helper.encode( keypair.getPrivate().getEncoded()));
+		String pubkey = Helper.encode(keypair.getPublic().getEncoded());
+		_keypair.setSalt( (String) ret.get("salt") );
 		_keypair.setPrikey(prikey);
 		_keypair.setPubkey(pubkey);
 
@@ -78,7 +114,6 @@ public class RSACrypto {
 		String clearText = null;
 
 		try {
-
 			cipher = Cipher.getInstance("RSA");
 			cipher.init(Cipher.DECRYPT_MODE, key);
 			byte[] raw = Base64.getDecoder().decode(message);
@@ -87,7 +122,6 @@ public class RSACrypto {
 		} catch (Exception e) {
 			return null;
 		}
-
 		return clearText;
 	}
 
@@ -132,12 +166,17 @@ public class RSACrypto {
 		return publickey;
 	}
 
-	String map(KeyPair keypair) {
-		String encodedPub = Helper.encode(keypair.getPublic().getEncoded());
-		String encodedPri = Helper.encode(keypair.getPrivate().getEncoded());
-		Map<String, String> result = new HashMap<>();
-		result.put("pubkey", encodedPub);
-		result.put("prikey", encodedPri);
-		return Helper.toJson(result);
+	public static void main(String[] args) {
+		RSACrypto rsa = new RSACrypto();
+		try {
+			de.app.model.KeyPair result = rsa.generateKey("passworkd");
+			System.out.println( result.getPubkey());
+			System.out.println(  result.getPrikey() );
+			String enc = rsa.encrypt(result.getPubkey(), "publiiiccc");
+			System.out.println( enc );
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			System.out.println("error occure");
+			e.printStackTrace();
+		}
 	}
 }

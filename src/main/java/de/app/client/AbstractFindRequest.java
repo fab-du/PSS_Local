@@ -23,14 +23,12 @@ public abstract class AbstractFindRequest<CRES> extends CRUDHelper{
     	this.findResponseClazz = findResponseClazz;
     }
     
-    
     public ResponseEntity<CRES[]> find( Object ...uriVariableValues ) {
     	ResponseEntity<CRES[]> response = null;
     	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders() );
     	response = this.makeRequest( this.buildUrl(client, url, this.getUri(), uriVariableValues), HttpMethod.GET, client, requestEntity, findResponseClazz);
     	return response;
     }
-    
     
     public ResponseEntity<CRES> findOne( Object ...uriVariableValues ){
     	ResponseEntity<CRES> response = null;

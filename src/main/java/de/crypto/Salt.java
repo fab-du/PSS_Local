@@ -1,4 +1,4 @@
-package de.cryptone.salt;
+package de.crypto;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import de.app.model.form.FormAuthentication;
 import de.app.model.form.FormChallengeResponse;
+import de.app.model.form.FormCrudResponse;
 import de.app.model.form.FormLoginAuthenticateResponse;
 import de.app.model.form.FormLoginChallenge;
 import de.app.model.form.FormRegister;
@@ -18,15 +19,15 @@ public class ClientSession{
 	private String uri_challenge = "/session/login/challenge";
 	@Value("${client.uri.session.login.authenticate}")
 	private String uri_authenticate ="/session/login/authenticate";
-	@Value("${client.uri.session.register}")
-	private String uri_register;
+	//@Value("${client.uri.session.register}")
+	private String uri_register="/session/register";
 	@Value("${client.uri.session.logout}")
-	private String uri_logout;
+	private String uri_logout="/session/logout";
 
 	//CRES. CREQ
 	private  AbstractWriteRequest<FormChallengeResponse, FormLoginChallenge> writerLoginChallenge;
 	private  AbstractWriteRequest<FormLoginAuthenticateResponse, FormAuthentication> writerLoginAuthenticate;
-	private  AbstractWriteRequest<?, FormRegister> writerRegister;
+	private  AbstractWriteRequest<FormCrudResponse, FormRegister> writerRegister;
 	private  AbstractWriteRequest<?, ?> writerLogout;
 
 
@@ -38,19 +39,18 @@ public class ClientSession{
 		writerLoginAuthenticate = new AbstractWriteRequest<FormLoginAuthenticateResponse,FormAuthentication >(client, FormLoginAuthenticateResponse.class, FormAuthentication.class );
 		writerLoginAuthenticate.setUri(uri_authenticate);
 		
-		writerRegister = new AbstractWriteRequest<>(client, Object.class, FormRegister.class );
+		writerRegister = new AbstractWriteRequest<FormCrudResponse, FormRegister>(client, FormCrudResponse.class, FormRegister.class );
 		writerRegister.setUri(uri_register);
 		
-		writerLogout = new AbstractWriteRequest<>(client, Object.class, Object.class );
+		writerLogout = new AbstractWriteRequest<>(client, String.class, String.class );
 		writerLogout.setUri(uri_logout);
 	}
 
-	public ResponseEntity<?> register( FormRegister registerData ){
+	public ResponseEntity<FormCrudResponse> register( FormRegister registerData ){
 		return writerRegister.create(registerData);
 	}
 	
 	public ResponseEntity<FormChallengeResponse> loginChallenge( FormLoginChallenge challenge ){
-		System.out.println( writerLoginAuthenticate.getUri() );
 		return writerLoginChallenge.create(challenge);
 	}
 	
@@ -58,9 +58,7 @@ public class ClientSession{
 		return writerLoginAuthenticate.create( authData );
 	}
 	
-	
-	public void logout(){
-		
+	public ResponseEntity<?> logout(){
+		return  writerLogout.create( new String("logout") );
 	}
-
 }

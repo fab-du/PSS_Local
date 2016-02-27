@@ -1,6 +1,7 @@
 package de.app;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.annotation.Priority;
 import javax.servlet.Filter;
@@ -28,16 +29,30 @@ public class RequestFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
-		System.out.println( "=============================================");
-		System.out.println( req.getHeader("Authorization"));
 		
 		String authToken = req.getHeader("Authorization");
+		if( authToken == null )
+			authToken = req.getHeader("authorization");
+		
 		if ( authToken != null  && restClient.getHeaders().get("Authorization") == null ){
 			restClient.setHeader("Authorization", authToken);
 		}
+
+		this.printAllheader(req);
 		chain.doFilter(request, response);
 	}
 	
+    void printAllheader( HttpServletRequest req ){
+    	Enumeration<String> headers = req.getHeaderNames();
+    	String headername;
+        System.out.println( "=========================================");
+        System.out.println( "=========DEBUG===========================");
+    	while( (headername = headers.nextElement()) != null ){
+    		System.out.println(headername + ":" + req.getHeader(headername));
+    	}
+    }
+	
+    
 	@Override
 	public void destroy() {}
 }

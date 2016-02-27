@@ -82,5 +82,12 @@ public class FormRegister {
 	public void setPrikey(String prikey) {
 		this.prikey = prikey;
 	}
-
+	
+	@Override
+	public String toString() {
+		return "FormRegister [email=" + email + ", firstname=" + firstname + ", secondname=" + secondname + ", company="
+				+ company + ", password=" + password + ", passphrase=" + passphrase + ", verifier=" + verifier
+				+ ", salt=" + salt + ", pubkey=" + pubkey + ", prikey=" + prikey + "]";
+	}
+	
 }

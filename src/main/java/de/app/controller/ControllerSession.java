@@ -1,6 +1,8 @@
 package de.app.controller;
 
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,14 +22,15 @@ import com.nimbusds.srp6.SRP6CryptoParams;
 import com.nimbusds.srp6.SRP6VerifierGenerator;
 
 import de.app.client.ClientSession;
-import de.app.exceptions.BatieCryptoExc;
+import de.app.model.KeyPair;
 import de.app.model.form.FormAuthentication;
 import de.app.model.form.FormChallengeResponse;
 import de.app.model.form.FormLogin;
 import de.app.model.form.FormLoginChallenge;
 import de.app.model.form.FormRegister;
+import de.app.service.ServiceGroup;
 import de.app.service.ServiceUser;
-import de.crypto.RSAKeyGenerator;
+import de.crypto.RSACrypto;
 
 @RestController
 @RequestMapping(value="/session")
@@ -37,6 +40,8 @@ public class ControllerSession {
 	ClientSession clientSession;
 	@Autowired
 	ServiceUser serviceuser;
+	@Autowired
+	ServiceGroup serviceGroup;
 
 	@RequestMapping( value="/login", method = RequestMethod.POST )
 	@Produces("application/json")
@@ -60,37 +65,43 @@ public class ControllerSession {
 		return clientSession.loginAuthenticate(formAuth);
 	}
 	
-
+	
 	@RequestMapping( value="/register", method = RequestMethod.POST )
 	@Produces("application/json")
 	public ResponseEntity<?> 
-		register( @RequestBody FormRegister registration ) throws BatieCryptoExc{
+		register( @RequestBody FormRegister registration ) throws NoSuchAlgorithmException, InvalidKeySpecException{
 
+		System.out.println( registration.toString());
 		SRP6CryptoParams config = SRP6CryptoParams.getInstance(); 
-		
+
 		SRP6VerifierGenerator gen = new SRP6VerifierGenerator(config); 
 		BigInteger salt = new BigInteger(SRP6VerifierGenerator.generateRandomSalt());
 
 		BigInteger verifier = gen.generateVerifier(salt, registration.getEmail(), registration.getPassword());
-		RSAKeyGenerator keygen = new RSAKeyGenerator();
-		de.app.model.KeyPair pairkey = keygen.generate();
-		
+		registration.setVerifier(verifier.toString());
+
+		RSACrypto rsacrypto = new RSACrypto();
+		KeyPair pairkey = rsacrypto.generateKey( registration.getPassphrase() );
+
+		/*
+		 * remove password and passphrase
+		 */
 		registration.setPassphrase(null);
 		registration.setPassword(null);
-		registration.setSalt(salt.toString());
-		registration.setVerifier(verifier.toString());
-		registration.setPubkey( pairkey.getPubkey());
-		registration.setPrikey( pairkey.getPrikey());
+		
+		registration.setSalt(pairkey.getSalt());
+		registration.setPubkey(pairkey.getPubkey());
+		registration.setPrikey(pairkey.getPrikey());
 
 		return clientSession.register(registration);
 	}
 
 	@RequestMapping( value="/logout", method = RequestMethod.POST )
-	public ResponseEntity<LinkedHashMap<String, String>>
+	public ResponseEntity<?>
 	logout(){		
-		return null;
+		return clientSession.logout();
 	}
-	
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Map<String, String>>
 	exceptionHandler( Exception ex ){
