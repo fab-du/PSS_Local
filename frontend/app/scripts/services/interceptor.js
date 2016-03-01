@@ -17,9 +17,12 @@ return {
 */
 
 request : function( config ){
-    console.log( config.headers["Authorization"] )
     if ( store.get("token")){
         config.headers["Authorization"] = store.get("token");
+    }
+
+    if ( store.get("clientpubkey") ){
+        config.headers["clientpubkey"] = store.get("clientpubkey");
     }
 
     return config;

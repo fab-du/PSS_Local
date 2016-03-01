@@ -62,7 +62,6 @@ return {
             });
         };
 
-
     },
 
     link: function( scope, el, attrs ){
@@ -314,14 +313,12 @@ return {
 
 .directive('matchFilter', function( $filter ){
     return{
-        
         restrict : 'E',
         scope : {
             data : '='
         },
         template :  '<div id="selectBox" class="md-alert" ng-hide="closed" on-close="closed=true" ><div><input type="text" style="width:200px;" name="" id="" value="{{substring}}" ng-model="substring" /></div>'+
                      '<div id="elements" ><div class="selectClass" ng-click="matchFilterSelect(it)" ng-repeat="it in data track by $email | filter:substring"> {{ it }} <hr style="background=lightblue"/>  </div></div></div>',
-
         controller : function( $filter, $scope, $rootScope ){
             $scope.closed = false;
             $scope.substring= "";

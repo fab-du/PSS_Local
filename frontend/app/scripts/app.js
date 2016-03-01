@@ -119,11 +119,9 @@ angular
           templateUrl: '/views/groups/groupdetails.html',
           controller : 'GroupDetailsController'
       })
-      .state('groups.groupId.documents', {
-          url : '/documents',
-      })
-      .state('groups.groupId.users', {
-          url : '/users',
+      .state('groups.groupId.details', {
+          url        : '/:groupId',
+          templateUrl: '/views/groups/groupdetails.details.html'
       });
 
       $stateProvider
@@ -142,16 +140,15 @@ angular
       $stateProvider
       .state('friends', {
           url : '/friends',
-          templateUrl : "/views/friends.html"
+          templateUrl : "/views/friends.html",
+          controller : "FriendController"
       })
       .state('friends.friendId', {
-          url : '/:friendId'
+          url : '/:friendId',
+          controller : "FriendDetailController"
       })
       .state('friends.friendId.groups', {
           url : '/groups'
-      })
-      .state('friends.friendId.friends', {
-          url : '/friends'
       });
 
       $routeProvider.otherwise({redirectTo: '/'});

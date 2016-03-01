@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cryptClientApp')
-.factory('Auth', function ($http, $state, $filter, $q, AUTH_EVENTS, Storage, store,  $rootScope ) {
+.factory('Auth', function ($http, $state, $location, $window, $filter, $q, AUTH_EVENTS, Storage, store,  $rootScope ) {
 var api = {};
 
 function register( user, success, error ){
@@ -23,6 +23,7 @@ api.login = function( user ){
         store.set("token", headers("authorization"));
         store.set("currentUserId", response.currentUserId );
         store.set("evidence", response.evidence );
+        store.set("clientpubkey", response.currentUserPublicKey );
 
         //Storage.putAll( authHeaders );
         $rootScope.$broadcast( AUTH_EVENTS.loginSuccess );
@@ -90,9 +91,16 @@ api.logout =  function(){
     console.log( "commmeee errreee to logout" );
 
     $http.post('/session/logout', {} ).success( function( res ){
-        console.log( "logout success" );
+        $http.config.headers["Authorization"] = null;
+        $http.config.headers["authorization"] = null;
+        $location.path("/");
+        $window.location.reload();
+        console.log( res );
     })
     .error( function( err ){
+        $http.config.headers["Authorization"] = null;
+        $http.config.headers["authorization"] = null;
+        $window.location.reload();
         console.log( err );
     });
 };
