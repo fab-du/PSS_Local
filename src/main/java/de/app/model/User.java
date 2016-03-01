@@ -8,12 +8,8 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@SuppressWarnings("serial")
 public class User extends AbstractEntity{
-	/*
-	 * user : 
-	 * 		 - email
-	 * 		 - company
-	 */
 	String firstname;
 	String secondname;
 	
@@ -32,10 +28,19 @@ public class User extends AbstractEntity{
 	@JsonIgnore
 	boolean validated=false;
 	
+	KeyPair keypair;
+	
 	Set<UserGroup> users = new HashSet<UserGroup>();
 	
 	Set<Friendship> friends = new HashSet<Friendship>();
-	
+
+	public KeyPair getKeypair() {
+		return keypair;
+	}
+
+	public void setKeypair(KeyPair keypair) {
+		this.keypair = keypair;
+	}
 
 	public Set<UserGroup> getUsers() {
 		return users;

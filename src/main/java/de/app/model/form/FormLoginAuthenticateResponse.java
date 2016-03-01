@@ -5,7 +5,7 @@ public class FormLoginAuthenticateResponse {
 	String currentUserId;
 	String email;
 	String evidence;
-	
+    String currentUserPublicKey;
 	
 	public FormLoginAuthenticateResponse() {
 		super();
@@ -29,6 +29,18 @@ public class FormLoginAuthenticateResponse {
 	public void setEvidence(String evidence) {
 		this.evidence = evidence;
 	}
-	
+
+	public String getCurrentUserPublicKey() {
+		return currentUserPublicKey;
+	}
+	public void setCurrentUserPublicKey(String currentUserPublicKey) {
+		this.currentUserPublicKey = currentUserPublicKey;
+	}
+
+	@Override
+	public String toString() {
+		return "FormLoginAuthenticateResponse [currentUserId=" + currentUserId + ", email=" + email + ", evidence="
+				+ evidence + ", currentUserPublicKey=" + currentUserPublicKey + "]";
+	}
 	
 }

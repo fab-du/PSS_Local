@@ -8,9 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
-
 import de.app.client.HeaderInterceptor;
-import de.app.client.SignatureInterceptor;
 //import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 

@@ -1,36 +1,39 @@
 package de.app.service;
 
 import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.cache.CacheManager;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
 import de.app.client.ClientGroup;
+import de.app.controller.ControllerUser;
 import de.app.model.Group;
 import de.app.model.KeySym;
 import de.crypto.AESCrypto;
+import de.crypto.RSACrypto;
 
-@Service
+@Component
 public class ServiceGroup {
 	
 	@Autowired
 	ClientGroup clientGroup;
-	
+	@Autowired
+	ControllerUser ctrlUser;
 	@Autowired
 	ServiceDocument serviceDocument;
+	@Autowired
+	CacheManager cacheManager;
 
-	public ResponseEntity<?> create( Group group ){
-		
-		if( group == null )
-			return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+	public Group create( Group group, String pubkey ) throws Exception{
 		
 		AESCrypto aesCrypto = new AESCrypto();
 		KeySym groupKey = aesCrypto.generateKey();
+
+		RSACrypto rsa = new RSACrypto();
+		String encSymKey = rsa.encrypt( pubkey, groupKey.getSymkey() );
+		groupKey.setSymkey(encSymKey);
 		group.setGroupkey(groupKey);
-		return clientGroup.Writer.create(group, null, null, null, null);
+		return group; 
 	}
 
 	public void uploadFile(MultipartFile file) throws IOException{
@@ -41,6 +44,4 @@ public class ServiceGroup {
 	
 	public void addUser(){
 	}
-
-
 }

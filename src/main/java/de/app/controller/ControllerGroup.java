@@ -1,21 +1,17 @@
 package de.app.controller;
 
-
 import java.io.IOException;
 import java.util.Arrays;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,39 +30,35 @@ import de.app.service.ServiceGroup;
 
 @RestController
 @RequestMapping(value="/api/groups")
-public class ControllerGroup {
+public class ControllerGroup extends AbstractController {
 	
 	@Autowired
 	RestClient rest;
-	
 	@Autowired
 	ClientGroup clientGroup;
-	
 	@Autowired
 	ClientDocument clientDocument;
-
 	@Autowired 
 	ClientUser clientUser;
-	
 	@Autowired
 	ServiceDocument serviceDocument;
-	
 	@Autowired
 	ServiceGroup serviceGroup;
 	
 	@RequestMapping( method = RequestMethod.GET )
 	public ResponseEntity<Group[]>  find(){
-		return clientGroup.find(null, null, null, null);
+		return clientGroup.find();
 	}
 	
 	@RequestMapping(value="/{groupId}",  method = RequestMethod.GET )
 	public ResponseEntity<Group>  findOne(@PathVariable(value="groupId") Long groupId){
-		return clientGroup.findOne(groupId, null, null, null);
+		return clientGroup.findOne(groupId);
 	}
 
 	@RequestMapping( method = RequestMethod.POST )
-	public ResponseEntity<?> create( @RequestBody Group group ) throws RestClientException, Exception{
-		return serviceGroup.create(group);
+	public ResponseEntity<?> create( @RequestBody Group group, @RequestHeader(value="clientpubkey") String pubkey ) throws RestClientException, Exception{
+		Group _group = serviceGroup.create( group, pubkey );
+		return clientGroup.getWriter().create(_group, null, null, null, null );
 	}
 
 	@RequestMapping( value="/{groupId}/users", method = RequestMethod.GET )
@@ -101,7 +93,7 @@ public class ControllerGroup {
 		return clientDocument.findOne(groupId, "documents", documentId);
 	}
 	
-	@RequestMapping( value="/{groupId}/documents/{documentId}/download", method = RequestMethod.GET )
+	@RequestMapping( value="/{groupId}/documents/{documentId}/download/{file}", method = RequestMethod.GET )
 	public ResponseEntity<?> groupId_documents_documentId_download( @PathVariable(value="groupId") Long groupId,
 			@PathVariable(value="documentId") Long documentId, HttpServletResponse response) throws IOException{
 			
@@ -113,8 +105,8 @@ public class ControllerGroup {
 			    
 			    ResponseEntity<byte[]> res = 
 			    		rest.getRestTemplate().exchange(url,HttpMethod.GET, entity, byte[].class, "1");
-			
-				return ResponseEntity
+
+			    return ResponseEntity
 						.ok()
 						.headers( res.getHeaders() )
 						.contentLength(res.getBody().length)
@@ -126,10 +118,5 @@ public class ControllerGroup {
 	public ResponseEntity<?> groupId_documents_documentId_shareDocument( @PathVariable(value="groupId") Long groupId,
 			@PathVariable(value="documentId") Long documentId){
 		return null;
-	}
-	
-	@ExceptionHandler({Exception.class})
-	public void exceptionHandler( HttpServletRequest request, Exception exception){
-		System.out.println( exception.getMessage());
 	}
 }

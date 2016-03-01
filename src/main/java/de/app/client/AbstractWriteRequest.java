@@ -27,13 +27,9 @@ public  class AbstractWriteRequest<CRES, CREQ > extends CRUDHelper{
 	}
 	
 	public 
-	ResponseEntity<CRES> create( CREQ body , Object ...uriVariableValues){
+	ResponseEntity<CRES> create( CREQ body, Object ...uriVariableValues){
+		System.out.println("comme erererkejr");
 		return this.crud(body, HttpMethod.POST, uriVariableValues);
-	}
-	
-	public 
-	ResponseEntity<CRES> create(  Object ...uriVariableValues){
-		return this.crud(null, HttpMethod.POST, uriVariableValues);
 	}
 	
 	public 

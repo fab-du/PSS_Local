@@ -1,7 +1,11 @@
 package de.app.model;
 
-public abstract class AbstractSecureModel {
-	   /*
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public abstract class AbstractSecureModel implements Serializable {
+
+	/*
      * JWS Signature
      * */
     String signature;

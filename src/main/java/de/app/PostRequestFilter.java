@@ -26,9 +26,9 @@ public class PostRequestFilter extends HandlerInterceptorAdapter{
 	}
 	
 	
-	@ExceptionHandler
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	void handleIllegalArgumentException(IllegalArgumentException e, HttpServletResponse response) throws IOException {
-	    response.sendError(HttpStatus.BAD_REQUEST.value());
-	}
+//	@ExceptionHandler
+//	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//	void handleIllegalArgumentException(IllegalArgumentException e, HttpServletResponse response) throws IOException {
+//	    response.sendError(HttpStatus.BAD_REQUEST.value());
+//	}
 }

@@ -2,8 +2,8 @@ package de.app.model;
 
 import java.util.Date;
 
+@SuppressWarnings("serial")
 public class Document extends AbstractEntity{
-	
 	
 	String name, path;
 	public Long version;

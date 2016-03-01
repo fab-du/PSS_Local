@@ -2,6 +2,8 @@ package de.app.model.form;
 
 import javax.validation.constraints.NotNull;
 
+import de.app.model.Group;
+
 public class FormRegister {
 
 	@NotNull
@@ -20,6 +22,17 @@ public class FormRegister {
 	String salt;
 	String pubkey;
 	String prikey; 
+	
+	Group group;
+	
+	
+	
+	public Group getGroup() {
+		return group;
+	}
+	public void setGroup(Group group) {
+		this.group = group;
+	}
 	
 	public String getEmail() {
 		return email;

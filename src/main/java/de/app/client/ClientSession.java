@@ -59,6 +59,6 @@ public class ClientSession{
 	}
 	
 	public ResponseEntity<?> logout(){
-		return  writerLogout.create( new String("logout") );
+		return  writerLogout.create(null, new String("logout") );
 	}
 }

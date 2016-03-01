@@ -5,6 +5,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
+@SuppressWarnings("serial")
 public class AbstractEntity extends AbstractSecureModel{
 	
 	Long id;

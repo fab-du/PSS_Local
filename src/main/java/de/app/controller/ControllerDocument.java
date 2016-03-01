@@ -1,10 +1,9 @@
 package de.app.controller;
 
 import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,18 +19,16 @@ import de.app.service.ServiceDocument;
 
 @RestController
 @RequestMapping(value="/api/documents")
-public class ControllerDocument {
+public class ControllerDocument  extends AbstractController{
 	
 	@Autowired
 	ClientDocument clientDocument;
-	
 	@Autowired
 	ServiceDocument serviceDocument;
-	
 	@Autowired
 	RestClient rest;
 	
-	
+	@Cacheable(de.app.CacheConfig.CACHE_DOCUMENTS)
 	@RequestMapping( method=RequestMethod.GET  )
 	public ResponseEntity<Document[]> find(){
 		return clientDocument.find();
@@ -58,8 +55,4 @@ public class ControllerDocument {
 		return null;
 	}
 
-	@ExceptionHandler({Exception.class})
-	public void exceptionHandler( HttpServletRequest request, Exception exception){
-		System.out.println( exception.getMessage());
-	}
 }

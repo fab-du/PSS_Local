@@ -2,7 +2,6 @@ package de.app.controller;
 
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,15 +21,14 @@ public class ControllerUser {
 	@Autowired
 	ClientUser clientUser;
 
-	
 	@RequestMapping( method = RequestMethod.GET )
 	public ResponseEntity<User[]> find() throws RestClientException, Exception{
-		return clientUser.find(null, null, null, null);
+		return clientUser.find();
 	}
 	
 	@RequestMapping(value="/{userId}",  method = RequestMethod.GET )
 	public ResponseEntity<User> find(@PathVariable(value="userId") Long userId) throws RestClientException, Exception{
-		return clientUser.findOne( null,null, userId, null );
+		return clientUser.findOne( userId );
 	}
 
 //	@RequestMapping(value="/{userId}/validate", method = RequestMethod.POST )

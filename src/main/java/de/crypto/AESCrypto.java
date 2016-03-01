@@ -117,4 +117,10 @@ public class AESCrypto {
 		this.chifferImp(secretkey, file, Cipher.ENCRYPT_MODE);
 	}
 	
+	
+	public static void main(String[] args) {
+		AESCrypto aes = new AESCrypto();
+		KeySym key = aes.generateKey();
+		System.out.println( key.toString() );
+	}
 }

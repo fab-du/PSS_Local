@@ -5,13 +5,15 @@ import java.util.Date;
 
 import org.springframework.data.annotation.LastModifiedDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class KeySym extends AbstractEntity{
 
 	String symkey;
-	
 	String salt; 
 
 	public Long version;
+	@JsonIgnore
 	public @LastModifiedDate Date date;
 	
 	public String getSymkey() {
@@ -37,5 +39,11 @@ public class KeySym extends AbstractEntity{
 	}
 	public void setSalt(String salt) {
 		this.salt = salt;
+	}
+	@Override
+	public String toString() {
+		return "KeySym [symkey=" + symkey + ", salt=" + salt + ", version=" + version + ", date=" + date + "]";
 	} 
+	
+	
 }

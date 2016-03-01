@@ -3,16 +3,17 @@ package de.app.controller;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Collection;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,50 +22,61 @@ import org.springframework.web.client.RestClientException;
 import com.nimbusds.srp6.SRP6CryptoParams;
 import com.nimbusds.srp6.SRP6VerifierGenerator;
 
+import de.app.CacheConfig;
 import de.app.client.ClientSession;
+import de.app.model.Group;
 import de.app.model.KeyPair;
+import de.app.model.KeySym;
 import de.app.model.form.FormAuthentication;
 import de.app.model.form.FormChallengeResponse;
 import de.app.model.form.FormLogin;
+import de.app.model.form.FormLoginAuthenticateResponse;
 import de.app.model.form.FormLoginChallenge;
 import de.app.model.form.FormRegister;
 import de.app.service.ServiceGroup;
 import de.app.service.ServiceUser;
+import de.crypto.AESCrypto;
 import de.crypto.RSACrypto;
 
 @RestController
 @RequestMapping(value="/session")
-public class ControllerSession {
+@Service
+public class ControllerSession extends AbstractController{
 
+	@Autowired
+	ApplicationContext appContext;
 	@Autowired
 	ClientSession clientSession;
 	@Autowired
 	ServiceUser serviceuser;
 	@Autowired
 	ServiceGroup serviceGroup;
+	
+	@Autowired 
+	CacheManager cacheManager;
 
 	@RequestMapping( value="/login", method = RequestMethod.POST )
 	@Produces("application/json")
 	@Consumes("application/json")
-	public ResponseEntity<?>
+	@Cacheable(value=CacheConfig.CACHE_SESSION)
+	public ResponseEntity<FormLoginAuthenticateResponse>
 	login_challenge( @RequestBody FormLogin authdata ) throws RestClientException, Exception{
 		
-		System.out.println( authdata.getEmail());
 		serviceuser.step1( authdata.getEmail()	, authdata.getPassword());
 
 		FormLoginChallenge challenge = new FormLoginChallenge( authdata.getEmail());
 		 ResponseEntity<FormChallengeResponse> challengeResponse = clientSession.loginChallenge(challenge);
 		 
-		 System.out.println( challengeResponse.getBody().toString());
 		 if( challengeResponse.getBody() == null ) 
 			 throw new Exception("Login error");
 		
 		FormAuthentication formAuth = serviceuser.step2( challengeResponse.getBody() );
 
 		formAuth.setEmail( authdata.getEmail());
-		return clientSession.loginAuthenticate(formAuth);
+		ResponseEntity<FormLoginAuthenticateResponse> response = clientSession.loginAuthenticate(formAuth);
+		
+		return response;
 	}
-	
 	
 	@RequestMapping( value="/register", method = RequestMethod.POST )
 	@Produces("application/json")
@@ -89,6 +101,18 @@ public class ControllerSession {
 		registration.setPassphrase(null);
 		registration.setPassword(null);
 		
+		Group group = new Group();
+		
+		group.setName( registration.getEmail() + "_privateGroup");
+		AESCrypto aesCrypto = new AESCrypto();
+		KeySym groupKey = aesCrypto.generateKey();
+
+		RSACrypto rsa = new RSACrypto();
+		String encSymKey = rsa.encrypt( pairkey.getPubkey(), groupKey.getSymkey() );
+		groupKey.setSymkey(encSymKey);
+		group.setGroupkey(groupKey);
+		
+		registration.setGroup(group);
 		registration.setSalt(pairkey.getSalt());
 		registration.setPubkey(pairkey.getPubkey());
 		registration.setPrikey(pairkey.getPrikey());
@@ -99,16 +123,12 @@ public class ControllerSession {
 	@RequestMapping( value="/logout", method = RequestMethod.POST )
 	public ResponseEntity<?>
 	logout(){		
-		return clientSession.logout();
+		ResponseEntity<?> response = clientSession.logout();
+		Collection<String> cacheNames = cacheManager.getCacheNames(); 
+		cacheNames.forEach( name -> {
+			cacheManager.getCache(name).clear();
+		});
+		return response;
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Map<String, String>>
-	exceptionHandler( Exception ex ){
-		System.out.println( ex.getLocalizedMessage() );
-		Map<String, String> errorMessage = new HashMap<String, String>();
-		errorMessage.put("message", "Error while trying loggin in");
-		return new ResponseEntity<Map<String,String>>(errorMessage, HttpStatus.BAD_REQUEST);
-	}
-	
 }

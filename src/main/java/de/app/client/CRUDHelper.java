@@ -13,6 +13,7 @@ public abstract class CRUDHelper {
 	
 	public URI buildUrl( RestClient client, String url, String uri , Object ...uriVariableValues ){
     	URI _uri = client.getRestTemplate().getUriTemplateHandler().expand( url + uri, uriVariableValues);
+    	System.out.println( _uri.toString() );
 		return _uri;
 	}
 	

@@ -1,15 +1,26 @@
 package de.app.model;
 
+import javax.validation.constraints.NotNull;
+
+@SuppressWarnings("serial")
 public class Group extends AbstractEntity{
 	
-	String name;
 	
+	
+	public Group(String name, Long gvid, KeySym groupkey) {
+		this.name = name;
+		this.gvid = gvid;
+		this.groupkey = groupkey;
+	}
+
+	@NotNull
+	String name;
+
 	Long gvid;
 	
 	KeySym groupkey;
 
-	public Group() {
-	}
+	public Group() {}
 	
 	public String getName() {
 		return name;
@@ -34,4 +45,10 @@ public class Group extends AbstractEntity{
 	public void setGroupkey(KeySym groupkey) {
 		this.groupkey = groupkey;
 	}
+
+	@Override
+	public String toString() {
+		return "Group [name=" + name + ", gvid=" + gvid + "]";
+	}
+	
 }
