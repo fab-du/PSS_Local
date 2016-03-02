@@ -53,4 +53,7 @@ public class RestClient{
 	public HttpHeaders getHeaders(){
 		return this.headers;
 	}
+	public void clearHeaders(){
+		this.headers.clear();
+	}
 }

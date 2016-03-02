@@ -22,6 +22,7 @@ public class FormRegister {
 	String salt;
 	String pubkey;
 	String prikey; 
+	String srpsalt;
 	
 	Group group;
 	
@@ -30,6 +31,16 @@ public class FormRegister {
 	public Group getGroup() {
 		return group;
 	}
+	
+	
+	public void setSrpsalt( String srpsalt ){
+		this.srpsalt = srpsalt;
+	}
+	
+	public String getSrpsalt(){
+		return srpsalt;
+	}
+	
 	public void setGroup(Group group) {
 		this.group = group;
 	}

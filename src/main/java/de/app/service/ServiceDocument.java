@@ -13,23 +13,27 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
+import de.app.client.ClientSymKey;
 import de.app.client.RestClient;
 import de.app.model.Document;
 import de.app.model.KeySym;
 import de.crypto.AESCrypto;
 
-@Component
+@Service
 public class ServiceDocument {
 	
 	@Autowired
-	RestClient rest;
+	RestClient client;
+	
+	@Autowired
+	ClientSymKey clientKeySym;
 
 	public
-	ResponseEntity<?> create( MultipartFile file, String url ) throws IOException{
+	ResponseEntity<?> create( MultipartFile file, String url, Long groupId ) throws IOException{
 		if ( file.isEmpty() )
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
@@ -40,7 +44,7 @@ public class ServiceDocument {
 			final byte[] bytes = new byte[1024];
 			
 			AESCrypto aesCrypto = new AESCrypto();
-			KeySym aesKey = aesCrypto.generateKey();
+			KeySym aesKey = clientKeySym.findOne( groupId ).getBody();
 			
 			while((read=is.read(bytes)) != -1){
 				fos.write(bytes, 0, read);
@@ -50,16 +54,18 @@ public class ServiceDocument {
 			fos.close();
 			File _file = new File( file.getOriginalFilename() );
 			aesCrypto.encrypt(aesKey.getSymkey(), _file);
-			FileUtils.forceDelete( new File( file.getName()));
-			FileUtils.copyFile(new File( file.getName() + ".enc"), new File( file.getName()));
+			
+			FileUtils.forceDelete( _file );
+			
+			FileUtils.copyFile(new File( _file.getName() + ".enc"), new File( _file.getName()));
 			
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-			 File __file = new File(file.getOriginalFilename());
+			 File __file = new File(_file.getName());
 			LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 			map.add("file", new FileSystemResource(  __file.getAbsolutePath()));
-			HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new    HttpEntity<LinkedMultiValueMap<String, Object>>(map);
-			ResponseEntity<Document> response = rest.getRestTemplate().exchange( url, HttpMethod.POST, requestEntity, Document.class);
+			HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new    HttpEntity<LinkedMultiValueMap<String, Object>>(map, client.getHeaders());
+			ResponseEntity<Document> response = client.getRestTemplate().exchange( url, HttpMethod.POST, requestEntity, Document.class);
 			return response;
 	}
 	

@@ -39,10 +39,12 @@ public class ControllerDocument  extends AbstractController{
 		return clientDocument.findOne( documentId );
 	}
 	
+	//TODO
 	@RequestMapping( method=RequestMethod.POST )
 	public ResponseEntity<?> create(@RequestParam("file") MultipartFile file) throws IOException{
 		String url = "http://localhost:8080/api/documents"; 
-		return serviceDocument.create(file, url);
+		//return serviceDocument.create(file, url);
+		return null;
 	}
 
 	@RequestMapping(value="/{documentId}/changeOwner", method=RequestMethod.POST  )

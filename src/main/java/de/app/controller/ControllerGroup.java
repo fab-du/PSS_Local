@@ -84,7 +84,7 @@ public class ControllerGroup extends AbstractController {
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.POST)
 	public ResponseEntity<?> addDocument( @PathVariable(value="groupId") Long groupId,@RequestParam("file") MultipartFile file ) throws IOException{
 			String url = "http://localhost:8080/api/groups/" + groupId + "/documents";
-			return serviceDocument.create(file, url);
+			return serviceDocument.create( file, url, groupId );
 	}
 	
 	@RequestMapping( value="/{groupId}/documents/{documentId}", method = RequestMethod.GET )

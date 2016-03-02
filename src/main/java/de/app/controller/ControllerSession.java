@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ import com.nimbusds.srp6.SRP6VerifierGenerator;
 
 import de.app.CacheConfig;
 import de.app.client.ClientSession;
+import de.app.client.RestClient;
 import de.app.model.Group;
 import de.app.model.KeyPair;
 import de.app.model.KeySym;
@@ -51,9 +53,10 @@ public class ControllerSession extends AbstractController{
 	ServiceUser serviceuser;
 	@Autowired
 	ServiceGroup serviceGroup;
-	
 	@Autowired 
 	CacheManager cacheManager;
+	@Autowired
+	RestClient client;
 
 	@RequestMapping( value="/login", method = RequestMethod.POST )
 	@Produces("application/json")
@@ -100,7 +103,7 @@ public class ControllerSession extends AbstractController{
 		 */
 		registration.setPassphrase(null);
 		registration.setPassword(null);
-		
+
 		Group group = new Group();
 		
 		group.setName( registration.getEmail() + "_privateGroup");
@@ -114,6 +117,7 @@ public class ControllerSession extends AbstractController{
 		
 		registration.setGroup(group);
 		registration.setSalt(pairkey.getSalt());
+		registration.setSrpsalt( salt.toString());
 		registration.setPubkey(pairkey.getPubkey());
 		registration.setPrikey(pairkey.getPrikey());
 
@@ -128,6 +132,8 @@ public class ControllerSession extends AbstractController{
 		cacheNames.forEach( name -> {
 			cacheManager.getCache(name).clear();
 		});
+		
+		client.clearHeaders();
 		return response;
 	}
 
