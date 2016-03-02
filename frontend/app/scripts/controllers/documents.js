@@ -8,31 +8,29 @@
  * Controller of the cryptClientApp
  */
 angular.module('cryptClientApp')
-.controller('DocumentsController', function ( $scope ) {
+.controller('DocumentsController', function ( $scope, Rest, $q ) {
 
-function init( ){
+var init = function(){
 
-$scope.filesString = [];
-$scope.files = [];
-
-$scope.startUpload = function(){
-
-};
-
-$scope.clean_documents_list = function(){
+    Rest.Document.find().$promise.then( function( documents ){
+        $scope.documents = documents;
+    });
 
 };
-
-$scope.$watch( "files", function( newFiles, oldFiles ){
-    if( newFiles !== oldFiles ){
-        $scope.filesString.push( newFiels );
-    }
-
-});
-
-
-}
 
 init();
 
+})
+.controller('DocumentsDetailController', function ( $scope, Rest, $q, $stateParams ) {
+
+var init = function(){
+
+Rest.Document.findOne( { documentId : $stateParams.documentId } ).$promise.then( function( document ){
+    $scope.document = document;
 });
+
+};
+
+init();
+
+})

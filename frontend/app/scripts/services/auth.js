@@ -24,6 +24,7 @@ api.login = function( user ){
         store.set("currentUserId", response.currentUserId );
         store.set("evidence", response.evidence );
         store.set("clientpubkey", response.currentUserPublicKey );
+        store.set("currentUserGroupId", response.currentUserGroupId );
 
         //Storage.putAll( authHeaders );
         $rootScope.$broadcast( AUTH_EVENTS.loginSuccess );
@@ -88,14 +89,14 @@ api.logout =  function(){
     store.remove("currentUserEmail");
     store.remove("token");
     store.remove("evidence");
-    console.log( "commmeee errreee to logout" );
+    store.remove("clientpubkey");
+    store.remove("currentUserGroupId");
 
     $http.post('/session/logout', {} ).success( function( res ){
         $http.config.headers["Authorization"] = null;
         $http.config.headers["authorization"] = null;
         $location.path("/");
         $window.location.reload();
-        console.log( res );
     })
     .error( function( err ){
         $http.config.headers["Authorization"] = null;

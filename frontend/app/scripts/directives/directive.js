@@ -51,13 +51,13 @@ return {
         stTable  : '=items', // two way data binding with parent scope
         onSelect : '&' // mehod
     },
-    controller : function( $scope, Rest, Auth, $state ){
+    controller : function( $scope, Rest, Auth, store, $state ){
         $scope.headers = ['id', 'firstname', 'secondname', 'email'];
         $scope.items = null; 
 
         $scope.addFriend = function( index ){
             console.log( $scope.items[index].id);
-            Rest.Friend.addFriend( { currentUserId :  Auth.getCurrentUser().currentUserId }, { id : $scope.items[index].id } ).$promise.then( function( ){
+            Rest.Friend.addFriend( { currentUserId :  store.get("currentUserId") }, { id : $scope.items[index].id } ).$promise.then( function( ){
                 $state.reload();
             });
         };
@@ -103,12 +103,12 @@ return {
         stTable  : '=items', // two way data binding with parent scope
         onSelect : '&' // mehod
     },
-    controller : function( $scope , Rest, Auth ){
+    controller : function( $scope , Rest, store, Auth ){
         $scope.items = null; 
         $scope.headers = ['id', 'firstname', 'secondname', 'email'];
 
         $scope.revoke = function( index ){
-            Rest.Friend.revoke( {  }, { friendId : $scope.items[index].id, currentUserId : Auth.getCurrentUser().currentUserId } ).$promise.then( function( ){
+            Rest.Friend.revoke( {  }, { friendId : $scope.items[index].id, currentUserId : store.get("currentUserId") } ).$promise.then( function( ){
                 if (index !== -1) {
                     $scope.items.splice(index, 1);
                 }
@@ -228,16 +228,14 @@ return {
         scope : {
             groupFiles : '='
         },
-        controller : function( $scope, $rootScope, $mdToast, Rest, $timeout, $compile, $filter, Auth, usSpinnerService,Upload ){
-            
+        controller : function( $scope, $rootScope, $mdToast, Rest, $timeout, $compile, $filter, store, Auth, usSpinnerService,Upload ){
 
             $scope.files = [];
             $scope.filesString = [];
 
             if ( angular.isUndefined( $scope.groupFiles ) ){
-                Rest.Group.documents({ groupId : Auth.getCurrentUser().currentUserGroupId  }).$promise.then( function( documents ){
+                Rest.Group.documents({ groupId : store.get("currentUserGroupId") }).$promise.then( function( documents ){
                     $scope.groupFiles = documents;
-                    console.log( $scope.groupFiles )
                 });
             }
 
@@ -255,7 +253,7 @@ return {
                 var file = $scope.filesString[ index ];
                 var currentUserId = '';
 
-                var url = "/api/groups/" + 85 + "/documents";
+                var url = "/api/groups/" + store.get("currentUserGroupId") + "/documents";
 
                 var promise = Upload.upload({
                     url: url,
@@ -275,7 +273,6 @@ return {
                             }
                         });
 
-                        console.log( index );
                         if( index !== null ){
                             $scope.removeFile( index );
                         }
