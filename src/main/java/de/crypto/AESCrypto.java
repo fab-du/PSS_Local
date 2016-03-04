@@ -49,6 +49,28 @@ public class AESCrypto {
 		return result;
 	}
 
+	public  String decrypt( final String secretkey, final String message ) {
+		 Cipher cipher = null;
+		 String clearText = null;
+		 byte[] stringBytes = null;
+
+		Security.addProvider( new org.bouncycastle.jce.provider.BouncyCastleProvider());
+
+		 Key key = this.symkeyFromString(secretkey);
+		 if( key == null ) return null;
+		 
+		 try {
+			  cipher = Cipher.getInstance("AES/ECB/PKCS7Padding", "BC");
+		      cipher.init(Cipher.DECRYPT_MODE, key);
+		      byte[] raw = Base64.getDecoder().decode(message);
+		      stringBytes = cipher.doFinal(raw);
+		      clearText= new String(stringBytes, "UTF8");
+			} catch (Exception e) {
+				return null;
+			} 
+
+		return clearText;
+	}
 
 	public String encrypt(final String secretkey, final String message) {
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
@@ -121,6 +143,8 @@ public class AESCrypto {
 	public static void main(String[] args) {
 		AESCrypto aes = new AESCrypto();
 		KeySym key = aes.generateKey();
-		System.out.println( key.toString() );
+		String enc_message = aes.encrypt(key.getSymkey(), "Salut maman comment tu vas et la famille je viens au camer dans bientot bisou");
+		System.out.println( enc_message );
+		System.out.println( aes.decrypt(key.getSymkey(), enc_message));
 	}
 }

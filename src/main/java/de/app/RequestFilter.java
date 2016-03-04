@@ -38,7 +38,7 @@ public class RequestFilter implements Filter {
 			restClient.setHeader("Authorization", authToken);
 		}
 
-		this.printAllheader(req);
+		//this.printAllheader(req);
 		chain.doFilter(request, response);
 	}
 	

@@ -1,6 +1,5 @@
 package de.crypto;
 
-import java.io.UnsupportedEncodingException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -18,10 +17,8 @@ import java.util.Map;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
-import javax.crypto.interfaces.PBEKey;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-
 import de.cryptone.utils.Helper;
 
 public class RSACrypto {
@@ -55,30 +52,27 @@ public class RSACrypto {
 		SecureRandom rand = SecureRandom.getInstance("SHA1PRNG");
 		byte[] salt = new byte[16];
 		rand.nextBytes(salt);
-		PBEKeySpec password = new PBEKeySpec(passphrase.toCharArray(), salt, 1000, 128);
-		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-		PBEKey key = (PBEKey) factory.generateSecret(password);
-		SecretKey encKey = new SecretKeySpec(key.getEncoded(), "AES");
+		
+		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+		PBEKeySpec spec = new PBEKeySpec(passphrase.toCharArray(), salt, 1000, 128);
+		SecretKey _key =  factory.generateSecret(spec);
+		SecretKey encKey = new SecretKeySpec(_key.getEncoded(), "AES");
 		result.put("secret", encKey);
 		result.put("salt", Helper.encode(salt));
 		return result;
 	}
 	
 	public de.app.model.KeyPair generateKey( String passphrase ) throws NoSuchAlgorithmException, InvalidKeySpecException {
-		de.app.model.KeyPair _keypair = new de.app.model.KeyPair();
 		AESCrypto aes = new AESCrypto();
 		
-		KeyPair keypair = this.generatePairkey();
-		
+		de.app.model.KeyPair keypair = this.generateKey();
 		Map<String, Object> ret = this.generateSecretFromPassphrase(passphrase);
 		SecretKey secretkey = (SecretKey) ret.get("secret");
-		String prikey = aes.encrypt( Helper.encode(secretkey.getEncoded()), Helper.encode( keypair.getPrivate().getEncoded()));
-		String pubkey = Helper.encode(keypair.getPublic().getEncoded());
-		_keypair.setSalt( (String) ret.get("salt") );
-		_keypair.setPrikey(prikey);
-		_keypair.setPubkey(pubkey);
+		String prikey = aes.encrypt( Helper.encode(secretkey.getEncoded()), keypair.getPrikey());
+		keypair.setSalt( (String) ret.get("salt") );
+		keypair.setPrikey(prikey);
 
-		return _keypair;
+		return keypair;
 	}
 
 	public String encrypt(final String key, final String message) {
@@ -108,6 +102,19 @@ public class RSACrypto {
 	public String decrypt(final String key, final String message) {
 		return this.decrypt(this.privatekeyFromString(key), message);
 	}
+	
+	public String decrypt( final de.app.model.KeyPair key , final String passphrase, final String message ) throws NoSuchAlgorithmException, InvalidKeySpecException{
+		byte[] salt = Helper.decode(key.getSalt());
+		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+		PBEKeySpec spec = new PBEKeySpec(passphrase.toCharArray(), salt, 1000, 128);
+		SecretKey _key =  factory.generateSecret(spec);
+		SecretKey encKey = new SecretKeySpec(_key.getEncoded(), "AES");
+		AESCrypto aes = new AESCrypto();
+		String dec_prikey = aes.decrypt(Helper.encode( encKey.getEncoded()), key.getPrikey());
+		String ret = this.decrypt(dec_prikey, message);
+		
+		return ret;
+	}
 
 	private String decrypt(PrivateKey key, String message) {
 		Cipher cipher = null;
@@ -123,17 +130,6 @@ public class RSACrypto {
 			return null;
 		}
 		return clearText;
-	}
-
-	String privatekeyToString(PrivateKey prikey) {
-		byte[] encodedprikey = prikey.getEncoded();
-		String base64String = null;
-		try {
-			base64String = new String(Base64.getEncoder().encode(encodedprikey), "UTF8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return base64String;
 	}
 
 	PrivateKey privatekeyFromString(String prikey) {
@@ -166,17 +162,4 @@ public class RSACrypto {
 		return publickey;
 	}
 
-	public static void main(String[] args) {
-		RSACrypto rsa = new RSACrypto();
-		try {
-			de.app.model.KeyPair result = rsa.generateKey("passworkd");
-			System.out.println( result.getPubkey());
-			System.out.println(  result.getPrikey() );
-			String enc = rsa.encrypt(result.getPubkey(), "publiiiccc");
-			System.out.println( enc );
-		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-			System.out.println("error occure");
-			e.printStackTrace();
-		}
-	}
 }

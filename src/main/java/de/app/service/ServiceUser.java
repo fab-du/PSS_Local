@@ -14,8 +14,10 @@ import com.nimbusds.srp6.SRP6Exception;
 import com.nimbusds.srp6.SRP6VerifierGenerator;
 
 import de.app.client.RestClient;
+import de.app.model.KeyPair;
 import de.app.model.form.FormAuthentication;
 import de.app.model.form.FormChallengeResponse;
+import de.crypto.RSACrypto;
 
 @Service
 public class ServiceUser {
@@ -63,6 +65,12 @@ public class ServiceUser {
 		if( authenticationToken == null )
 			throw new Exception("Malformed Token");
 			restClient.setHeader("Authentication", authenticationToken);
+	}
+	
+	public KeyPair generateSessionKey ( ){
+		RSACrypto rsa = new RSACrypto();
+		KeyPair keypair = rsa.generateKey();
+		return keypair;
 	}
 
 }

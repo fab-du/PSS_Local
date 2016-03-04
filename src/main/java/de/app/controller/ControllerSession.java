@@ -64,11 +64,12 @@ public class ControllerSession extends AbstractController{
 	@Cacheable(value=CacheConfig.CACHE_SESSION)
 	public ResponseEntity<FormLoginAuthenticateResponse>
 	login_challenge( @RequestBody FormLogin authdata ) throws RestClientException, Exception{
-		
+		RSACrypto rsa = new RSACrypto();
 		serviceuser.step1( authdata.getEmail()	, authdata.getPassword());
 
 		FormLoginChallenge challenge = new FormLoginChallenge( authdata.getEmail());
 		 ResponseEntity<FormChallengeResponse> challengeResponse = clientSession.loginChallenge(challenge);
+		 
 		 
 		 if( challengeResponse.getBody() == null ) 
 			 throw new Exception("Login error");
@@ -76,8 +77,13 @@ public class ControllerSession extends AbstractController{
 		FormAuthentication formAuth = serviceuser.step2( challengeResponse.getBody() );
 
 		formAuth.setEmail( authdata.getEmail());
+		KeyPair sessionkey = serviceuser.generateSessionKey();
+		formAuth.setSpubkey(sessionkey.getPubkey());
 		ResponseEntity<FormLoginAuthenticateResponse> response = clientSession.loginAuthenticate(formAuth);
 		
+		cacheManager.getCache( CacheConfig.CACHE_SESSION).put("pubkey", sessionkey );
+		cacheManager.getCache( CacheConfig.CACHE_SESSION).put("passphrase", rsa.encrypt(sessionkey.getPubkey(), authdata.getPassphrase()));
+		cacheManager.getCache(CacheConfig.CACHE_SESSION).put("currentUser", response.getBody());
 		return response;
 	}
 	

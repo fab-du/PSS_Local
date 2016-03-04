@@ -1,6 +1,8 @@
 package de.app.controller;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +84,7 @@ public class ControllerGroup extends AbstractController {
 	}
 	
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.POST)
-	public ResponseEntity<?> addDocument( @PathVariable(value="groupId") Long groupId,@RequestParam("file") MultipartFile file ) throws IOException{
+	public ResponseEntity<?> addDocument( @PathVariable(value="groupId") Long groupId,@RequestParam("file") MultipartFile file ) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException{
 			String url = "http://localhost:8080/api/groups/" + groupId + "/documents";
 			return serviceDocument.create( file, url, groupId );
 	}

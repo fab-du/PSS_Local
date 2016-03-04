@@ -4,6 +4,7 @@ public class FormAuthentication {
 	String email;
 	String A;
 	String M1;
+	String spubkey;
 	
 	public FormAuthentication(String A, String M1) {
 		this.A = A;
@@ -30,4 +31,13 @@ public class FormAuthentication {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public String getSpubkey() {
+		return spubkey;
+	}
+
+	public void setSpubkey(String spubkey) {
+		this.spubkey = spubkey;
+	}
+	
 }
