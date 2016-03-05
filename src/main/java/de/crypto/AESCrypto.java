@@ -138,13 +138,4 @@ public class AESCrypto {
 	public void encrypt( final String secretkey, File file ){
 		this.chifferImp(secretkey, file, Cipher.ENCRYPT_MODE);
 	}
-	
-	
-	public static void main(String[] args) {
-		AESCrypto aes = new AESCrypto();
-		KeySym key = aes.generateKey();
-		String enc_message = aes.encrypt(key.getSymkey(), "Salut maman comment tu vas et la famille je viens au camer dans bientot bisou");
-		System.out.println( enc_message );
-		System.out.println( aes.decrypt(key.getSymkey(), enc_message));
-	}
 }
