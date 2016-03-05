@@ -50,11 +50,11 @@
             </md-button>
 
             <md-button ng-if="!isLoggedIn" ui-sref="login" >
-                login
+            {{ 'session.signin' | translate }}
             </md-button>
 
             <md-button ng-if="!isLoggedIn" ui-sref="register" >
-                register
+            {{ 'session.signup' | translate }}
             </md-button>
 
             <md-button ng-if="isLoggedIn" ng-click="logout()">
@@ -65,7 +65,7 @@
 
             <h1> CryptOne </h1>
             <ng-messages when="error">
-                {{ error }}
+                {{ error | translate }}
             </ng-messages>
 
         <div>
@@ -73,6 +73,39 @@
                 online
                 <i class="glyphicon glyphicon-user"></i> 
             </md-button>
+
+           <div class="pull-right btn-group">
+             <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                 lang: {{ prefferedLanguage }} <span class="caret"></span>
+             </button>
+             <ul class="dropdown-menu" role="menu">
+               <li>
+                <a href="#" ng-click="switchLanguage('de')">
+                    <img style="width:25px; height:25px" src="images/de.png"> 
+                </a>
+               </li>
+               <li class="divider"></li>
+               <li>
+                <a href="" ng-click="switchLanguage('en')">
+                    <img  style="width:25px; height:25px" src="images/en.png"> 
+                </a>
+               </li>
+               <li class="divider"></li>
+               <li>
+                <a href="" ng-click="switchLanguage('fr')">
+                    <img  style="width:25px; height:25px" src="images/fr.png">
+                </a>
+               </li>
+               <li class="divider"></li>
+               <li>
+                <a href="" ng-click="switchLanguage('fr')">
+                    <img  style="width:25px; height:25px" src="images/cm.png">
+                </a>
+               </li>
+               <li class="divider"></li>
+             </ul>
+           </div>
+            
         </div>
 
     </md-toolbar>
@@ -83,7 +116,7 @@
             <md-tabs  md-dynamic-height="" md-border-bottom="" >
                 <md-content class="md-padding mg-warn">
 
-                    <md-tab ng-repeat="tab in tabs" label="{{ tab.label }}" md-on-select="onTabSelected( tab.label )" class="md-primary">
+                    <md-tab ng-repeat="tab in tabs" label="{{ tab.label | translate }}" md-on-select="onTabSelected( tab.label )" class="md-primary">
                         <md-button ng-click="tabContentClick( tab.label, content )" ng-repeat="content in tab.contents"> {{ content }} </md-button>
                     </md-tab>
 
@@ -133,7 +166,7 @@
                   </thead>                                                                          
                   <tbody>
                         <tr ng-repeat="row in friends" >
-                            <td ng-drag="true" ng-drag-data='row' ng-drag-success='dragSuccess($data, $event)'> {{ row.email }} </td>
+                            <td ng-drag="true" ng-drag-data='row' ng-drag-success='dragSuccess($data, $event)'> {{ row.email  }} </td>
                         <tr>
                   </tbody>
                 </table>
@@ -141,7 +174,7 @@
                <table st-table="mygroups" class="table table-striped" st-sticky-header>
                   <thead>                                                                           
                     <tr>                                                                              
-                        <th> Registered in groups
+                        <th> {{ 'groups.registered' | translate }}
                         </th>                                                                             
                     </tr>                                                                             
                   </thead>                                                                          
@@ -181,7 +214,9 @@
     <script src="bower_components/lr-sticky-header/lrStickyHeader.js"></script>
     <script src="bower_components/smart-table-sticky-header/stStickyHeader.js"></script>
     <script src="bower_components/a0-angular-storage/dist/angular-storage.js"></script>
-    <!-- endbower -->
+    <script src="bower_components/angular-translate/angular-translate.js"></script>
+    <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+  <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
