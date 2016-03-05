@@ -9,7 +9,16 @@
  */
 angular.module('cryptClientApp')
 
-.controller('MainController', function ( $q, $scope, usSpinnerService, $window, $timeout,  $rootScope, AUTH_EVENTS,  $state, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth, $mdDialog, Rest ) {
+.controller('MainController', function ( $q, $scope, usSpinnerService, $window, $timeout,  $rootScope, AUTH_EVENTS,  $state, $translate, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth, $mdDialog, Rest ) {
+
+    $scope.prefferedLanguage = $translate.use();
+    $scope.switchLanguage = function (key) {
+        var currentkey = $translate.use();
+        if ( currentkey !== key ){
+            $translate.use( key );
+            $scope.prefferedLanguage = key;
+        }
+    };
 
    var timo= $timeout( function(){
         usSpinnerService.spin('spinner-1');

@@ -48,11 +48,15 @@ angular
     'smart-table',
     'angularSpinner',
     'ngFileUpload',
+    'pascalprecht.translate',
     'ngSanitize'
   ])
-  .config(function ($routeProvider, $resourceProvider, $httpProvider, $stateProvider, usSpinnerConfigProvider) {
+  .config(function ($routeProvider, $resourceProvider, $httpProvider, $stateProvider, usSpinnerConfigProvider, $translateProvider ) {
 
     usSpinnerConfigProvider.setDefaults({color: '#5CB85C', radius:1});
+
+    $translateProvider.preferredLanguage('de');
+    $translateProvider.useStaticFilesLoader({prefix: 'i18n/', suffix: '.json'})
 
     $httpProvider.defaults.xsrfHeaderName = "X-XSRFToken";
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
