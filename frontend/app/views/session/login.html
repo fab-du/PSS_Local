@@ -2,25 +2,31 @@
   <br/>
   <md-content class="autoScroll">
     <md-input-container class="md-icon-float md-block">
-      <label>Email</label>
-      <md-icon md-svg-src="/images/18/person.svg"></md-icon>
-      <input ng-model="user.email" type="email">
+        <label>
+            {{'users.email' | translate}}
+        </label>
+        <md-icon md-svg-src="/images/18/person.svg"></md-icon>
+        <input ng-model="user.email" type="email">
     </md-input-container>
 
     <md-input-container class="md-icon-float md-block">
-        <label>Password</label>
+        <label>
+            {{'users.password' | translate}}
+        </label>
         <md-icon md-svg-src="images/18/person.svg"></md-icon>
         <input ng-model="user.password" type="password">
     </md-input-container>
 
     <md-input-container class="md-icon-float md-block">
-        <label>Passphrase</label>
+        <label>
+            {{'users.passphrase' | translate}}
+        </label>
         <md-icon md-svg-src="images/18/person.svg"></md-icon>
         <input ng-model="user.passphrase" type="password">
     </md-input-container>
 
     <md-input-container class="md-block">
-        <md-button ng-click="login( user )">loging</md-button>
+        <md-button ng-click="login( user )">{{ 'session.signin' | translate }}</md-button>
     </md-input-container>
   </md-content>
 </div>
