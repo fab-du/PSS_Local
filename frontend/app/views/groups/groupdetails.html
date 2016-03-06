@@ -1,8 +1,8 @@
-<div style="margin-left=10px">
+<div class="container-fluid">
 <table st-table="group" class="table table-striped" st-sticky-header>
     <thead>                                                                           
     <tr>                                                                              
-        <th> <h5>Group:</h5> {{ group.name }}
+        <th> <h5>{{ 'groups.group' | translate }}</h5> {{ group.name }}
         </th>                                                                             
         <th>
             <button class="btn btn-sm btn-success" popover-placement="top" type="button" ui-sref="groups.groupId.details">
@@ -13,7 +13,7 @@
     </thead>                                                                          
     <tbody>
         <tr ng-repeat="( k, v) in group" >
-            <td> {{ k }} : <span class="badge"> {{v}} </span> </td>
+            <td> {{ k }} : <span class="badge" style="backgroun-color:lightblue" > {{v}} </span> </td>
         <tr>
 
         <tr>
