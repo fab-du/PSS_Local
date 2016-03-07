@@ -22,19 +22,23 @@ import javax.crypto.spec.SecretKeySpec;
 import de.cryptone.utils.Helper;
 
 public class RSACrypto {
-	
-	private KeyPair generatePairkey() {
-		KeyPairGenerator keyPairGen = null;
-		KeyPair keyPair = null;
-		try {
-			keyPairGen = KeyPairGenerator.getInstance("RSA");
-			keyPairGen.initialize(1024);
-			keyPair = keyPairGen.generateKeyPair();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return keyPair;
+
+    public final static String  ASYM_KEY_ALGO    = "RSA";
+
+    public final static String  ASYM_CIFFER_ALGO = "RSA";
+
+    public final static String  ENTRY_SECRET     = "secret";
+
+    public final static String  ENTRY_SALT       = "salt";
+
+    public final static int KEY_LENGHT           = 1024;
+
+    public final static String EXC_MESS_NULL = "no arguments provided:";
+
+	private KeyPair generatePairkey() throws NoSuchAlgorithmException {
+		 KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance( ASYM_KEY_ALGO );
+		 keyPairGen.initialize( KEY_LENGHT );
+		 return keyPairGen.generateKeyPair();
 	}
 
 	public de.app.model.KeyPair generateKey() {
@@ -57,8 +61,8 @@ public class RSACrypto {
 		PBEKeySpec spec = new PBEKeySpec(passphrase.toCharArray(), salt, 1000, 128);
 		SecretKey _key =  factory.generateSecret(spec);
 		SecretKey encKey = new SecretKeySpec(_key.getEncoded(), "AES");
-		result.put("secret", encKey);
-		result.put("salt", Helper.encode(salt));
+		result.put( ENTRY_SECRET, encKey);
+		result.put( ENTRY_SALT, Helper.encode(salt));
 		return result;
 	}
 	
@@ -67,11 +71,10 @@ public class RSACrypto {
 		
 		de.app.model.KeyPair keypair = this.generateKey();
 		Map<String, Object> ret = this.generateSecretFromPassphrase(passphrase);
-		SecretKey secretkey = (SecretKey) ret.get("secret");
+		SecretKey secretkey = (SecretKey) ret.get( ENTRY_SECRET );
 		String prikey = aes.encrypt( Helper.encode(secretkey.getEncoded()), keypair.getPrikey());
-		keypair.setSalt( (String) ret.get("salt") );
+		keypair.setSalt( (String) ret.get(ENTRY_SALT) );
 		keypair.setPrikey(prikey);
-
 		return keypair;
 	}
 
@@ -79,22 +82,14 @@ public class RSACrypto {
 		return this.encrypt(this.publickeyFromString(key), message);
 	}
 
-	private String encrypt(PublicKey key, String message) {
-		Cipher cipher = null;
-		byte[] raw = null;
+	private String encrypt(PublicKey key, String message) throws Exception {
+        Cipher cipher = Cipher.getInstance( ASYM_CIFFER_ALGO );
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        byte[] stringBytes = message.getBytes();
+        byte[] raw = cipher.doFinal(stringBytes);
 
-		try {
-			cipher = Cipher.getInstance("RSA");
-			cipher.init(Cipher.ENCRYPT_MODE, key);
-			byte[] stringBytes = message.getBytes();
-			raw = cipher.doFinal(stringBytes);
-		} catch (Exception e) {
-			return null;
-		}
-
-		if (raw == null) {
-			return null;
-		}
+		if (raw == null) 
+		    throw Exception("Encryption goes wrong");
 
 		return Base64.getEncoder().encodeToString(raw);
 	}
@@ -111,55 +106,35 @@ public class RSACrypto {
 		SecretKey encKey = new SecretKeySpec(_key.getEncoded(), "AES");
 		AESCrypto aes = new AESCrypto();
 		String dec_prikey = aes.decrypt(Helper.encode( encKey.getEncoded()), key.getPrikey());
-		String ret = this.decrypt(dec_prikey, message);
-		
-		return ret;
+		return this.decrypt(dec_prikey, message);
 	}
 
-	private String decrypt(PrivateKey key, String message) {
-		Cipher cipher = null;
-		String clearText = null;
-
-		try {
-			cipher = Cipher.getInstance("RSA");
-			cipher.init(Cipher.DECRYPT_MODE, key);
-			byte[] raw = Base64.getDecoder().decode(message);
-			byte[] stringBytes = cipher.doFinal(raw);
-			clearText = new String(stringBytes, "UTF8");
-		} catch (Exception e) {
-			return null;
-		}
-		return clearText;
+	private String decrypt(PrivateKey key, String message) throws Exception {
+        Cipher cipher = Cipher.getInstance( ASYM_CIFFER_ALGO );
+        cipher.init(Cipher.DECRYPT_MODE, key);
+        byte[] raw = Base64.getDecoder().decode(message);
+        byte[] stringBytes = cipher.doFinal(raw);
+        return new String(stringBytes, "UTF8");
 	}
 
-	PrivateKey privatekeyFromString(String prikey) {
+	PrivateKey privatekeyFromString(String prikey) throws Exception {
+        if ( prikey == null )
+            throw Exception( EXC_MESS_NULL +  "PrivateKey privatekeyFromString(String prikey)" )
+
 		byte prikeybytes[] = Base64.getDecoder().decode(prikey.getBytes());
-		KeyFactory keyFactory = null;
-		PrivateKey privatekey = null;
-		try {
-			keyFactory = KeyFactory.getInstance("RSA");
-			KeySpec privateKeySpec = new PKCS8EncodedKeySpec(prikeybytes);
-			privatekey = keyFactory.generatePrivate(privateKeySpec);
-		} catch (Exception e) {
-			return null;
-		}
-
-		return privatekey;
+		KeyFactory  keyFactory = KeyFactory.getInstance("RSA");
+		KeySpec privateKeySpec = new PKCS8EncodedKeySpec(prikeybytes);
+		return keyFactory.generatePrivate(privateKeySpec);
 	}
 
-	PublicKey publickeyFromString(String pubkey) {
+	PublicKey publickeyFromString(String pubkey) throws Exception {
+        if ( pubkey == null )
+            throw Exception( EXC_MESS_NULL +  "PublicKey publickeyFromString(String pubkey)" )
+
 		byte[] pubkeyBytes = Base64.getDecoder().decode(pubkey.getBytes());
 		X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(pubkeyBytes);
-		KeyFactory kf = null;
-		PublicKey publickey = null;
-		try {
-			kf = KeyFactory.getInstance("RSA");
-			publickey = kf.generatePublic(X509publicKey);
-		} catch (Exception e) {
-			return null;
-		}
-
-		return publickey;
+        KeyFactory kf = KeyFactory.getInstance( ASYM_KEY_ALGO );
+        return kf.generatePublic(X509publicKey);
 	}
 
 }
