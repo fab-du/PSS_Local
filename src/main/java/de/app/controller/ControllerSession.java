@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -82,7 +81,11 @@ public class ControllerSession extends AbstractController{
 		ResponseEntity<FormLoginAuthenticateResponse> response = clientSession.loginAuthenticate(formAuth);
 		
 		cacheManager.getCache( CacheConfig.CACHE_SESSION).put("pubkey", sessionkey );
-		cacheManager.getCache( CacheConfig.CACHE_SESSION).put("passphrase", rsa.encrypt(sessionkey.getPubkey(), authdata.getPassphrase()));
+		
+		if ( authdata.getPassphrase() != null ){
+			cacheManager.getCache( CacheConfig.CACHE_SESSION).put("passphrase", rsa.encrypt(sessionkey.getPubkey(), authdata.getPassphrase()));	
+		}
+		
 		cacheManager.getCache(CacheConfig.CACHE_SESSION).put("currentUser", response.getBody());
 		return response;
 	}
@@ -90,7 +93,7 @@ public class ControllerSession extends AbstractController{
 	@RequestMapping( value="/register", method = RequestMethod.POST )
 	@Produces("application/json")
 	public ResponseEntity<?> 
-		register( @RequestBody FormRegister registration ) throws NoSuchAlgorithmException, InvalidKeySpecException{
+		register( @RequestBody FormRegister registration ) throws NoSuchAlgorithmException, InvalidKeySpecException, Exception{
 
 		System.out.println( registration.toString());
 		SRP6CryptoParams config = SRP6CryptoParams.getInstance(); 

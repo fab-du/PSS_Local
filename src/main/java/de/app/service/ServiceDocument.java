@@ -2,10 +2,7 @@ package de.app.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +42,7 @@ public class ServiceDocument {
 	ClientKeyPair clientKeypair;
 
 	public
-	ResponseEntity<?> create( MultipartFile file, String url, Long groupId ) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException{
+	ResponseEntity<?> create( MultipartFile file, String url, Long groupId ) throws Exception{
 		if ( file.isEmpty() )
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
@@ -86,8 +83,6 @@ public class ServiceDocument {
 			
 			FileUtils.copyFile(new File( _file.getName() + ".enc"), new File( _file.getName()));
 			
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 			client.setHeader("Content-Type", MediaType.MULTIPART_FORM_DATA_VALUE);
 			 File __file = new File(_file.getName());
 			LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();

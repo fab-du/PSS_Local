@@ -1,5 +1,9 @@
 package de.app.controller;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +30,7 @@ public class ControllerFriend extends AbstractController{
 	ServiceFriend serviceFriend;
 
 	@Cacheable(de.app.CacheConfig.CACHE_FRIENDS)
-	@RequestMapping( method=RequestMethod.GET  )
+	@RequestMapping( method=RequestMethod.GET )
 	public ResponseEntity<User[]> find(@PathVariable(value="userId") Long userId){
 		return clientFriend.find( userId );
 	}
@@ -37,13 +41,13 @@ public class ControllerFriend extends AbstractController{
 	}
 	
 	@RequestMapping( method=RequestMethod.POST)
-	public ResponseEntity<?> create( @PathVariable("userId") Long userId, @RequestBody User user ){
+	public ResponseEntity<?> create( @PathVariable("userId") Long userId, @RequestBody User user ) throws InvalidKeyException, NoSuchAlgorithmException, SignatureException, Exception{
 		return serviceFriend.addFriend(userId, user.getId() );
 	}
 
 	@RequestMapping( value="/{friendId}/revoke", method=RequestMethod.DELETE )
 	public ResponseEntity<?> revoke( @PathVariable(value="userId") Long userId, @PathVariable(value="friendId") Long friendId){
-		return clientFriend.Writer.delete(null, userId, friendId, "/revoke", null);
+		return clientFriend.revoke(userId, friendId);
 	}
 
 	@RequestMapping( value="/{friendId}/addToGroup/{groupId}", method=RequestMethod.PUT )

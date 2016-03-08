@@ -1,15 +1,6 @@
 package de.app.controller;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import de.app.client.ClientDocument;
 import de.app.client.ClientGroup;
@@ -84,35 +74,19 @@ public class ControllerGroup extends AbstractController {
 	}
 	
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.POST)
-	public ResponseEntity<?> addDocument( @PathVariable(value="groupId") Long groupId,@RequestParam("file") MultipartFile file ) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException{
-			String url = "http://localhost:8080/api/groups/" + groupId + "/documents";
-			return serviceDocument.create( file, url, groupId );
+	public ResponseEntity<?> addDocument( @PathVariable(value="groupId") Long groupId,@RequestParam("file") MultipartFile file ) throws Exception{
+		String url = "http://localhost:8080/api/groups/" + groupId + "/documents";
+		return serviceDocument.create( file, url, groupId );
 	}
 	
 	@RequestMapping( value="/{groupId}/documents/{documentId}", method = RequestMethod.GET )
-	public ResponseEntity<?> groupId_documents_documentId( @PathVariable(value="groupId") Long groupId,
-			@PathVariable(value="documentId") Long documentId){
+	public ResponseEntity<?> groupId_documents_documentId( @PathVariable(value="groupId") Long groupId, @PathVariable(value="documentId") Long documentId){
 		return clientDocument.findOne(groupId, "documents", documentId);
 	}
 	
 	@RequestMapping( value="/{groupId}/documents/{documentId}/download/{file}", method = RequestMethod.GET )
-	public ResponseEntity<?> groupId_documents_documentId_download( @PathVariable(value="groupId") Long groupId,
-			@PathVariable(value="documentId") Long documentId, HttpServletResponse response) throws IOException{
-			
-			String url = "http://localhost:8080/api/groups/10/documents/1/download";
-			  HttpHeaders headers = new HttpHeaders();
-			    headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
-			    
-			    HttpEntity<String> entity = new HttpEntity<String>(headers);
-			    
-			    ResponseEntity<byte[]> res = 
-			    		rest.getRestTemplate().exchange(url,HttpMethod.GET, entity, byte[].class, "1");
-
-			    return ResponseEntity
-						.ok()
-						.headers( res.getHeaders() )
-						.contentLength(res.getBody().length)
-						.body( res.getBody());
+	public ResponseEntity<?> groupId_documents_documentId_download( @PathVariable(value="groupId") Long groupId, @PathVariable(value="documentId") Long documentId, @PathVariable(value="file") String file ) throws Exception{
+		return serviceGroup.download(groupId, documentId, file);
 	}
 	
 	//TODO

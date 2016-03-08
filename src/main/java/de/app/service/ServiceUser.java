@@ -1,6 +1,7 @@
 package de.app.service;
 
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,7 +68,7 @@ public class ServiceUser {
 			restClient.setHeader("Authentication", authenticationToken);
 	}
 	
-	public KeyPair generateSessionKey ( ){
+	public KeyPair generateSessionKey ( ) throws NoSuchAlgorithmException{
 		RSACrypto rsa = new RSACrypto();
 		KeyPair keypair = rsa.generateKey();
 		return keypair;

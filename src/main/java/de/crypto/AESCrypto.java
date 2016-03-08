@@ -72,10 +72,8 @@ public class AESCrypto {
 	public String encrypt(final String secretkey, final String message) throws Exception {
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
-        if ( secretKey == null || message == null )
+        if ( secretkey == null || message == null )
              throw new Exception( EXC_MESS_NULL + "public  String encrypt( final String secretkey, final String message )" );
-
-		Cipher cipher = null;
 
 		Key key = this.symkeyFromString(secretkey);
 
@@ -93,10 +91,9 @@ public class AESCrypto {
 	private void chifferImp( final String secretkey, File file, int modus) throws Exception{
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		
-        if ( secretkey == null || file == null || modus == null )
+        if ( secretkey == null || file == null  )
             throw new Exception( EXC_MESS_NULL + "private void chifferImp( final String secretkey, File file, int modus)" );
 
-		Cipher cipher = null;
 		Key key = this.symkeyFromString(secretkey);
 		
 		Cipher cipher = Cipher.getInstance( SYM_CIPHER_ALGO, "BC");
@@ -117,11 +114,11 @@ public class AESCrypto {
         bos.close();
 	}
 
-	public void decrypt(final String secretkey, File file) {
+	public void decrypt(final String secretkey, File file) throws Exception {
 		this.chifferImp(secretkey, file, Cipher.DECRYPT_MODE);
 	}
 	
-	public void encrypt( final String secretkey, File file ){
+	public void encrypt( final String secretkey, File file ) throws Exception{
 		this.chifferImp(secretkey, file, Cipher.ENCRYPT_MODE);
 	}
 }

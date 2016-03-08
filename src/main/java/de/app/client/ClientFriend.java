@@ -25,4 +25,12 @@ public class ClientFriend extends ClientUser{
 	public ResponseEntity<User> findOne( Long userId, Long friendId ) {
 		return super.findOne(  userId, friendId, null, null );
 	}
+	
+	public ResponseEntity<?> revoke ( Long userId, Long friendId ){
+		return this.Writer.delete( userId, friendId, "revoke", null );
+	}
+	
+	public ResponseEntity<?> addFriendToGroup ( Long userId, Long friendId, Long groupId ){
+		return this.Writer.put( userId, friendId, "addToGroup", groupId );
+	}
 }

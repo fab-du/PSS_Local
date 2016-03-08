@@ -41,7 +41,7 @@ public class RSACrypto {
 		 return keyPairGen.generateKeyPair();
 	}
 
-	public de.app.model.KeyPair generateKey() {
+	public de.app.model.KeyPair generateKey() throws NoSuchAlgorithmException {
 		de.app.model.KeyPair _keypair = new de.app.model.KeyPair();
 		KeyPair keypair = this.generatePairkey();
 		String prikey = Helper.encode(keypair.getPrivate().getEncoded());
@@ -51,7 +51,7 @@ public class RSACrypto {
 		return _keypair;
 	}
 	
-	private Map<String, Object> generateSecretFromPassphrase( String passphrase ) throws NoSuchAlgorithmException, InvalidKeySpecException{
+	public Map<String, Object> generateSecretFromPassphrase( String passphrase ) throws NoSuchAlgorithmException, InvalidKeySpecException{
 		Map<String, Object> result= new HashMap<>();
 		SecureRandom rand = SecureRandom.getInstance("SHA1PRNG");
 		byte[] salt = new byte[16];
@@ -66,19 +66,20 @@ public class RSACrypto {
 		return result;
 	}
 	
-	public de.app.model.KeyPair generateKey( String passphrase ) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	public de.app.model.KeyPair generateKey( String passphrase ) throws NoSuchAlgorithmException, InvalidKeySpecException, Exception {
 		AESCrypto aes = new AESCrypto();
 		
 		de.app.model.KeyPair keypair = this.generateKey();
 		Map<String, Object> ret = this.generateSecretFromPassphrase(passphrase);
 		SecretKey secretkey = (SecretKey) ret.get( ENTRY_SECRET );
-		String prikey = aes.encrypt( Helper.encode(secretkey.getEncoded()), keypair.getPrikey());
+		String prikey;
+		prikey = aes.encrypt( Helper.encode(secretkey.getEncoded()), keypair.getPrikey());
 		keypair.setSalt( (String) ret.get(ENTRY_SALT) );
 		keypair.setPrikey(prikey);
 		return keypair;
 	}
 
-	public String encrypt(final String key, final String message) {
+	public String encrypt(final String key, final String message) throws Exception {
 		return this.encrypt(this.publickeyFromString(key), message);
 	}
 
@@ -89,16 +90,18 @@ public class RSACrypto {
         byte[] raw = cipher.doFinal(stringBytes);
 
 		if (raw == null) 
-		    throw Exception("Encryption goes wrong");
+		    throw new Exception("Encryption goes wrong");
 
 		return Base64.getEncoder().encodeToString(raw);
 	}
 
-	public String decrypt(final String key, final String message) {
+	public String decrypt(final String key, final String message) throws Exception {
 		return this.decrypt(this.privatekeyFromString(key), message);
 	}
 	
-	public String decrypt( final de.app.model.KeyPair key , final String passphrase, final String message ) throws NoSuchAlgorithmException, InvalidKeySpecException{
+	public String decrypt( final de.app.model.KeyPair key , final String passphrase, final String message ) throws NoSuchAlgorithmException,
+																												   InvalidKeySpecException,
+																												   Exception{
 		byte[] salt = Helper.decode(key.getSalt());
 		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 		PBEKeySpec spec = new PBEKeySpec(passphrase.toCharArray(), salt, 1000, 128);
@@ -119,7 +122,7 @@ public class RSACrypto {
 
 	PrivateKey privatekeyFromString(String prikey) throws Exception {
         if ( prikey == null )
-            throw Exception( EXC_MESS_NULL +  "PrivateKey privatekeyFromString(String prikey)" )
+            throw new Exception( EXC_MESS_NULL +  "PrivateKey privatekeyFromString(String prikey)" );
 
 		byte prikeybytes[] = Base64.getDecoder().decode(prikey.getBytes());
 		KeyFactory  keyFactory = KeyFactory.getInstance("RSA");
@@ -129,7 +132,7 @@ public class RSACrypto {
 
 	PublicKey publickeyFromString(String pubkey) throws Exception {
         if ( pubkey == null )
-            throw Exception( EXC_MESS_NULL +  "PublicKey publickeyFromString(String pubkey)" )
+            throw new Exception( EXC_MESS_NULL +  "PublicKey publickeyFromString(String pubkey)" );
 
 		byte[] pubkeyBytes = Base64.getDecoder().decode(pubkey.getBytes());
 		X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(pubkeyBytes);

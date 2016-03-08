@@ -1,5 +1,6 @@
 package de.app.model;
 
+@SuppressWarnings("serial")
 public class Friendship extends AbstractSecureModel{
 	
 	Long friendId;

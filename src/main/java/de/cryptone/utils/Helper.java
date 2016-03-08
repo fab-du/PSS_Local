@@ -9,6 +9,9 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Map;
 
+import org.bouncycastle.crypto.encodings.PKCS1Encoding;
+import org.bouncycastle.jcajce.provider.keystore.pkcs12.PKCS12KeyStoreSpi;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

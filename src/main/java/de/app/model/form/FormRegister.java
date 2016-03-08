@@ -3,6 +3,7 @@ package de.app.model.form;
 import javax.validation.constraints.NotNull;
 
 import de.app.model.Group;
+import de.app.model.KeySym;
 
 public class FormRegister {
 
@@ -24,6 +25,8 @@ public class FormRegister {
 	String prikey; 
 	String srpsalt;
 	
+	KeySym groupsymkey;
+	
 	Group group;
 	
 	
@@ -36,11 +39,18 @@ public class FormRegister {
 	public void setSrpsalt( String srpsalt ){
 		this.srpsalt = srpsalt;
 	}
-	
 	public String getSrpsalt(){
 		return srpsalt;
 	}
-	
+
+	public KeySym getGroupsymkey() {
+		return groupsymkey;
+	}
+	public void setGroupsymkey(KeySym groupsymkey) {
+		this.groupsymkey = groupsymkey;
+	}
+
+
 	public void setGroup(Group group) {
 		this.group = group;
 	}

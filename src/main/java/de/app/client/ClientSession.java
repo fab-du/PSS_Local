@@ -30,7 +30,6 @@ public class ClientSession{
 	private  AbstractWriteRequest<FormCrudResponse, FormRegister> writerRegister;
 	private  AbstractWriteRequest<?, ?> writerLogout;
 
-
 	@Autowired
 	public ClientSession(RestClient client ) {
 		writerLoginChallenge = new AbstractWriteRequest<FormChallengeResponse, FormLoginChallenge>(client, FormChallengeResponse.class, FormLoginChallenge.class );

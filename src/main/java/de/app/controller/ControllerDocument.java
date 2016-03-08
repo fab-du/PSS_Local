@@ -42,7 +42,7 @@ public class ControllerDocument  extends AbstractController{
 	//TODO
 	@RequestMapping( method=RequestMethod.POST )
 	public ResponseEntity<?> create(@RequestParam("file") MultipartFile file) throws IOException{
-		String url = "http://localhost:8080/api/documents"; 
+		//String url = "http://localhost:8080/api/documents"; 
 		//return serviceDocument.create(file, url);
 		return null;
 	}
