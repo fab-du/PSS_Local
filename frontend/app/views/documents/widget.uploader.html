@@ -69,11 +69,11 @@
         <tr class="sibling" ng-repeat="_file in groupFiles">
             <td> {{ _file.name  }} </td>
             <td> {{ _file.path  }} </td>
-            <td>{{ _file.createdAt | date  }} </td>
-            <td>{{ _file.size  }} </td>
-            <td>{{ _file.type  }} </td>
+            <td> {{ _file.createdAt | date  }} </td>
+            <td> {{ _file.size  }} </td>
+            <td> {{ _file.type  }} </td>
             <td> 
-                <button class="btn btn-success btn-sm"> 
+                <button ng-click="download($index)" class="btn btn-success btn-sm"> 
                     <span class="glyphicon glyphicon-download-alt" ></span>
                 </button>
                 <button class="btn btn-danger btn-sm"> 

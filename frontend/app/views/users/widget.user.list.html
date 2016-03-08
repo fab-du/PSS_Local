@@ -1,0 +1,20 @@
+<h4> {{ title }} <h4><hr/>
+<table st-table="items" class="table table-striped" st-sticky-header>
+    <thead>
+        <tr>
+            <th ng-repeat="header in headers">{{header}}</th>                                                                             
+        </tr>                                                                             
+    </thead>                                                                          
+        <tbody>                                                                           
+        <tr ng-repeat="row in items" >    
+            <td ng-repeat="header in headers">{{ row[header] }}</td>
+        <td>
+            <button class="btn btn-sm" popover-placement="top" type="button">
+                <i class="glyphicon glyphicon-eye-open"></i>                                             
+            </button>                                                                                
+            <button class="btn btn-info btn-sm" popover-placement="top" type="button" ng-click="addFriend($index)">
+                <i class="glyphicon glyphicon-plus"></i>                                             
+            </button>                                                                                
+        </td>
+    </tbody>
+</table>
