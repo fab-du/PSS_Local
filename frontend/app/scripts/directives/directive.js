@@ -7,7 +7,7 @@
  * # directive
  */
 angular.module('cryptClientApp')
-.directive('accessLevel', function ( Auth ) {
+.directive('accessLevel', function ( Auth ) {//{{{
 return {
     restrict: 'A',
     link: function($scope, element, attrs) {
@@ -21,30 +21,11 @@ return {
             }
         }
 };
-})
-.directive('tabUser', function( ){
+})//}}}
+.directive('tabUser', function( ){//{{{
 return {
-    restrict : 'E',
-    template : '<h4> {{ title }} <h4> <hr/><table st-table="items" class="table table-striped" st-sticky-header>'                     +
-               '<thead>'                                                                           +
-               '<tr>'                                                                              +
-               '<th ng-repeat="header in headers">{{header}}'                                      +
-               '</th>'                                                                             +
-               '</tr>'                                                                             +
-               '</thead>'                                                                          +
-               '<tbody>'                                                                           +
-               '<tr ng-repeat="row in items" >'    +
-               '<td ng-repeat="header in headers">{{ row[header] }}</td>'+
-               '<td>'+
-               '<button class="btn btn-sm" popover-placement="top" type="button">'+
-               '<i class="glyphicon glyphicon-eye-open"></i>                                             '+
-               '</button>                                                                                '+
-               '<button class="btn btn-info btn-sm" popover-placement="top" type="button" ng-click="addFriend($index)">'+
-               '<i class="glyphicon glyphicon-plus"></i>                                             '+
-               '</button>                                                                                '+
-               '</td>'+
-               '</tbody>'+
-               '</table>',
+    restrict     : 'E',
+    templateUrl  : '/views/users/widget.user.list.html',
     scope        : {
         title    : '@', // String binding
         items    : '=', // two way data binding with parent scope
@@ -69,34 +50,13 @@ return {
            if( _old !== null ){
            }
         });
-
     }
-
 };
-})
-.directive('tabFriend', function(){
+})//}}}
+.directive('tabFriend', function(){//{{{
 return {
     restrict : 'E',
-    template : '<h4> {{ title }} <h4> <hr/> <table st-table="items" class="table table-striped" st-sticky-header>'                     +
-               '<thead>'                                                                           +
-               '<tr>'                                                                              +
-               '<th ng-repeat="header in headers">{{header}}'                                      +
-               '</th>'                                                                             +
-               '</tr>'                                                                             +
-               '</thead>'                                                                          +
-               '<tbody>'                                                                           +
-               '<tr ng-repeat="row in items" >'    +
-               '<td ng-repeat="header in headers">{{ row[header] }}</td>'+
-               '<td>'+
-               '<button class="btn btn-sm" popover-placement="top" type="button">'+
-               '<i class="glyphicon glyphicon-eye-open"></i>                                             '+
-               '</button>                                                                                '+
-               '<button class="btn btn-danger btn-sm" popover-placement="top" type="button" ng-click="revoke($index)">'+
-               '<i class="glyphicon glyphicon-minus"></i>                                             '+
-               '</button>                                                                                '+
-               '</td>'+
-               '</tbody>'+
-               '</table>',
+    templateUrl : '/views/users/widget.friend.list.html',
     scope : {
         title    : '@', // String binding
         items    : '=', // two way data binding with parent scope
@@ -108,7 +68,7 @@ return {
         $scope.headers = ['id', 'firstname', 'secondname', 'email'];
 
         $scope.revoke = function( index ){
-            Rest.Friend.revoke( {  }, { friendId : $scope.items[index].id, currentUserId : store.get("currentUserId") } ).$promise.then( function( ){
+            Rest.Friend.revoke( {}, { friendId : $scope.items[index].id, currentUserId : store.get("currentUserId") } ).$promise.then( function( ){
                 if (index !== -1) {
                     $scope.items.splice(index, 1);
                 }
@@ -126,33 +86,11 @@ return {
     }
 
 };
-})
-.directive('tabDocument', function(){
+})//}}}
+.directive('tabDocument', function(){//{{{
 return {
     restrict : 'E',
-    template : '<table st-table="items" class="table table-striped" st-sticky-header>'                     +
-               '<thead>'                                                                           +
-               '<tr>'                                                                              +
-               '<th ng-repeat="header in headers">{{header}}'                                      +
-               '</th>'                                                                             +
-               '</tr>'                                                                             +
-               '</thead>'                                                                          +
-               '<tbody>'                                                                           +
-               '<tr ng-repeat="row in items" >'    +
-               '<td ng-repeat="header in headers">{{ row[header] }}</td>'+
-               '<td>'+
-               '<button class="btn btn-sm" popover-placement="top" type="button">'+
-               '<i class="glyphicon glyphicon-eye-open"></i>                                             '+
-               '</button>                                                                                '+
-               '<button class="btn btn-success btn-sm" popover-placement="top" type="button">'+
-               '<i class="glyphicon glyphicon-share"></i>                                             '+
-               '</button>                                                                                '+
-               '<button class="btn btn-danger btn-sm" popover-placement="top" type="button">'+
-               '<i class="glyphicon glyphicon-minus"></i>                                             '+
-               '</button>                                                                                '+
-               '</td>'+
-               '</tbody>'+
-               '</table>',
+    templateUrl : "/views/documents/widget.document.tab.html",
     scope : {
         title    : '@', // String binding
         items    : '=', // two way data binding with parent scope
@@ -169,33 +107,11 @@ return {
     }
 
 };
-})
-.directive('tabGroup', function(){
+})//}}}
+.directive('tabGroup', function(){//{{{
 return {
     restrict : 'E',
-    template : '<h4> {{ title }} <h4> <hr/><table st-table="items" class="table table-striped" st-sticky-header>'                     +
-               '<thead>'                                                                           +
-               '<tr>'                                                                              +
-               '<th ng-repeat="header in headers">{{header}}'                                      +
-               '</th>'                                                                             +
-               '</tr>'                                                                             +
-               '</thead>'                                                                          +
-               '<tbody>'                                                                           +
-               '<tr ng-repeat="row in items" >'    +
-               '<td ng-repeat="header in headers">{{ row[header] }}</td>'+
-               '<td>'+
-               '<button class="btn btn-sm" popover-placement="top" type="button"  ng-click="details(row)">'+
-               '<i class="glyphicon glyphicon-eye-open"></i>                                             '+
-               '</button>                                                                                '+
-               '<button class="btn btn-success btn-sm" popover-placement="top" type="button">'+
-               '<i class="glyphicon glyphicon-share"></i>                                             '+
-               '</button>                                                                                '+
-               '<button class="btn btn-danger btn-sm" popover-placement="top" type="button">'+
-               '<i class="glyphicon glyphicon-minus"></i>                                             '+
-               '</button>                                                                                '+
-               '</td>'+
-               '</tbody>'+
-               '</table>',
+    templateUrl : '/views/groups/widget.group.list.html',
     scope : {
         title    : '@', // String binding
         items    : '=', // two way data binding with parent scope
@@ -219,8 +135,8 @@ return {
     }
 
 };
-})
-.directive('uploader', function( ){
+})//}}}
+.directive('uploader', function( ){//{{{
     return{
         restrict : 'E',
         transclude : true,
@@ -228,7 +144,7 @@ return {
         scope : {
             groupFiles : '='
         },
-        controller : function( $scope, $rootScope, $mdToast, Rest, $timeout, $compile, $filter, store, Auth, usSpinnerService,Upload ){
+        controller : function( $scope, $rootScope, $window, $mdToast, $http, Rest, $timeout, $compile, $filter, store, Auth, usSpinnerService,Upload ){
 
             $scope.files = [];
             $scope.filesString = [];
@@ -247,6 +163,15 @@ return {
 
             $scope.removeFile = function( index ){
                $scope.filesString.pop(index); 
+            };
+
+            $scope.download = function( index ){
+                var docId   = $scope.groupFiles[ index ].id;
+                var docName = $scope.groupFiles[ index ].name;
+                var url     = "/api/groups/" + store.get("currentUserGroupId") + "/documents/" + docId + "/download/" + docName  ;
+                $http.get( url, { headers : { 'Content-Type' : 'application/json; charset=utf-8' }, responseType : 'arraybuffer' } ).then( function( response ){
+                    console.log( response );
+                });
             };
 
             $scope.upload  = function( index ){
@@ -306,9 +231,8 @@ return {
         },
     };
 
-})
-
-.directive('matchFilter', function( $filter ){
+})//}}}
+.directive('matchFilter', function( $filter ){//{{{
     return{
         restrict : 'E',
         scope : {
@@ -337,5 +261,5 @@ return {
 
         }
     }
-});
+});//}}}
 

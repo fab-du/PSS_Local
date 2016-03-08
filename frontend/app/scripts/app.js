@@ -89,10 +89,7 @@ angular
       .state('users', {
           url : '/users', 
           controller : "UsersController",
-          templateUrl : "/views/users.html",
-            templateProvider : function($templateCache){
-                return $templateCache.get('/views/users.html');
-            }
+          templateUrl : "/views/users.html"
       })
       .state('users.groups', {
           url : '/users_grp_admin',
@@ -167,4 +164,3 @@ angular
 
     });
 })
-
