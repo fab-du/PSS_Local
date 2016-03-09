@@ -28,8 +28,7 @@ public class FormRegister {
 	KeySym groupsymkey;
 	
 	Group group;
-	
-	
+
 	
 	public Group getGroup() {
 		return group;

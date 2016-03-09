@@ -100,7 +100,16 @@ public class AESCrypto {
 		cipher.init(modus, key);
 
         BufferedInputStream bis = new BufferedInputStream( new FileInputStream(file));
-        File result = new File(file.getName() + ".enc");
+        
+        File result = null;
+        
+        if ( modus == Cipher.ENCRYPT_MODE ){
+        	result = new File(file.getName() + ".enc");
+        }
+        else{
+        	result = new File(file.getName() + ".dec");
+        }
+        		
         BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream(result));
 			
         byte[] readed = new byte[64];

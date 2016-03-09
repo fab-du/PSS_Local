@@ -1,6 +1,9 @@
 package de.app.service;
 
 import java.io.File;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,13 +66,15 @@ public class ServiceGroup {
 		HttpEntity<String> entity = new HttpEntity<String>(rest.getHeaders());
 		
 		ResponseEntity<byte[]> res = rest.getRestTemplate().exchange(url,HttpMethod.GET, entity, byte[].class, "1");
+		
 		if ( res.getStatusCode() == HttpStatus.OK ){
 			String headercontent = res.getHeaders().get( HttpHeaders.CONTENT_DISPOSITION ).toString();
 			String[] result = headercontent.split("=");
 			String _filename = result[ result.length -1 ];
 			String filename = _filename.substring(1, _filename.length() - 2 ).trim();
 					
-			java.nio.file.Files.write( Paths.get( filename + ".enc"), res.getBody() );
+			
+			java.nio.file.Files.write( Paths.get( filename ), res.getBody() );
 			
 			String enc_passphrase = cacheManager.getCache( CacheConfig.CACHE_SESSION).get("passphrase", String.class);
 			FormLoginAuthenticateResponse currentUser = cacheManager.getCache(CacheConfig.CACHE_SESSION).get("currentUser", FormLoginAuthenticateResponse.class);
@@ -82,7 +87,9 @@ public class ServiceGroup {
 			KeySym groupkeysym = clientKeySym.findGroupKeySym(groupId);
 			String dec_groupkeysym = rsa.decrypt(userKeyPair, dec_passphrase, groupkeysym.getSymkey());
 			AESCrypto aes = new AESCrypto();
-			aes.decrypt(dec_groupkeysym, new File( filename + ".enc") );
+			aes.decrypt(dec_groupkeysym, new File( filename ) );
+			Files.delete( Paths.get(filename));
+			Files.move( Paths.get(filename + ".dec"), Paths.get(filename) );
 		}
 		return res;
 	}

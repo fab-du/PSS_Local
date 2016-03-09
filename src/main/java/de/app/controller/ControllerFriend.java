@@ -42,7 +42,7 @@ public class ControllerFriend extends AbstractController{
 	
 	@RequestMapping( method=RequestMethod.POST)
 	public ResponseEntity<?> create( @PathVariable("userId") Long userId, @RequestBody User user ) throws InvalidKeyException, NoSuchAlgorithmException, SignatureException, Exception{
-		return serviceFriend.addFriend(userId, user.getId() );
+		return serviceFriend.addFriend(userId, user.getId());
 	}
 
 	@RequestMapping( value="/{friendId}/revoke", method=RequestMethod.DELETE )
@@ -51,7 +51,8 @@ public class ControllerFriend extends AbstractController{
 	}
 
 	@RequestMapping( value="/{friendId}/addToGroup/{groupId}", method=RequestMethod.PUT )
-	public ResponseEntity<?> friendId_users_userId_addToGroup( @PathVariable(value="userId") Long userId, @PathVariable(value="friendId") Long friendId, @PathVariable(value="groupId") Long groupId ){
-		return  clientFriend.Writer.put(userId, friendId,"addToGroup", groupId );
+	public ResponseEntity<?> friendId_users_userId_addToGroup( @PathVariable(value="userId") Long userId, @PathVariable(value="friendId") Long friendId, @PathVariable(value="groupId") Long groupId ) throws Exception{
+		 serviceFriend.addUserToGroup(userId, friendId, groupId);
+		 return null;
 	}
 }
