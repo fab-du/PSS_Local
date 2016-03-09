@@ -1,5 +1,6 @@
 package de.crypto;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class RSATest {
 	}
 	
 	@Before
-	public void initPairKeys(){
+	public void initPairKeys() throws NoSuchAlgorithmException{
 		pairKeys = new ArrayList<>();
 		RSACrypto rsa = new RSACrypto();
 		for (int i = 0; i < KEY; i++) {
