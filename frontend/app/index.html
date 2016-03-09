@@ -151,13 +151,13 @@
 
         <div flex>
             <md-content id="content">
-                <ui-view></ui-view>
+                <div class="container-fluid" ui-view></div>
             </md-content>
         </div>
 
         <div ng-show="navBarShowR"  flex="15" ng-hide="navBarHideR" >
 
-               <table st-table="friends" class="table table-striped" st-sticky-header>
+               <table st-table="friends" ng-show="friends" class="table table-striped" st-sticky-header>
                   <thead>                                                                           
                     <tr>                                                                              
                         <th> Friend Email
@@ -171,7 +171,7 @@
                   </tbody>
                 </table>
 
-               <table st-table="mygroups" class="table table-striped" st-sticky-header>
+               <table st-table="mygroups" ng-show="mygroups" class="table table-striped" st-sticky-header>
                   <thead>                                                                           
                     <tr>                                                                              
                         <th> {{ 'groups.registered' | translate }}
@@ -240,6 +240,7 @@
         <script src="scripts/directives/directive.js"></script>
         <script src="scripts/controllers/session.js"></script>
         <script src="scripts/services/auth_events.js"></script>
+        <script src="scripts/services/res_events.js"></script>
         <!-- endbuild -->
 </body>
 </html>
