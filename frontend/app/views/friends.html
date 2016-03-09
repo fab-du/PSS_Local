@@ -1,5 +1,5 @@
-<div class="well" layout="column">
-    <div flex="60">
-        <tab-friend  title="friends" on-select="onSelect()"  items="friends"></tab-friend>
+<div ng-show="friends" class="well container-fluid" layout="column">
+    <div  flex="60">
+        <tab-friend  title="{{ 'friends.friends' | translate }}" on-select="onSelect()"  items="friends"></tab-friend>
     </div>
 </div>

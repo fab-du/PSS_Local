@@ -1,19 +1,17 @@
-<div flex class="well" layout="column" ng-cloak>
+<div flex class="well container-fluid"  ng-cloak>
 
-    <div flex layout="row" ng-show="groups">
-        <div flex="60">
-            <tab-group  title="public group"  items="groups"></tab-group>
+    <div flex layout="row container-fluid" ng-show="groups">
+        <div class="container-fluid">
+            <tab-group  title="{{'groups.public' | translate}}"   items="groups"></tab-group>
         </div>
 
-        <div flex>
-            <ui-view></ui-view>
+        <div class="container-fluid" flex>
+            <div class="well container-fluid" ui-view></div>
         </div>
     </div>
 
-    <div flex layout="row" ng-show="mygroups">
-        <div>
-            <tab-group  title="registered in groups: "  items="mygroups"></tab-group>
-        </div>
+    <div flex layout="row container-fluid" ng-show="mygroups">
+        <tab-group  title="{{'groups.registered' | translate}}" items="mygroups"></tab-group>
     </div>
 
 </div>

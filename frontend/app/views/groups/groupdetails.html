@@ -17,12 +17,14 @@
         <tr>
 
         <tr>
-            <td> <md-button class="md-primary md-raised" data-toggle="modal" data-target="#modalAddUser" ng-if="currentGroupUsers | isGroupMember">  add User </md-button> 
-                 <md-button class="md-primary md-raised" data-toggle="modal" data-target="#modalAddDocument" ng-if="currentGroupUsers| isGroupMember">  upload   </md-button>
+            <td> 
+                <md-button class="md-primary md-raised" data-toggle="modal" data-target="#modalAddUser" ng-if="currentGroupUsers | isGroupMember">{{ 'groups.addUser' | translate }}</md-button> 
+                <md-button class="md-primary md-raised" data-toggle="modal" data-target="#modalAddDocument" ng-if="currentGroupUsers| isGroupMember">{{ 'documents.upload' | translate }}</md-button>
             </td>
         </tr>
     </tbody>
 </table>
+</div>
 
 <div class="modal fade" id="modalAddUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -58,6 +60,4 @@
       </div>
     </div>
   </div>
-</div>
-
 </div>

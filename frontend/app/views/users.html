@@ -1,20 +1,14 @@
-<div ng-cloak layout="column" class="well" >
+<div ng-cloak class="well container-fluid" >
 
-<div flex="60" layout="row" ng-show="users">
-        <div flex="60">
-            <tab-user  title="users" on-select="onSelect()"  items="users"></tab-user>
-        </div>
-</div>
-
-<div flex="50" layout="row" ng-show="friends">
-    <div flex="60">
-        <tab-friend  title="friends" on-select="onSelect()"  items="friends"></tab-friend>
+<div ng-show="users" class="container-fluid">
+    <div class="well container-fluid">
+        <tab-user  title="{{ 'users.user' | translate }}" on-select="onSelect()"  items="users"></tab-user>
     </div>
 </div>
 
-<div flex="50" layout="row" ng-show="documents">
-    <div flex="60">
-        <tab-document  title="documents" on-select="onSelect()"  items="documents"></tab-document>
+<div ng-show="friends" class="container-fluid">
+    <div class="well container-fluid">
+        <tab-friend  title="{{ 'friends.friends' | translate }}" on-select="onSelect()"  items="friends"></tab-friend>
     </div>
 </div>
 

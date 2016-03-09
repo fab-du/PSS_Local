@@ -1,6 +1,41 @@
-<div class="well" layout="column">
-    <div ng-cloak>
-        Documents
-    </div>
-    <div ng-cloak ui-view></div>
+<div class="well container-fluid" layout="column">
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th> Group : 85  </th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr>
+            <th>{{ 'documents.name' | translate }}</th>
+            <th> {{ 'documents.path' | translate }}</th>
+            <th>createdAt</th>
+            <th>{{ 'documents.size' | translate }}</th>
+            <th>{{ 'documents.type' | translate }}</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="sibling" ng-repeat="_file in documents">
+            <td> {{ _file.name  }} </td>
+            <td> {{ _file.path  }} </td>
+            <td> {{ _file.createdAt | date  }} </td>
+            <td> {{ _file.size  }} </td>
+            <td> {{ _file.type  }} </td>
+            <td> 
+                <button ng-click="download($index)" class="btn btn-success btn-sm"> 
+                    <span class="glyphicon glyphicon-download-alt" ></span>
+                </button>
+                <button class="btn btn-danger btn-sm"> 
+                    <span class="glyphicon glyphicon-minus" ></span>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
 </div>
