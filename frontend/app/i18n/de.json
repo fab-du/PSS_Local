@@ -25,10 +25,14 @@
 
     "documents":
     {
-        "document": "dokument",
-        "remove"  : "entfernen",
-        "upload"  : "hochladen",
-        "download": "runterladen"
+        "document" : "dokument",
+        "name"     : "Name",
+        "path"     : "Pfad",
+        "size"     : "Groesse",
+        "type"     : "Art",
+        "remove"   : "entfernen",
+        "upload"   : "hochladen",
+        "download" : "runterladen"
     },
 
     "groups":
@@ -39,6 +43,7 @@
       "private"    : "private Gruppe",
       "registered" : "registriert in gruppe",
       "new"        : "neu gruppe anlegen",
+      "addUser"    : "Benutzer hinzufügen",
       "remove"     : "gruppe entfernen"
     },
 

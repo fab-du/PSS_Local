@@ -25,10 +25,14 @@
 
     "documents":
     {
-        "document": "document",
-        "remove"  : "remove",
-        "upload"  : "upload",
-        "download": "download"
+        "document" : "document",
+        "name"     : "name",
+        "path"     : "path",
+        "size"     : "size",
+        "type"     : "type",
+        "remove"   : "remove",
+        "upload"   : "upload",
+        "download" : "download"
     },
 
     "groups":
@@ -39,6 +43,7 @@
       "private"    : "private group",
       "registered" : "registered in group:",
       "new"        : "new group",
+      "addUser"    : "add user",
       "remove"     : "remove group"
     },
 

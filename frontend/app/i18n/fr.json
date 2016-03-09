@@ -25,10 +25,14 @@
 
     "documents":
     {
-        "document": "document",
-        "remove"  : "supprimer",
-        "upload"  : "envoyez",
-        "download": "telecharger"
+        "document" : "document",
+        "name"     : "nom",
+        "path"     : "repertoire",
+        "size"     : "taille",
+        "type"     : "genre",
+        "remove"   : "supprimer",
+        "upload"   : "envoyez",
+        "download" : "telecharger"
     },
 
     "groups":
@@ -37,8 +41,9 @@
       "mygroup"    : "mes groupes",
       "public"     : "groupe publique",
       "private"    : "groupe privé",
-      "registered" : "enregisté dans le group:",
+      "registered" : "enregisté dans le group : ",
       "new"        : "creer",
+      "addUser"    : "ajouter utilisateur",
       "remove"     : "supprimer"
     },
 
