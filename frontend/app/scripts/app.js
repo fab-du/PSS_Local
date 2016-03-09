@@ -104,9 +104,6 @@ angular
       })
       .state('users.userId.friends', {
           url : '/friends'
-      })
-      .state('users.userId.documents', {
-          url : '/documents'
       });
 
       $stateProvider
@@ -128,6 +125,7 @@ angular
       $stateProvider
       .state('documents', {
           url : '/documents',
+          controller : 'DocumentsController',
           templateUrl : "/views/documents.html"
       })
       .state('documents.upload', {

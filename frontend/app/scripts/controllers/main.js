@@ -9,7 +9,7 @@
  */
 angular.module('cryptClientApp')
 
-.controller('MainController', function ( $q, $scope, usSpinnerService, $window, $timeout,  $rootScope, AUTH_EVENTS,  $state, $translate, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth, $mdDialog, Rest ) {
+.controller('MainController', function ( $q, $scope, usSpinnerService, $window, $timeout,  $rootScope, AUTH_EVENTS,  $state, $translate, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth, $mdDialog, Rest ,ERRORS_EVENTS, SUCCESS_EVENTS ) {
 
     $scope.prefferedLanguage = $translate.use();
     $scope.switchLanguage = function (key) {
@@ -158,7 +158,7 @@ angular.module('cryptClientApp')
     }
 
 
-    // auth message handler 
+    // Message handler
 	$rootScope.$on(AUTH_EVENTS.notAuthorized, function(){
         Storage.deleteAll();
         console.log( AUTH_EVENTS.notAuthorized );
@@ -184,6 +184,18 @@ angular.module('cryptClientApp')
 
 	$rootScope.$on(AUTH_EVENTS.notFound, function(){
         showMessage("success-toast",  AUTH_EVENTS.notFound );
+    });
+
+	$rootScope.$on(AUTH_EVENTS.notFound, function(){
+        showMessage("success-toast",  AUTH_EVENTS.notFound );
+    });
+
+	$rootScope.$on(SUCCESS_EVENTS.deleted, function(){
+        showMessage("success-toast",  SUCCESS_EVENTS.deleted );
+    });
+
+	$rootScope.$on(SUCCESS_EVENTS.created, function(){
+        showMessage("success-toast",  SUCCESS_EVENTS.created );
     });
 
 });

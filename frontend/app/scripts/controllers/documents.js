@@ -8,11 +8,10 @@
  * Controller of the cryptClientApp
  */
 angular.module('cryptClientApp')
-.controller('DocumentsController', function ( $scope, Rest, $q ) {
+.controller('DocumentsController', function ( $scope, Rest, $q, store ) {
 
 var init = function(){
-
-    Rest.Document.find().$promise.then( function( documents ){
+    Rest.Group.documents({ groupId : store.get("currentUserGroupId") }).$promise.then( function( documents ){
         $scope.documents = documents;
     });
 

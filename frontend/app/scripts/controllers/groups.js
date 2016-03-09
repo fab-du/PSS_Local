@@ -34,6 +34,10 @@ angular.module('cryptClientApp')
         var _group = group;
         _group['createdAt'] = $filter('date')( group['createdAt'] );
 
+        delete _group.groupkey;
+        delete _group.signature;
+        delete _group.hashValue;
+
         Rest.Group.users({ groupId : $stateParams.groupId }).$promise.then( function( users ){
             $scope.currentGroupUsers = users; 
             var gvid = _group.gvid;

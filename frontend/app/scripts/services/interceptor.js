@@ -8,13 +8,8 @@
  * Service in the cryptClientApp.
  */
 angular.module('cryptClientApp')
-.factory('Interceptor', function($q, $location, store, $rootScope, AUTH_EVENTS ){
+.factory('Interceptor', function($q, $location, store, $rootScope, AUTH_EVENTS, ERRORS_EVENTS, SUCCESS_EVENTS ){
 return {
-
-/*
-* Automatically attach Authorization header
-*
-*/
 
 request : function( config ){
     if ( store.get("token")){
@@ -28,8 +23,16 @@ request : function( config ){
     return config;
 },
 
-response : function( res ){
-    return res;
+response : function( response ){
+
+    $rootScope.$broadcast({
+        201: SUCCESS_EVENTS.created,
+        204: SUCCESS_EVENTS.nothingToDelete,
+        202: SUCCESS_EVENTS.deleted
+
+    }[response.status], response);
+    
+    return response;
 },
 
 /*
@@ -41,7 +44,7 @@ responseError: function( response ) {
         403: AUTH_EVENTS.notAuthorized,
         419: AUTH_EVENTS.sessionTimeout,
         440: AUTH_EVENTS.sessionTimeout,
-        404: AUTH_EVENTS.notFound,
+        404: AUTH_EVENTS.notFound
 
       }[response.status], response);
 
