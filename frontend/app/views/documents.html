@@ -27,12 +27,32 @@
             <td> {{ _file.size  }} </td>
             <td> {{ _file.type  }} </td>
             <td> 
-                <button ng-click="download($index)" class="btn btn-success btn-sm"> 
-                    <span class="glyphicon glyphicon-download-alt" ></span>
-                </button>
-                <button class="btn btn-danger btn-sm"> 
-                    <span class="glyphicon glyphicon-minus" ></span>
-                </button>
+
+                <div class="container-fluid">
+                    <div>
+                        <button ng-click="download($index)" class="btn btn-success btn-sm"> 
+                            <span class="glyphicon glyphicon-download-alt" ></span>
+                        </button>
+                    </div>
+                    
+                    <div>
+                        <button class="btn btn-danger btn-sm"> 
+                            <span class="glyphicon glyphicon-minus" ></span>
+                        </button>
+                    </div>
+                    
+                    <div class="dropdown">
+                        <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="shareDropdown" data-toggle="dropdown" aria-expanded="false"> 
+                            <span class="glyphicon glyphicon-share" ></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="shareDropdown">
+                            <li><a href="#">share with users  </a></li>
+                            <li><a href="#">share with friends</a></li>
+                            <li><a href="#">share with group  </a></li>
+                        </ul>
+                    </div>
+                </div>
+
             </td>
         </tr>
     </tbody>

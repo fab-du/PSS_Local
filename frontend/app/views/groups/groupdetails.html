@@ -1,29 +1,24 @@
-<div class="container-fluid">
-<table st-table="group" class="table table-striped" st-sticky-header>
-    <thead>                                                                           
-    <tr>                                                                              
-        <th> <h5>{{ 'groups.group' | translate }}</h5> {{ group.name }}
-        </th>                                                                             
-        <th>
-            <button class="btn btn-sm btn-success" popover-placement="top" type="button" ui-sref="groups.groupId.details">
-                <i class="glyphicon glyphicon-eye-open"></i>                    
-            </button>                                                       
-        </th>
-    </tr>                                                                             
-    </thead>                                                                          
-    <tbody>
-        <tr ng-repeat="( k, v) in group" >
-            <td> {{ k }} : <span class="badge" style="backgroun-color:lightblue" > {{v}} </span> </td>
-        <tr>
+<div class="panel panel-default container-fluid">
+    <div class="panel-heading"> 
+        {{ 'groups.group' | translate }} : </br> <span class="label label-info" >{{ group.name }} </span>
 
-        <tr>
-            <td> 
-                <md-button class="md-primary md-raised" data-toggle="modal" data-target="#modalAddUser" ng-if="currentGroupUsers | isGroupMember">{{ 'groups.addUser' | translate }}</md-button> 
-                <md-button class="md-primary md-raised" data-toggle="modal" data-target="#modalAddDocument" ng-if="currentGroupUsers| isGroupMember">{{ 'documents.upload' | translate }}</md-button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+    </div>
+
+    <ul class="list-group">
+        <li class="list-group-item" > <span class="label label-info" > id: </br> <span class="glyphicon glyphicon-user"> {{ group.id }}    </span>   </span></li>
+        <li class="list-group-item" > <span class="label label-info" > gvid: </br> <span class="glyphicon glyphicon-user">{{ group.gvid }}      </span>   </span></li>
+        <li class="list-group-item" > <span class="label label-info" > {{ 'documents.document' | translate }} : </br> <span class="glyphicon glyphicon-file">{{ group.documents }}  </span>   </span></li>
+        <li class="list-group-item" > <span class="label label-info" > {{ 'users.user' | translate }} : </br> <span class="glyphicon glyphicon-user">{{ group.users }}      </span>   </span></li>
+    </ul>
+
+    <div class="panel-footer">
+        <md-button class="md-primary md-raised" data-toggle="modal" data-target="#modalAddUser" ng-if="currentGroupUsers | isGroupMember">{{ 'groups.addUser' | translate }}</md-button> 
+        <md-button class="md-primary md-raised" data-toggle="modal" data-target="#modalAddDocument" ng-if="currentGroupUsers| isGroupMember">{{ 'documents.upload' | translate }}</md-button>
+
+        <button class="btn btn-sm btn-success" popover-placement="top" type="button" ui-sref="groups.groupId.details">
+            <i class="glyphicon glyphicon-eye-open"></i>                    
+        </button>                                                       
+    </div>
 </div>
 
 <div class="modal fade" id="modalAddUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
