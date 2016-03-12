@@ -1,5 +1,7 @@
 package de.app.model.form;
 
+import de.app.model.KeyPair;
+
 public class FormLoginAuthenticateResponse {
 
 	String currentUserId;
@@ -7,6 +9,8 @@ public class FormLoginAuthenticateResponse {
 	String evidence;
     String currentUserPublicKey;
     Long currenUserGroupId;
+    
+    KeyPair userkeypair;
 	
 	public FormLoginAuthenticateResponse() {
 		super();
@@ -44,6 +48,18 @@ public class FormLoginAuthenticateResponse {
 	public void setCurrentUserPublicKey(String currentUserPublicKey) {
 		this.currentUserPublicKey = currentUserPublicKey;
 	}
+	
+	
+
+	public KeyPair getUserkeypair() {
+		return userkeypair;
+	}
+
+
+	public void setUserkeypair(KeyPair userkeypair) {
+		this.userkeypair = userkeypair;
+	}
+
 
 	@Override
 	public String toString() {
