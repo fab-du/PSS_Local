@@ -44,6 +44,7 @@
       "registered" : "registered in group:",
       "new"        : "new group",
       "addUser"    : "add user",
+      "member"     : "member",
       "remove"     : "remove group"
     },
 
