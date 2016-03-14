@@ -1,6 +1,7 @@
 <div flex class="well container-fluid"  ng-cloak>
 
     <div flex layout="row container-fluid" ng-show="groups">
+
         <div class="container-fluid">
             <tab-group  title="{{'groups.public' | translate}}"   items="groups"></tab-group>
         </div>
@@ -8,6 +9,7 @@
         <div class="container-fluid" flex>
             <div class="well container-fluid" ui-view></div>
         </div>
+
     </div>
 
     <div flex layout="row container-fluid" ng-show="mygroups">
