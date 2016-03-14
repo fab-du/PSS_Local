@@ -15,7 +15,7 @@
         <md-button class="md-primary md-raised" data-toggle="modal" data-target="#modalAddUser" ng-if="currentGroupUsers | isGroupMember">{{ 'groups.addUser' | translate }}</md-button> 
         <md-button class="md-primary md-raised" data-toggle="modal" data-target="#modalAddDocument" ng-if="currentGroupUsers| isGroupMember">{{ 'documents.upload' | translate }}</md-button>
 
-        <button class="btn btn-sm btn-success" popover-placement="top" type="button" ui-sref="groups.groupId.details">
+        <button class="btn btn-sm btn-success" popover-placement="top" type="button" ui-sref="groups.groupId.details({groupId: group.id })">
             <i class="glyphicon glyphicon-eye-open"></i>                    
         </button>                                                       
     </div>

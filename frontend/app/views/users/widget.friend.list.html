@@ -9,7 +9,7 @@
     <tr ng-repeat="row in items" >
         <td ng-repeat="header in headers">{{ row[header] }}</td>
     <td> 
-        <button class="btn btn-sm" popover-placement="top" type="button">
+        <button class="btn btn-sm" popover-placement="top" ui-sref="users.userId({ id : row[$index].id })" type="button">
             <i class="glyphicon glyphicon-eye-open"></i>             
         </button>                                                                                
         <button class="btn btn-danger btn-sm" popover-placement="top" type="button" data-toggle="modal" data-target="mySmallModalLabel" ng-click="revoke($index)">

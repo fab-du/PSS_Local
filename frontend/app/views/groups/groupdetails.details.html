@@ -1,3 +1,14 @@
 <div class="container-fluid">
-    {{ group }}
+    <div class="panel panel-default">
+      <div class="panel-title">
+        <ul class="nav nav-tabs nav-justified">
+            <li role="presentation"> <a ui-sref="group.groupId.details">infos</a> </li>
+            <li role="presentation"> <a ui-sref="group.groupId.details.documents">{{ 'documents.document' | translate }}</a> </li>
+            <li role="presentation"> <a ui-sref="group.groupId.details.member">{{ 'groups.member'  | translate }}</a> </li>
+        </ul>
+      </div>
+      <div class="panel-body">
+       {{ group }}  
+      </div>
+    </div>
 </div>

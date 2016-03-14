@@ -1,11 +1,4 @@
  <div class="well container-fluid" layout="row">
-
-    <!--
-       -<div flex="60">
-       -    <div  ui-grid=gridOptions class="grid" ui-grid-selection ui-grid-auto-resize></div> 
-       -</div>
-    -->
-
     <div flex="35" class="md-col-4 container-fluid" ng-show="selected">
         <menu type="toolbar">
             <button class="md-button">  Sign users </button>
@@ -13,7 +6,6 @@
             <button class="md-button">  Add Friend </button>
         </menu>
         <hr/>
-
         <div ng-repeat="detail in details track by $index">
             <md-card>
                 <md-card-content>
@@ -29,5 +21,4 @@
             </md-card>
         </div>
     </div>
-
 </div>

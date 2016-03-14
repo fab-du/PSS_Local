@@ -117,7 +117,7 @@
                 <md-content class="md-padding mg-warn">
 
                     <md-tab ng-repeat="tab in tabs" label="{{ tab.label | translate }}" md-on-select="onTabSelected( tab.label )" class="md-primary">
-                        <md-button ng-click="tabContentClick( tab.label, content )" ng-repeat="content in tab.contents"> {{ content }} </md-button>
+                        <md-button ng-click="tabContentClick( tab.label, content )" ng-repeat="content in tab.contents"> {{ content  | translate }} </md-button>
                     </md-tab>
 
                 </md-content>
