@@ -11,7 +11,7 @@
 angular.module('cryptClientApp')
 .filter('getById', function () {
   return function(input, keyname, value ) {
-      var obj=null;
+      var obj = null;
       angular.forEach( input, function( v ){
         if( v[ keyname ].toString().trim() === value.toString().trim() ){
             obj = v;
@@ -31,5 +31,5 @@ angular.module('cryptClientApp')
         var ret = Auth.isGroupMember( group )
         return Auth.isGroupMember( group );
     }
-})
+});
 

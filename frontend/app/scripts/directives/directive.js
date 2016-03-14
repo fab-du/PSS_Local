@@ -102,10 +102,7 @@ return {
         $scope.headers = [ "id", "path", "name", "created at" ];
     },
 
-    link: function( scope, el, attrs ){
-
-    }
-
+    link: function( scope, el, attrs ){}
 };
 })//}}}
 .directive('tabGroup', function(){//{{{
@@ -144,13 +141,15 @@ return {
         scope : {
             groupFiles : '='
         },
-        controller : function( $scope, $rootScope, $window, $mdToast, $http, Rest, $timeout, $compile, $filter, store, Auth, usSpinnerService,Upload ){
+        controller : function( $scope, $rootScope, $window, $stateParams, $mdToast, $http, Rest, $timeout, $compile, $filter, store, Auth, usSpinnerService, Upload ){
+
+            var groupId = $stateParams.groupId || store.get('currentGroupId');
 
             $scope.files = [];
             $scope.filesString = [];
 
             if ( angular.isUndefined( $scope.groupFiles ) ){
-                Rest.Group.documents({ groupId : store.get("currentUserGroupId") }).$promise.then( function( documents ){
+                Rest.Group.documents({ groupId : groupId }).$promise.then( function( documents ){
                     $scope.groupFiles = documents;
                 });
             }
@@ -168,7 +167,7 @@ return {
             $scope.download = function( index ){
                 var docId   = $scope.groupFiles[ index ].id;
                 var docName = $scope.groupFiles[ index ].name;
-                var url     = "/api/groups/" + store.get("currentUserGroupId") + "/documents/" + docId + "/download/" + docName  ;
+                var url     = "/api/groups/" + groupId + "/documents/" + docId + "/download/" + docName  ;
                 $http.get( url, { headers : { 'Content-Type' : 'application/json; charset=utf-8' }, responseType : 'arraybuffer' } ).then( function( response ){
                     console.log( response );
                 });
@@ -178,8 +177,7 @@ return {
                 var file = $scope.filesString[ index ];
                 var currentUserId = '';
 
-                var url = "/api/groups/" + store.get("currentUserGroupId") + "/documents";
-
+                var url = "/api/groups/" + groupId + "/documents";
                 var promise = Upload.upload({
                     url: url,
                     data: {file: file}

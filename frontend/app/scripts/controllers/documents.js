@@ -1,5 +1,4 @@
 'use strict';
-
 /**
  * @ngdoc function
  * @name cryptClientApp.controller:DocumentsCtrl
@@ -14,22 +13,14 @@ var init = function(){
     Rest.Group.documents({ groupId : store.get("currentUserGroupId") }).$promise.then( function( documents ){
         $scope.documents = documents;
     });
-
 };
-
 init();
-
 })
 .controller('DocumentsDetailController', function ( $scope, Rest, $q, $stateParams ) {
-
 var init = function(){
-
-Rest.Document.findOne( { documentId : $stateParams.documentId } ).$promise.then( function( document ){
-    $scope.document = document;
-});
-
+    Rest.Document.findOne( { documentId : $stateParams.documentId } ).$promise.then( function( document ){
+        $scope.document = document;
+    });
 };
-
 init();
-
-})
+});
