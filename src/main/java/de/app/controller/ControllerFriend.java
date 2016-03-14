@@ -52,7 +52,6 @@ public class ControllerFriend extends AbstractController{
 
 	@RequestMapping( value="/{friendId}/addToGroup/{groupId}", method=RequestMethod.PUT )
 	public ResponseEntity<?> friendId_users_userId_addToGroup( @PathVariable(value="userId") Long userId, @PathVariable(value="friendId") Long friendId, @PathVariable(value="groupId") Long groupId ) throws Exception{
-		 serviceFriend.addUserToGroup(userId, friendId, groupId);
-		 return null;
+		 return serviceFriend.addUserToGroup(userId, friendId, groupId);
 	}
 }

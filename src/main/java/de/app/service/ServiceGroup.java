@@ -47,15 +47,14 @@ public class ServiceGroup {
 	ClientSymKey clientKeySym;
 	@Autowired
 	ClientKeyPair clientKeyPair;
+	@Autowired
+    ServiceSession serviceSession;
 	
 	public Group create( Group group, String pubkey ) throws Exception{
-		
 		AESCrypto aesCrypto = new AESCrypto();
 		KeySym groupKey = aesCrypto.generateKey();
-
-		RSACrypto rsa = new RSACrypto();
-		String encSymKey = rsa.encrypt( pubkey, groupKey.getSymkey() );
-		groupKey.setSymkey(encSymKey);
+		String enc_symkey = serviceSession.encryptWithCurrentUserPubkey(groupKey.getSymkey());
+		groupKey.setSymkey(enc_symkey);
 		group.setGroupkey(groupKey);
 		return group; 
 	}

@@ -8,6 +8,7 @@ import de.app.CacheConfig;
 import de.app.model.KeyPair;
 import de.app.model.form.FormLoginAuthenticateResponse;
 import de.crypto.RSACrypto;
+import de.crypto.Signature;
 
 @Service
 public class ServiceSession {
@@ -31,4 +32,10 @@ public class ServiceSession {
 		FormLoginAuthenticateResponse currentUser = cacheManager.getCache(CacheConfig.CACHE_SESSION ).get("currentUser", FormLoginAuthenticateResponse.class);
 		return new RSACrypto().encrypt( currentUser.getUserkeypair().getPubkey(), message);
 	}
+
+    public String sign( String pubkey ) throws Exception{
+		FormLoginAuthenticateResponse currentUser = cacheManager.getCache(CacheConfig.CACHE_SESSION ).get("currentUser", FormLoginAuthenticateResponse.class);
+		String dec_passphrase = this.decryptPassphrase();
+        return new Signature().sign(  currentUser.getUserkeypair(), dec_passphrase, pubkey );
+    }
 }

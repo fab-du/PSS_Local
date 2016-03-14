@@ -36,13 +36,9 @@ public class ServiceFriend {
 	ServiceSession serviceSession;
 	
 	public ResponseEntity<?> addFriend( Long userId, Long friendId ) throws InvalidKeyException, NoSuchAlgorithmException, SignatureException, Exception{
+
 		KeyPair friendKeyPair = serviceKeyPair.findOne(friendId);
-		KeyPair userKeyPair = serviceKeyPair.findOne(userId);
-		
-		String dec_passphrase = serviceSession.decryptPassphrase();
-		
-		Signature sign = new Signature(); 
-		String signature = sign.sign( userKeyPair, dec_passphrase, friendKeyPair.getPubkey()); 
+		String signature = serviceSession.sign( friendKeyPair.getPubkey()); 
 		
 		Friendship friendship = new Friendship();
 		friendship.setSignature( signature );
@@ -52,16 +48,17 @@ public class ServiceFriend {
 		return client.getRestTemplate().postForObject("http://localhost:8080/api/" + userId + "/friends", toPost, ResponseEntity.class);
 	}
 
-	public void addUserToGroup( Long userId, Long friendId, Long groupId ) throws Exception{
+	public ResponseEntity<?> addUserToGroup( Long userId, Long friendId, Long groupId ) throws Exception{
 		KeyPair friendKeyPair = serviceKeyPair.findOne(friendId);
-		KeyPair userKeyPair   = serviceKeyPair.findOne(userId);
 		KeySym groupKey 	  = clientKeySym.findGroupKeySym(groupId);
 		
-		String dec_passphrase = serviceSession.decryptPassphrase();
-		RSACrypto rsa = new RSACrypto();
-		String dec_groupSecretKey = rsa.decrypt(userKeyPair, dec_passphrase, groupKey.getSymkey());
+		String dec_groupSecretKey = serviceSession.decryptWithCurrentUserPK( groupKey.getSymkey());
+        RSACrypto rsa  = new RSACrypto();
 		String enc_groupSecretKey = rsa.encrypt( friendKeyPair.getPubkey(), dec_groupSecretKey);
 		groupKey.setSymkey( enc_groupSecretKey );
+
+		HttpEntity<KeySym> toPost = new HttpEntity<KeySym>( groupKey, client.getHeaders());
+		return client.getRestTemplate().postForObject("http://localhost:8080/api/xx/" + groupId + "/users/" + friendId , toPost, ResponseEntity.class);
 	}
 	
 }
