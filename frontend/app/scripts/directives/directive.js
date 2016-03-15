@@ -92,16 +92,7 @@ return {
              $state.go('groups.groupId', { groupId : row.id });
         };
     },
-    link: function( scope, el, attrs ){
-
-        /*
-         *scope.$watch('items', function(n, o){
-         *    if( n !== o  ){
-         *    }
-         *})
-         */
-    }
-
+    link: function( scope, el, attrs ){}
 };
 })
 .directive('uploader', function( ){
@@ -112,14 +103,16 @@ return {
         scope : {
             groupFiles : '='
         },
-        controller : function( $scope, $rootScope, $window, $stateParams, $mdToast, $http, Rest, $timeout, $compile, $filter, store, Auth, usSpinnerService, Upload ){
+        controller : function( $scope, $rootScope, $window, $mdToast, $http, Rest, $timeout, $compile, $filter, store, Auth, usSpinnerService, Upload ){
 
-            var groupId = $stateParams.groupId || store.get('currentGroupId');
 
             $scope.files = [];
             $scope.filesString = [];
 
             if ( angular.isUndefined( $scope.groupFiles ) ){
+                var groupId = $rootScope.groupId || store.get('currentGroupId');
+                console.log("===================================");
+                console.log( groupId );
                 Rest.Group.documents({ groupId : groupId }).$promise.then( function( documents ){
                     $scope.groupFiles = documents;
                 });
@@ -138,7 +131,7 @@ return {
             $scope.download = function( index ){
                 var docId   = $scope.groupFiles[ index ].id;
                 var docName = $scope.groupFiles[ index ].name;
-                var groupId = $stateParams.groupId || store.get('currentGroupId');
+                var groupId = $rootScope.groupId || store.get('currentGroupId');
                 var url     = "/api/groups/" + groupId + "/documents/" + docId + "/download/" + docName  ;
                 $http.get( url, { headers : { 'Content-Type' : 'application/json; charset=utf-8' }, responseType : 'arraybuffer' } ).then( function( response ){
                     console.log( response );
@@ -149,7 +142,7 @@ return {
                 var file = $scope.filesString[ index ];
                 var currentUserId = '';
 
-                var groupId = $stateParams.groupId || store.get('currentGroupId');
+                var groupId = $rootScope.groupId || store.get('currentGroupId');
                 var url = "/api/groups/" + groupId + "/documents";
                 var promise = Upload.upload({
                     url: url,
