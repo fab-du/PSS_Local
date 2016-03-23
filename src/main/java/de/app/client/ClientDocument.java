@@ -5,21 +5,22 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import de.app.CryptoneProperties;
 import de.app.model.Document;
 
 @Service
 public class ClientDocument extends AbstractFindRequest<Document>{
 	
-	private String uri = "/api/groups/{preffix}/documents/{suffix2}";
-	
+	CryptoneProperties env;
 	public final AbstractWriteRequest<?, Document> Writer;
 	
 	@Autowired
-	public ClientDocument(RestClient client) {
+	public ClientDocument(RestClient client, CryptoneProperties env) {
 		super(client, Document.class, Document[].class);
-		this.setUri( uri );
+		this.env = env;
+		this.setUri( env.getDocuments() );
 		Writer = new AbstractWriteRequest<>(client, Object.class, Document.class );
-		Writer.setUri(uri);
+		Writer.setUri(env.getDocuments());
 	}
 	
 	@Cacheable(value=de.app.CacheConfig.CACHE_DOCUMENTS)

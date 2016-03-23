@@ -4,14 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import de.app.CryptoneProperties;
 import de.app.model.User;
 
 @Service
 public class ClientUser extends AbstractFindRequest<User> {
+	CryptoneProperties env;
 	
 	public  AbstractWriteRequest<?, User> Writer;
 	
-	String uri="/api/{prefix1}/{prefix2}/users/{suffix1}/{suffix2}";
+	//String uri = this.env.getUsers(); //="/api/{prefix1}/{prefix2}/users/{suffix1}/{suffix2}";
 	
 	@Override
 	public void setUri(String uri) {
@@ -19,11 +22,12 @@ public class ClientUser extends AbstractFindRequest<User> {
 	}
 	
 	@Autowired
-	public ClientUser(RestClient client) {
+	public ClientUser(RestClient client,CryptoneProperties env ) {
 		super(client, User.class, User[].class );
-		this.setUri(uri);
+		this.env = env;
+		this.setUri(env.getUsers());
 		Writer = new AbstractWriteRequest<>(client, Object.class, User.class );
-		Writer.setUri(uri);
+		Writer.setUri(env.getUsers());
 	}
 	public AbstractWriteRequest<?, User> getWriter(){
 		return this.Writer;

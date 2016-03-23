@@ -1,7 +1,14 @@
-uri:
-    session:
-        register: /session/register
-        logout: /session/logout
-        login:
-            challenge: /session/login/challenge
-            authenticate: /session/login/authenticate
+remoteserver:
+    uri:
+        session:
+            register: /session/register
+            logout: /session/logout
+            login:
+                challenge: /session/login/challenge
+                authenticate: /session/login/authenticate
+        documents: /api/groups/{preffix}/documents/{suffix2}
+        friends:   /api/{preffix1}/friends/{suffix1}/{suffix2}/{suffix3}
+        users:     /api/{prefix1}/{prefix2}/users/{suffix1}/{suffix2}
+        groups:    /api/groups/{suffix1}/{suffix2}/{suffix3}/{suffix4}/
+        keypairs:  /api/{userId}/keypair
+        symkeys:   /api/{groupId}/keysym

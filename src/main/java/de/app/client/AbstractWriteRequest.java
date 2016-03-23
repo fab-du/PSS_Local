@@ -1,13 +1,16 @@
 package de.app.client;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import de.app.CryptoneProperties;
+
 public  class AbstractWriteRequest<CRES, CREQ > extends CRUDHelper{
-    
-    private String url = "http://localhost:8080/";
+	@Autowired
+	CryptoneProperties env;
     protected final RestClient client;
     protected final Class<CRES> responseClazz;
     protected final Class<CREQ> requestClazz;
@@ -22,7 +25,7 @@ public  class AbstractWriteRequest<CRES, CREQ > extends CRUDHelper{
 	ResponseEntity<CRES> crud( CREQ body, HttpMethod method, Object ...uriVariableValues){
 		ResponseEntity<CRES> response = null;
     	HttpEntity<CREQ> requestEntity = this.getHttpEntity( this.client.getHeaders(), body );
-    	response= this.makeRequest( this.buildUrl(client,url, this.getUri(), uriVariableValues), method, client, requestEntity, responseClazz);
+    	response= this.makeRequest( this.buildUrl(client,env.getUrl(), this.getUri(), uriVariableValues), method, client, requestEntity, responseClazz);
     	return response; 
 	}
 	

@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
@@ -13,6 +15,7 @@ import de.app.client.HeaderInterceptor;
 
 
 @SpringBootApplication
+@EnableConfigurationProperties(CryptoneProperties.class)
 public class LocalApplication {
 
 //	@Bean()
@@ -46,6 +49,12 @@ public class LocalApplication {
 		return new HttpHeaders();
 	}
 	
+	//To resolve ${} in @Value
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
+	
 	/**
 	 * Create a new instance of the {@link RestTemplate} using default settings.
 	 * Default {@link HttpMessageConverter}s are initialized.
@@ -74,7 +83,7 @@ public class LocalApplication {
 //		return multipartResolver;
 //	}
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {     
         SpringApplication.run(LocalApplication.class, args);
     }
 }

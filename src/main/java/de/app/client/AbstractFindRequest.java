@@ -1,8 +1,11 @@
 package de.app.client;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+
+import de.app.CryptoneProperties;
 
 
 /*
@@ -10,9 +13,11 @@ import org.springframework.http.ResponseEntity;
  * CRES : Client Response Entity
  */
 public abstract class AbstractFindRequest<CRES> extends CRUDHelper{
-    private String url = "http://localhost:8080/";
-    
-    protected final RestClient client;
+	
+	@Autowired
+	CryptoneProperties env;
+
+	protected final RestClient client;
     
     protected final Class<CRES> responseClazz;
     protected final Class<CRES[]> findResponseClazz;
@@ -26,14 +31,14 @@ public abstract class AbstractFindRequest<CRES> extends CRUDHelper{
     public ResponseEntity<CRES[]> find( Object ...uriVariableValues ) {
     	ResponseEntity<CRES[]> response = null;
     	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders() );
-    	response = this.makeRequest( this.buildUrl(client, url, this.getUri(), uriVariableValues), HttpMethod.GET, client, requestEntity, findResponseClazz);
+    	response = this.makeRequest( this.buildUrl(client, env.getUrl(), this.getUri(), uriVariableValues), HttpMethod.GET, client, requestEntity, findResponseClazz);
     	return response;
     }
     
     public ResponseEntity<CRES> findOne( Object ...uriVariableValues ){
     	ResponseEntity<CRES> response = null;
     	HttpEntity<?> requestEntity = this.getHttpEntity( this.client.getHeaders() );
-    	response = this.makeRequest( this.buildUrl(client, url, this.getUri(), uriVariableValues), HttpMethod.GET, client, requestEntity, responseClazz);
+    	response = this.makeRequest( this.buildUrl(client, env.getUrl(), this.getUri(), uriVariableValues), HttpMethod.GET, client, requestEntity, responseClazz);
     	return response;
     }
     

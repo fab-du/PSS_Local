@@ -3,24 +3,24 @@ package de.app.client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import de.app.CryptoneProperties;
 import de.app.model.Group;
 
-@Component
+@Service
 public class ClientGroup extends AbstractFindRequest<Group>{
-
-	private String uri = "/api/groups/{suffix1}/{suffix2}/{suffix3}/{suffix4}/";
 	
+	CryptoneProperties env;
 	AbstractWriteRequest<?, Group> Writer;
 	
 	@Autowired
-	public ClientGroup(RestClient client) {
+	public ClientGroup(RestClient client,CryptoneProperties env) {
 		super(client, Group.class, Group[].class);
-		super.setUri( uri );
+		this.env = env;
+		super.setUri( env.getGroups() );
 		Writer = new AbstractWriteRequest<Object, Group>(client, Object.class, Group.class );
-		Writer.setUri(uri);
-		System.out.println(Writer.getUri());
+		Writer.setUri( env.getGroups() );
 	}
 	
 	public AbstractWriteRequest<?, Group> getWriter(){

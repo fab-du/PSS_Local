@@ -4,17 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import de.app.CryptoneProperties;
 import de.app.model.User;
 
 @Service
 public class ClientFriend extends ClientUser{
-	String uri="/api/{preffix1}/friends/{suffix1}/{suffix2}/{suffix3}";
+
+	CryptoneProperties env;
 
 	@Autowired
-	public ClientFriend(RestClient client) {
-		super(client);
-		this.setUri(uri);
-		this.Writer.setUri(uri);
+	public ClientFriend(RestClient client, CryptoneProperties env ) {
+		super(client, env);
+		this.env = env;
+		this.setUri(env.getFriends());
+		this.Writer.setUri(env.getFriends());
 	}
 	
 	@Cacheable(value=de.app.CacheConfig.CACHE_FRIENDS)

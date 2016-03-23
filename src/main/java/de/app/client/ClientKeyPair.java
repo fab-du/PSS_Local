@@ -2,19 +2,21 @@ package de.app.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
+import de.app.CryptoneProperties;
 import de.app.model.KeyPair;
 
-@Service
+@Component
 public class ClientKeyPair extends AbstractFindRequest<KeyPair> {
-
-	String uri = "/api/{userId}/keypair";
+	
+	CryptoneProperties env;
 	
 	@Autowired
-	public ClientKeyPair(RestClient client) {
+	public ClientKeyPair(RestClient client, CryptoneProperties env) {
 		super(client, KeyPair.class, KeyPair[].class);
-		this.setUri(uri);
+		this.env = env;
+		this.setUri( env.getKeypairs() );
 	}
 	
 	public ResponseEntity<KeyPair> findUserKeyPair( Long userId ){
