@@ -14,7 +14,8 @@ public class ClientSymKey extends AbstractFindRequest<KeySym>{
 	public ClientSymKey(RestClient client,CryptoneProperties env) {
 		super(client, KeySym.class, KeySym[].class);
 		this.env = env;
-		this.setUri(env.getSymkeys());
+		super.setUri(env.getSymkeys());
+		super.setUrl(env.getUrl());
 	}
 	
 	public KeySym findGroupKeySym( Long groupId ){

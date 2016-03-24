@@ -16,6 +16,7 @@ public class ClientKeyPair extends AbstractFindRequest<KeyPair> {
 	public ClientKeyPair(RestClient client, CryptoneProperties env) {
 		super(client, KeyPair.class, KeyPair[].class);
 		this.env = env;
+		super.setUrl(env.getUrl());
 		this.setUri( env.getKeypairs() );
 	}
 	

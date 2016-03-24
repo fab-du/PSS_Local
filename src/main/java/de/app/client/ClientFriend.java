@@ -18,6 +18,7 @@ public class ClientFriend extends ClientUser{
 		super(client, env);
 		this.env = env;
 		this.setUri(env.getFriends());
+		this.setUrl( env.getUrl());
 		this.Writer.setUri(env.getFriends());
 	}
 	

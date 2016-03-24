@@ -14,8 +14,6 @@ public class ClientUser extends AbstractFindRequest<User> {
 	
 	public  AbstractWriteRequest<?, User> Writer;
 	
-	//String uri = this.env.getUsers(); //="/api/{prefix1}/{prefix2}/users/{suffix1}/{suffix2}";
-	
 	@Override
 	public void setUri(String uri) {
 		super.setUri(uri);
@@ -26,9 +24,13 @@ public class ClientUser extends AbstractFindRequest<User> {
 		super(client, User.class, User[].class );
 		this.env = env;
 		this.setUri(env.getUsers());
+		super.setUrl(env.getUrl());
+
 		Writer = new AbstractWriteRequest<>(client, Object.class, User.class );
 		Writer.setUri(env.getUsers());
+		Writer.setUrl(env.getUrl());
 	}
+	
 	public AbstractWriteRequest<?, User> getWriter(){
 		return this.Writer;
 	}

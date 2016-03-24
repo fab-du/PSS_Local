@@ -22,9 +22,7 @@ public class RestClient{
 	@Autowired
 	public RestClient( RestTemplate restTemplate, HttpHeaders headers ) {
 		this.restTemplate = restTemplate;
-		
 		List<HttpMessageConverter<?>> messageConverters = this.restTemplate.getMessageConverters();
-		//messageConverters.add( new MappingJackson2HttpMessageConverter());
 	    for (HttpMessageConverter<?> converter : messageConverters) {
 	        if (converter instanceof MappingJackson2HttpMessageConverter) {
 	            MappingJackson2HttpMessageConverter jsonConverter = (MappingJackson2HttpMessageConverter) converter;

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 public abstract class CRUDHelper {
 	
 	private String uri;
+	String url;
 	
 	public URI buildUrl( RestClient client, String url, String uri , Object ...uriVariableValues ){
     	URI _uri = client.getRestTemplate().getUriTemplateHandler().expand( url + uri, uriVariableValues);
@@ -33,4 +34,13 @@ public abstract class CRUDHelper {
 	public String getUri(){
 		return this.uri; 
 	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
 }
