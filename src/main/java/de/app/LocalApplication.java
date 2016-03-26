@@ -11,8 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
 import de.app.client.HeaderInterceptor;
-//import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-
 
 @SpringBootApplication
 @EnableConfigurationProperties(CryptoneProperties.class)

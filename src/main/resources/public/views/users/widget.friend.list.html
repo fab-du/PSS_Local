@@ -1,0 +1,33 @@
+<h4> {{ title }} <h4> <hr/> 
+<table st-table="items" class="table table-striped" st-sticky-header>
+<thead>                                                                           
+    <tr>                                                                              
+        <th ng-repeat="header in headers">{{header}} </th>                                                                             
+    </tr>                                                                             
+</thead>                                                                          
+<tbody>                                                                           
+    <tr ng-repeat="row in items" >
+        <td ng-repeat="header in headers">{{ row[header] }}</td>
+    <td> 
+        <button class="btn btn-sm" popover-placement="top" ui-sref="users.userId({ id : row[$index].id })" type="button">
+            <i class="glyphicon glyphicon-eye-open"></i>             
+        </button>                                                                                
+        <button class="btn btn-danger btn-sm" popover-placement="top" type="button" data-toggle="modal" data-target="mySmallModalLabel" ng-click="revoke($index)">
+            <i class="glyphicon glyphicon-minus"></i>                                             
+        </button>                                                                                
+    </td>
+</tbody>
+</table>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+        Confirm action
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-primary">Save changes</button>
+    </div>
+  </div>
+</div>
+

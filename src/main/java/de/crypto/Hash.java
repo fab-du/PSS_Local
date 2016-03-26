@@ -2,7 +2,6 @@ package de.crypto;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import de.cryptone.utils.Helper;
 
 public class Hash {
@@ -18,7 +17,6 @@ public class Hash {
 
 	public boolean checkHash(byte[] obj , String digesta) throws NoSuchAlgorithmException{
 		byte[] _digesta = Helper.decode(digesta);
-        MessageDigest md = MessageDigest.getInstance( HASH_ALGO );
         byte[] digestb = Helper.decode(this.hash(obj));
         return MessageDigest.isEqual(_digesta, digestb);
 	}

@@ -9,6 +9,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class KeySym extends AbstractEntity{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String symkey;
 	String salt; 
 

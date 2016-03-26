@@ -1,0 +1,24 @@
+ <div class="well container-fluid" layout="row">
+    <div flex="35" class="md-col-4 container-fluid" ng-show="selected">
+        <menu type="toolbar">
+            <button class="md-button">  Sign users </button>
+            <button class="md-button" > Add User </button>
+            <button class="md-button">  Add Friend </button>
+        </menu>
+        <hr/>
+        <div ng-repeat="detail in details track by $index">
+            <md-card>
+                <md-card-content>
+                    <md-list>
+                    <md-list-item ng-repeat="(v, k) in detail">
+                        {{ v }}
+                        {{ k }}
+                    </md-list-item>
+                    </md-list>
+                </md-card-content>
+                <md-card-footer>
+                </md-card-footer>
+            </md-card>
+        </div>
+    </div>
+</div>

@@ -17,7 +17,6 @@ import de.app.model.Friendship;
 import de.app.model.KeyPair;
 import de.app.model.KeySym;
 import de.crypto.RSACrypto;
-import de.crypto.Signature;
 
 @Component
 public class ServiceFriend {

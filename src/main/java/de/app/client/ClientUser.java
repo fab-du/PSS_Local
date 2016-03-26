@@ -16,10 +16,6 @@ public class ClientUser extends AbstractFindRequest<User> {
 	
 	//String uri = this.env.getUsers(); //="/api/{prefix1}/{prefix2}/users/{suffix1}/{suffix2}";
 	
-	@Override
-	public void setUri(String uri) {
-		super.setUri(uri);
-	}
 	
 	@Autowired
 	public ClientUser(RestClient client,CryptoneProperties env ) {
@@ -28,6 +24,7 @@ public class ClientUser extends AbstractFindRequest<User> {
 		this.setUri(env.getUsers());
 		Writer = new AbstractWriteRequest<>(client, Object.class, User.class );
 		Writer.setUri(env.getUsers());
+		Writer.setUrl(env.getUrl());
 	}
 	public AbstractWriteRequest<?, User> getWriter(){
 		return this.Writer;

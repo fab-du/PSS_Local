@@ -1,0 +1,26 @@
+<div class="container-fluid">
+
+   <div class="panel panel-default">
+
+      <div class="panel-title">
+        <ul class="nav nav-tabs nav-justified">
+            <li role="presentation"> <a ui-sref="group.groupId.details">infos</a> </li>
+            <li role="presentation" ng-if="currentGroupUsers | isGroupMember"> <a ui-sref="group.groupId.details.documents">{{ 'documents.document' | translate }}</a> </li>
+            <li role="presentation"> <a ui-sref="group.groupId.details.member">{{ 'groups.member'  | translate }}</a> </li>
+        </ul>
+      </div>
+
+      <div class="panel-body">
+          <ul class="list-group">
+              <li class="list-group-item" > {{ 'documents.document' | translate }} : {{ group.documents }}  </li>
+              <li class="list-group-item" > {{ 'groups.member' | translate }} :  {{ group.users }} </li>
+          </ul>
+      </div>
+
+      <div class="panel-footer">
+          <button class=="btn btn-info" type="button" ui-sref=""> {{ 'session.signup' | translate }} </button>
+      </div>
+
+   </div>
+
+</div>

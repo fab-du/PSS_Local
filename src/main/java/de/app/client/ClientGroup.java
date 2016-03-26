@@ -21,6 +21,7 @@ public class ClientGroup extends AbstractFindRequest<Group>{
 		super.setUri( env.getGroups() );
 		Writer = new AbstractWriteRequest<Object, Group>(client, Object.class, Group.class );
 		Writer.setUri( env.getGroups() );
+		Writer.setUrl(env.getUrl());
 	}
 	
 	public AbstractWriteRequest<?, Group> getWriter(){

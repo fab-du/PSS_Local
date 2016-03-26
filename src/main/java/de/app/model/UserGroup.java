@@ -1,6 +1,11 @@
 package de.app.model;
 
 public class UserGroup extends AbstractEntity{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private long useringroupId;
 
 	private long groupId;

@@ -28,15 +28,19 @@ public class ClientSession{
 		this.env = env;
 		writerLoginChallenge = new AbstractWriteRequest<FormChallengeResponse, FormLoginChallenge>(client, FormChallengeResponse.class, FormLoginChallenge.class );
 		writerLoginChallenge.setUri(env.getChallenge());
+		writerLoginChallenge.setUrl( env.getUrl());
 		
 		writerLoginAuthenticate = new AbstractWriteRequest<FormLoginAuthenticateResponse,FormAuthentication >(client, FormLoginAuthenticateResponse.class, FormAuthentication.class );
 		writerLoginAuthenticate.setUri(env.getAuthenticate());
+		writerLoginAuthenticate.setUrl( env.getUrl());
 		
 		writerRegister = new AbstractWriteRequest<FormCrudResponse, FormRegister>(client, FormCrudResponse.class, FormRegister.class );
 		writerRegister.setUri(env.getRegister());
+		writerRegister.setUrl(env.getUrl());
 		
 		writerLogout = new AbstractWriteRequest<>(client, String.class, String.class );
 		writerLogout.setUri(env.getLogout());
+		writerLogout.setUrl(env.getUrl());
 	}
 
 	public ResponseEntity<FormCrudResponse> register( FormRegister registerData ){

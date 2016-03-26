@@ -18,9 +18,10 @@ public class ClientDocument extends AbstractFindRequest<Document>{
 	public ClientDocument(RestClient client, CryptoneProperties env) {
 		super(client, Document.class, Document[].class);
 		this.env = env;
-		this.setUri( env.getDocuments() );
+		this.setUri(env.getDocuments());
 		Writer = new AbstractWriteRequest<>(client, Object.class, Document.class );
 		Writer.setUri(env.getDocuments());
+		Writer.setUrl(env.getUrl());
 	}
 	
 	@Cacheable(value=de.app.CacheConfig.CACHE_DOCUMENTS)

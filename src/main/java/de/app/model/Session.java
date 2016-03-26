@@ -2,6 +2,10 @@ package de.app.model;
 
 public class Session extends AbstractEntity {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String email;
 	String B;
 	String salt;

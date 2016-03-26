@@ -19,6 +19,7 @@ public class ClientFriend extends ClientUser{
 		this.env = env;
 		this.setUri(env.getFriends());
 		this.Writer.setUri(env.getFriends());
+		this.Writer.setUrl(env.getUrl());
 	}
 	
 	@Cacheable(value=de.app.CacheConfig.CACHE_FRIENDS)
