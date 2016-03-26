@@ -26,6 +26,7 @@ public class ClientSession{
 	@Autowired
 	public ClientSession( RestClient client, CryptoneProperties env ) {
 		this.env = env;
+
 		writerLoginChallenge = new AbstractWriteRequest<FormChallengeResponse, FormLoginChallenge>(client, FormChallengeResponse.class, FormLoginChallenge.class );
 		writerLoginChallenge.setUri(env.getChallenge());
 		writerLoginChallenge.setUrl( env.getUrl());
@@ -33,6 +34,12 @@ public class ClientSession{
 		writerLoginAuthenticate = new AbstractWriteRequest<FormLoginAuthenticateResponse,FormAuthentication >(client, FormLoginAuthenticateResponse.class, FormAuthentication.class );
 		writerLoginAuthenticate.setUri(env.getAuthenticate());
 		writerLoginAuthenticate.setUrl( env.getUrl());
+
+		
+		writerLoginAuthenticate = new AbstractWriteRequest<FormLoginAuthenticateResponse,FormAuthentication >(client, FormLoginAuthenticateResponse.class, FormAuthentication.class );
+		writerLoginAuthenticate.setUri(env.getAuthenticate());
+		writerLoginAuthenticate.setUrl(env.getUrl());
+
 		
 		writerRegister = new AbstractWriteRequest<FormCrudResponse, FormRegister>(client, FormCrudResponse.class, FormRegister.class );
 		writerRegister.setUri(env.getRegister());

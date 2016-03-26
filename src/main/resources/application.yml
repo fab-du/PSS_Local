@@ -1,12 +1,7 @@
 server:
   port: 0
   
-#spring:
-#  resources:
-#    static-locations:
-#      - static
   
-
 remoteserver:
     uri:
         register: /session/register
@@ -19,5 +14,5 @@ remoteserver:
         groups:    /api/groups/{suffix1}/{suffix2}/{suffix3}/{suffix4}/
         keypairs:  /api/{userId}/keypair
         symkeys:   /api/{groupId}/keysym
-        url: http://localhost:8080/
+        url: http://localhost:8080
  
