@@ -57,6 +57,8 @@ public class ControllerGroup extends AbstractController {
 	public ResponseEntity<User[]> users( @PathVariable(value="groupId") Long groupId ){
 		return clientUser.find("groups", groupId, null, null);
 	}
+
+
 	
 	@RequestMapping( value="/{groupId}/users", method = RequestMethod.POST )
 	public ResponseEntity<?> addUser( @PathVariable(value="groupId") Long groupId, @RequestBody User user ){
@@ -70,7 +72,7 @@ public class ControllerGroup extends AbstractController {
 
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.GET)
 	public ResponseEntity<Document[]> documents( @PathVariable(value="groupId") Long groupId){
-		return clientDocument.find(groupId, null);
+		return clientDocument.find(groupId);
 	}
 	
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.POST)
@@ -78,17 +80,17 @@ public class ControllerGroup extends AbstractController {
 		String url = "http://localhost:8080/api/groups/" + groupId + "/documents";
 		return serviceDocument.create( file, url, groupId );
 	}
-	
+
 	@RequestMapping( value="/{groupId}/documents/{documentId}", method = RequestMethod.GET )
 	public ResponseEntity<?> groupId_documents_documentId( @PathVariable(value="groupId") Long groupId, @PathVariable(value="documentId") Long documentId){
-		return clientDocument.findOne(groupId, "documents", documentId);
+		return clientDocument.findOne(groupId, documentId);
 	}
-	
+
 	@RequestMapping( value="/{groupId}/documents/{documentId}/download/{file}", method = RequestMethod.GET )
 	public ResponseEntity<?> groupId_documents_documentId_download( @PathVariable(value="groupId") Long groupId, @PathVariable(value="documentId") Long documentId, @PathVariable(value="file") String file ) throws Exception{
 		return serviceGroup.download(groupId, documentId, file);
 	}
-	
+
 	//TODO
 	@RequestMapping( value="/{groupId}/documents/{documentId}/shareDocument", method = RequestMethod.POST )
 	public ResponseEntity<?> groupId_documents_documentId_shareDocument( @PathVariable(value="groupId") Long groupId,

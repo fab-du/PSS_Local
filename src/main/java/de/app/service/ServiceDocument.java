@@ -4,8 +4,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.io.FileUtils;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.MultipartConfigFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
@@ -13,6 +19,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.integration.http.multipart.MultipartFileReader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,16 +85,14 @@ public class ServiceDocument {
 			aesKey.setSymkey( _symkey );
 			aesCrypto.encrypt(aesKey.getSymkey(), _file);
 			
-			FileUtils.forceDelete( _file );
-			
 			FileUtils.copyFile(new File( _file.getName() + ".enc"), new File( _file.getName()));
-			
 			client.setHeader("Content-Type", MediaType.MULTIPART_FORM_DATA_VALUE);
 			 File __file = new File(_file.getName());
 			LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-			map.add("file", new FileSystemResource(  __file.getAbsolutePath()));
-			HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new    HttpEntity<LinkedMultiValueMap<String, Object>>(map, client.getHeaders());
-			ResponseEntity<Document> response = client.getRestTemplate().exchange( url, HttpMethod.POST, requestEntity, Document.class);
+			
+			map.add("file", new FileSystemResource( __file));
+			ResponseEntity<?> response = client.getRestTemplate().exchange( url, HttpMethod.POST, new HttpEntity<>( map, client.getHeaders()), byte[].class);
+			FileUtils.forceDelete(__file);
 			return response;
 	}
 	

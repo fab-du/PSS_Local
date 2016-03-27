@@ -9,8 +9,7 @@
  */
 angular.module('cryptClientApp')
 
-.controller('MainController', function ( $q, $scope, usSpinnerService, $window, $timeout,  $rootScope, AUTH_EVENTS,  $state, $translate, $mdSidenav, $mdBottomSheet, $mdToast, Storage, Auth, $mdDialog, Rest ,ERRORS_EVENTS, SUCCESS_EVENTS ) {
-
+.controller('MainController', function ( $q, $scope, usSpinnerService, $window, $timeout,  $rootScope, AUTH_EVENTS,  $state, $translate, $mdSidenav, $mdBottomSheet, $mdToast, store, Auth, $mdDialog, Rest ,ERRORS_EVENTS, SUCCESS_EVENTS ) {
     $scope.prefferedLanguage = $translate.use();
     $scope.switchLanguage = function (key) {
         var currentkey = $translate.use();
@@ -32,38 +31,12 @@ angular.module('cryptClientApp')
         }
     });
 
-    $scope.tabs = 
-    {
-        "users"     : {label : "users"    , contents : ["friends", "groups", "search"]  },
-        "documents" : {label : "documents", contents : ["private", "groups" ] },
-        "groups"    : {label : "groups"   , contents : ["admin", "member", "search", "add" ] },
-        "friends"   : {label : "friends"  , contents : ["find" ] },
-    };
 
-
-    $scope.onTabSelected = function( tablabel ){
-        if( $rootScope.isLoggedIn ){
-            $scope.title = tablabel;
-            $state.go( tablabel );
-        }
-    };
-
-    $scope.tabContentClick = function( tablabel, tabcontent ){
-        if( tabcontent === "add" && tablabel === "groups" ){
-            $scope.showAddGroup();
-        }
-
-        if( $rootScope.isLoggedIn && tabcontent !== "add" ){
-            $state.go( tablabel + "." + tabcontent );
-        }
-    };
-
-
-    $scope.navBarShowL = true;
-    $scope.navBarShowR = !$scope.navBarShowL;
     /*
-     * navbar : 0 left, 1 right
-     * */
+    * navbar : 0 left, 1 right
+    * */
+    $scope.navBarShowL = false;
+    $scope.navBarShowR = !$scope.navBarShowL;
     $scope.toggleNavBar = function( navbar ){
         if( navbar === 0 ){
             var toggle = $scope.navBarShowL;
@@ -94,25 +67,17 @@ angular.module('cryptClientApp')
                 $scope.friends = friends;
             });
 
+            $rootScope.currentUserGroupId = store.get('currentUserGroupId');
+
             Rest.Group.mygroups( { suffix1 : Auth.getCurrentUser().currentUserId } ).$promise.then( function( mygroups ){
                 $scope.mygroups = mygroups;
             });
-           $state.reload();
         } 
     });
 
     $scope.dropSuccess = function( data, ev, _self ){
         Rest.Friend.addToGroup( { friendId : data.id, currentUserId : Auth.getCurrentUser().currentUserId, param : _self.id  }).$promise.then( function(resp){ } )
     }
-
-
-    $scope.goHome = function( ){
-        $state.go("main");
-    };
-
-    $scope.goUpload = function( ){
-        $state.go("documents.upload");
-    };
 
     function showMessage( type, msg ){
         $mdToast.show({
@@ -124,14 +89,12 @@ angular.module('cryptClientApp')
 
 
     $scope.showAddGroup = showAddGroup;  
-
     function showAddGroup( actionOnSuccess ){
         var content = {
             parent : angular.element('window'),
             template:'<md-dialog aria-label="Mango (Fruit)"> <md-content class="md-padding"> <form name="newGroupForm"> <div layout layout-sm="column"> <md-input-container flex> <label>Groupname</label> <input ng-model="newgroup.name" placeholder="Placeholder text"> </md-input-container> </md-content> <div class="md-actions" layout="row"> <span flex></span> <md-button ng-click="closeDialog()"> Cancel </md-button> <md-button ng-click="success( newgroup )" class="md-primary"> Save </md-button> </div></md-dialog>',
             controller : function ( $scope, $mdDialog ){
                 $scope.newgroup = {};
-
                 $scope.closeDialog = function () {
                     $mdDialog.hide( );
                 };
@@ -153,33 +116,31 @@ angular.module('cryptClientApp')
 
             }
         };
-
         var dialog = $mdDialog.show( content );
     }
 
 
     // Message handler
 	$rootScope.$on(AUTH_EVENTS.notAuthorized, function(){
-        Storage.deleteAll();
-        console.log( AUTH_EVENTS.notAuthorized );
+        store.remove();
     });
 	$rootScope.$on(AUTH_EVENTS.notAuthenticated, function(){
         $rootScope.isLoggedIn = false;
-        Storage.remove();
+        store.remove();
         window.location.href = "/#/session/login"
     });
 	$rootScope.$on(AUTH_EVENTS.sessionTimeout, function(){
-        Storage.remove();
+        store.remove();
         window.location.href = "/"
     });
 	$rootScope.$on(AUTH_EVENTS.logoutSuccess, function(){
         $rootScope.isLoggedIn = false;
-        Storage.remove();
+        store.remove();
         window.location.href = "/"
     });
 	$rootScope.$on(AUTH_EVENTS.loginSuccess, function(){
         $rootScope.isLoggedIn = Auth.isLoggedIn();
-        window.location.href = "#/users";
+        $state.go('users');
     });
 
 	$rootScope.$on(AUTH_EVENTS.notFound, function(){

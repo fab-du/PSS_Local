@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -31,7 +32,10 @@ public class RestClient{
 	        }
 	    }
 	    messageConverters.add( new ByteArrayHttpMessageConverter());
+	    messageConverters.add( new ResourceHttpMessageConverter());
 		this.restTemplate.setMessageConverters(messageConverters);
+		
+
 		this.headers = headers;
 		headers.add("Content-Type", "application/json");
 	}

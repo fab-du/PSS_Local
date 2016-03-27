@@ -103,16 +103,13 @@ return {
         scope : {
             groupFiles : '='
         },
-        controller : function( $scope, $rootScope, $window, $mdToast, $http, Rest, $timeout, $compile, $filter, store, Auth, usSpinnerService, Upload ){
-
+        controller : function( $scope, $rootScope, Documents, $stateParams, $window, $mdToast, $http, Rest, $timeout, $compile, $filter, store, Auth, usSpinnerService, Upload ){
 
             $scope.files = [];
             $scope.filesString = [];
 
             if ( angular.isUndefined( $scope.groupFiles ) ){
-                var groupId = $rootScope.groupId || store.get('currentGroupId');
-                console.log("===================================");
-                console.log( groupId );
+                var groupId = $stateParams.groupId || store.get('currentGroupId');
                 Rest.Group.documents({ groupId : groupId }).$promise.then( function( documents ){
                     $scope.groupFiles = documents;
                 });
@@ -129,29 +126,23 @@ return {
             };
 
             $scope.download = function( index ){
-                var docId   = $scope.groupFiles[ index ].id;
-                var docName = $scope.groupFiles[ index ].name;
-                var groupId = $rootScope.groupId || store.get('currentGroupId');
-                var url     = "/api/groups/" + groupId + "/documents/" + docId + "/download/" + docName  ;
-                $http.get( url, { headers : { 'Content-Type' : 'application/json; charset=utf-8' }, responseType : 'arraybuffer' } ).then( function( response ){
-                    console.log( response );
-                });
+                var doc   = $scope.groupFiles[ index ];
+                var groupId = $stateParams.groupId || store.get('currentGroupId');
+                Documents.download( doc, groupId );
             };
 
             $scope.upload  = function( index ){
                 var file = $scope.filesString[ index ];
-                var currentUserId = '';
+                var currentUserId = store.get('currentUserId');
 
-                var groupId = $rootScope.groupId || store.get('currentGroupId');
+                var groupId = $stateParams.groupId || store.get('currentGroupId');
                 var url = "/api/groups/" + groupId + "/documents";
                 var promise = Upload.upload({
                     url: url,
                     data: {file: file}
                 });
 
-                // start upload-indicator
                 usSpinnerService.spin('spinner-upload-' + index);
-
                 promise.then( function( res ){
 
                     $timeout( function(){
@@ -195,8 +186,78 @@ return {
         },
     };
 })
-.directive( 'find',function() {
-return {
-    templateUrl : '/views/widget.find.html'
-};
-})
+.directive('cryptUpload', function(){
+  return {
+    restrict : 'E',
+    transclude : true,
+    templateUrl: '/views/documents/widget.document.upload.html',
+    link : function( $scope, el, attr ){
+        console.log('commer heeee');
+    }
+  };
+});
+
+
+/*
+ *<uploader groupFiles="groupFiles"> </uploader>
+ *
+ *<!--
+ *   -<table class="table table-hover table-striped">
+ *   -    <thead>
+ *   -        <tr>
+ *   -            <th> {{ 'groups.group' | translate }} : groupname  </th>
+ *   -            <th></th>
+ *   -            <th></th>
+ *   -            <th></th>
+ *   -            <th></th>
+ *   -            <th></th>
+ *   -        </tr>
+ *   -        <tr>
+ *   -            <th>{{ 'documents.name' | translate }}</th>
+ *   -            <th> {{ 'documents.path' | translate }}</th>
+ *   -            <th>createdAt</th>
+ *   -            <th>{{ 'documents.size' | translate }}</th>
+ *   -            <th>{{ 'documents.type' | translate }}</th>
+ *   -            <th></th>
+ *   -        </tr>
+ *   -    </thead>
+ *   -    <tbody>
+ *   -        <tr class="sibling" ng-repeat="_file in documents">
+ *   -            <td> {{ _file.name  }} </td>
+ *   -            <td> {{ _file.path  }} </td>
+ *   -            <td> {{ _file.createdAt | date  }} </td>
+ *   -            <td> {{ _file.size  }} </td>
+ *   -            <td> {{ _file.type  }} </td>
+ *   -            <td> 
+ *   -
+ *   -                <div class="container-fluid">
+ *   -                    <div>
+ *   -                        <button ng-click="download($index)" class="btn btn-success btn-sm"> 
+ *   -                            <span class="glyphicon glyphicon-download-alt" ></span>
+ *   -                        </button>
+ *   -                    </div>
+ *   -                    
+ *   -                    <div>
+ *   -                        <button class="btn btn-danger btn-sm"> 
+ *   -                            <span class="glyphicon glyphicon-minus" ></span>
+ *   -                        </button>
+ *   -                    </div>
+ *   -                    
+ *   -                    <div class="dropdown">
+ *   -                        <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="shareDropdown" data-toggle="dropdown" aria-expanded="false"> 
+ *   -                            <span class="glyphicon glyphicon-share" ></span>
+ *   -                        </button>
+ *   -                        <ul class="dropdown-menu" aria-labelledby="shareDropdown">
+ *   -                            <li><a href="#">share with users  </a></li>
+ *   -                            <li><a href="#">share with friends</a></li>
+ *   -                            <li><a href="#">share with group  </a></li>
+ *   -                        </ul>
+ *   -                    </div>
+ *   -                </div>
+ *   -
+ *   -            </td>
+ *   -        </tr>
+ *   -    </tbody>
+ *   -</table>
+ *   -->
+ */

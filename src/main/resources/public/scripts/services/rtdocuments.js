@@ -12,8 +12,8 @@ angular.module('cryptClientApp')
 
 var routes = 
 {
-    url : '/api/documents/:documentId',
-    defaults : { documentId : '@documentId' },
+    url : '/api/groups/:group/documents/:verb',
+    defaults : { verb : '@documentId' },
     actions : 
     {
         find          : { method : 'GET' },

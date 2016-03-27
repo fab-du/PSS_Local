@@ -1,6 +1,5 @@
 package de.app;
 
-import javax.ws.rs.client.ClientRequestFilter;
 
 import org.junit.Before;
 import org.junit.Test;

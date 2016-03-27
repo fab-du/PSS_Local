@@ -107,25 +107,24 @@ angular
       });
 
       $stateProvider
-      .state('documents', {
+      .state('documents',{
+          controller : function($scope, $rootScope, $state ){ console.log('documents controller') /*just a work around*/ },
           url : '/documents',
+          template: '<ui-view></ui-view>'
+      })
+      .state('documents.groupId', {
+          url : '/:groupId',
           controller : 'DocumentsController',
           templateUrl : "/views/documents.html"
       })
-      .state('documents.private', {
-          url : '/private',
+      .state('documents.groupId.upload', {
+          url : '/upload',
+          controller : function($scope, $stateParams){},
           templateUrl : "/views/documents.html"
       })
-      .state('documents.groups', {
-          url : '/groups',
-          templateUrl : "/views/documents.html"
-      })
-      .state('documents.upload', {
-          url : '/documents/upload',
-          templateUrl : "/views/documents/documents.upload.html"
-      })
-      .state('documents.documentId', {
-          url : '/:documentId'
+      .state('groupId.documents.documentId', {
+          controller : function(){},
+          url : '/:groupId/documents/:documentId'
       });
 
       $stateProvider
@@ -138,9 +137,6 @@ angular
           url : '/:friendId',
           controller : "FriendDetailController"
       })
-      .state('friends.friendId.groups', {
-          url : '/groups'
-      });
 
       $routeProvider.otherwise({redirectTo: '/'});
 })
