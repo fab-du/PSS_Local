@@ -22,7 +22,7 @@ import de.app.service.ServiceGroup;
 
 @RestController
 @RequestMapping(value="/api/groups")
-public class ControllerGroup extends AbstractController {
+public class ControllerGroup {
 	
 	@Autowired
 	RestClient rest;
@@ -76,9 +76,16 @@ public class ControllerGroup extends AbstractController {
 	}
 	
 	@RequestMapping( value="/{groupId}/documents", method = RequestMethod.POST)
-	public ResponseEntity<?> addDocument( @PathVariable(value="groupId") Long groupId,@RequestParam("file") MultipartFile file ) throws Exception{
+	public ResponseEntity<?> addDocument( @PathVariable(value="groupId") Long groupId, @RequestParam("file") MultipartFile file ) {
 		String url = "http://localhost:8080/api/groups/" + groupId + "/documents";
-		return serviceDocument.create( file, url, groupId );
+		System.out.println("kjhkjhkjhgkgkgkkjhh");
+		try {
+			return serviceDocument.create( file, url, groupId );
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@RequestMapping( value="/{groupId}/documents/{documentId}", method = RequestMethod.GET )

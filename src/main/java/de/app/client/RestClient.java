@@ -2,10 +2,14 @@ package de.app.client;
 
 import java.util.List;
 import javax.annotation.PostConstruct;
+
+import org.apache.commons.fileupload.FileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -28,13 +32,16 @@ public class RestClient{
 	        if (converter instanceof MappingJackson2HttpMessageConverter) {
 	            MappingJackson2HttpMessageConverter jsonConverter = (MappingJackson2HttpMessageConverter) converter;
 	            jsonConverter.setObjectMapper(new ObjectMapper());
+	            
 	            jsonConverter.setSupportedMediaTypes(ImmutableList.of(new MediaType("application", "json", MappingJackson2HttpMessageConverter.DEFAULT_CHARSET), new MediaType("text", "javascript", MappingJackson2HttpMessageConverter.DEFAULT_CHARSET)));
 	        }
 	    }
 	    messageConverters.add( new ByteArrayHttpMessageConverter());
 	    messageConverters.add( new ResourceHttpMessageConverter());
+	    final FormHttpMessageConverter e = new FormHttpMessageConverter();
+	    e.addPartConverter(new MappingJackson2HttpMessageConverter());
+	    messageConverters.add(e);
 		this.restTemplate.setMessageConverters(messageConverters);
-		
 
 		this.headers = headers;
 		headers.add("Content-Type", "application/json");

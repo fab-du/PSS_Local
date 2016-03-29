@@ -19,7 +19,7 @@ import de.app.service.ServiceDocument;
 
 @RestController
 @RequestMapping(value="/api/documents")
-public class ControllerDocument  extends AbstractController{
+public class ControllerDocument {
 	
 	@Autowired
 	ClientDocument clientDocument;
