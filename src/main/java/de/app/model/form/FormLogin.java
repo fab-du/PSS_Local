@@ -30,4 +30,10 @@ public class FormLogin {
 	public void setPassphrase(String passphrase) {
 		this.passphrase = passphrase;
 	}
+
+	@Override
+	public String toString() {
+		return "FormLogin [email=" + email + ", password=" + password + ", passphrase=" + passphrase + "]";
+	}
+	
 }

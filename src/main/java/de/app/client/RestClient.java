@@ -16,6 +16,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import jersey.repackaged.com.google.common.collect.ImmutableList;
 
 @Component
@@ -31,20 +33,17 @@ public class RestClient{
 	    for (HttpMessageConverter<?> converter : messageConverters) {
 	        if (converter instanceof MappingJackson2HttpMessageConverter) {
 	            MappingJackson2HttpMessageConverter jsonConverter = (MappingJackson2HttpMessageConverter) converter;
-	            jsonConverter.setObjectMapper(new ObjectMapper());
-	            
+	            jsonConverter.setObjectMapper(new ObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false));
+
 	            jsonConverter.setSupportedMediaTypes(ImmutableList.of(new MediaType("application", "json", MappingJackson2HttpMessageConverter.DEFAULT_CHARSET), new MediaType("text", "javascript", MappingJackson2HttpMessageConverter.DEFAULT_CHARSET)));
 	        }
 	    }
 	    messageConverters.add( new ByteArrayHttpMessageConverter());
-	    messageConverters.add( new ResourceHttpMessageConverter());
-	    final FormHttpMessageConverter e = new FormHttpMessageConverter();
-	    e.addPartConverter(new MappingJackson2HttpMessageConverter());
-	    messageConverters.add(e);
+	    messageConverters.add( new FormHttpMessageConverter());
+        
 		this.restTemplate.setMessageConverters(messageConverters);
-
 		this.headers = headers;
-		headers.add("Content-Type", "application/json");
+		//headers.add("Content-Type", "application/json");
 	}
 	
 	@PostConstruct

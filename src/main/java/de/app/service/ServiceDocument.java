@@ -86,16 +86,24 @@ public class ServiceDocument {
 			
 			FileUtils.copyFile(new File( _file.getName() + ".enc"), new File( _file.getName()));
 			client.setHeader("Content-Type", MediaType.MULTIPART_FORM_DATA_VALUE);
+			client.setHeader("content-type", MediaType.MULTIPART_FORM_DATA_VALUE);
+
 			 File __file = new File(_file.getName());
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-			
-			//map.add("file", new FileSystemResource( __file ));
-			Resource resource = new FileSystemResource( __file.getAbsolutePath());
-			map.add("file", resource);
-			System.out.println("commeee ehrhekhrleoieorhh");
-			ResponseEntity<?> response = client.getRestTemplate().exchange( url, HttpMethod.POST, new HttpEntity<>( map, client.getHeaders()), Document.class);
+			 LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+
+			map.add("file", new FileSystemResource( __file.getAbsolutePath()));
+			HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new  HttpEntity<LinkedMultiValueMap<String, Object>>(map, client.getHeaders());
+			ResponseEntity<?> response = client.getRestTemplate().exchange( url, HttpMethod.POST, requestEntity, Document.class);
 			FileUtils.forceDelete(__file);
+			
+			client.setHeader("Content-Type", "application/json");
+			client.setHeader("Content-Type", "application/json");
+			
 			return response;
+	}
+	
+	public void upload( File file ){
+		
 	}
 	
 

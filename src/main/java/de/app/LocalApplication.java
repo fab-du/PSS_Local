@@ -33,13 +33,13 @@ public class LocalApplication {
 	 * Resolve for data up/down-load
 	 */
 	
-	
-	@Bean
-	public CommonsMultipartResolver multipartResolver(){
-		final CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-		resolver.setMaxUploadSize(500000);
-		return resolver;
-	}
+//	
+//	@Bean
+//	public CommonsMultipartResolver multipartResolver(){
+//		final CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+//		resolver.setMaxUploadSize(500000);
+//		return resolver;
+//	}
 	
 
 	@Bean

@@ -16,7 +16,7 @@ var routes =
     defaults : { verb : '@documentId' },
     actions : 
     {
-        find          : { method : 'GET' },
+        find          : { method : 'GET', isArray : true  },
         findOne       : { method : 'GET' },
         changeOwner   : { method : 'POST', params : { verb  : 'changeOwner' }},
         shareDocument : { method : 'POST', params : { verb  : 'shareDocument', group : '@group' }},

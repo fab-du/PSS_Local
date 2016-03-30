@@ -20,6 +20,7 @@ import de.app.client.RestClient;
 @Component
 @Priority(value=1)
 public class RequestFilter implements Filter {
+	
 	@Autowired
 	RestClient restClient;
 	@Override
@@ -45,8 +46,6 @@ public class RequestFilter implements Filter {
     void printAllheader( HttpServletRequest req ){
     	Enumeration<String> headers = req.getHeaderNames();
     	String headername;
-        System.out.println( "=========================================");
-        System.out.println( "=========DEBUG===========================");
     	while( (headername = headers.nextElement()) != null ){
     		System.out.println(headername + ":" + req.getHeader(headername));
     	}
