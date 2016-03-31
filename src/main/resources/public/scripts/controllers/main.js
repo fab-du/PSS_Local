@@ -151,6 +151,10 @@ angular.module('cryptClientApp')
         showMessage("success-toast",  AUTH_EVENTS.notFound );
     });
 
+	$rootScope.$on(AUTH_EVENTS.badRequest, function(){
+        showMessage("success-toast",  "Bad Request" );
+    });
+
 	$rootScope.$on(SUCCESS_EVENTS.deleted, function(){
         showMessage("success-toast",  SUCCESS_EVENTS.deleted );
     });

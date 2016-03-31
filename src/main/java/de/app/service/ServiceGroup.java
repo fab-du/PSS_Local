@@ -48,9 +48,12 @@ public class ServiceGroup {
 	ClientKeyPair clientKeyPair;
 	@Autowired
     ServiceSession serviceSession;
+	@Autowired
+	AESCrypto aesCrypto; 
+	@Autowired
+	RSACrypto rsa;
 	
 	public Group create( Group group, String pubkey ) throws Exception{
-		AESCrypto aesCrypto = new AESCrypto();
 		KeySym groupKey = aesCrypto.generateKey();
 		String enc_symkey = serviceSession.encryptWithCurrentUserPubkey(groupKey.getSymkey());
 		groupKey.setSymkey(enc_symkey);
@@ -70,7 +73,6 @@ public class ServiceGroup {
 			String[] result = headercontent.split("=");
 			String _filename = result[ result.length -1 ];
 			String filename = _filename.substring(1, _filename.length() - 2 ).trim();
-					
 			
 			java.nio.file.Files.write( Paths.get( filename ), res.getBody() );
 			
@@ -78,14 +80,12 @@ public class ServiceGroup {
 			FormLoginAuthenticateResponse currentUser = cacheManager.getCache(CacheConfig.CACHE_SESSION).get("currentUser", FormLoginAuthenticateResponse.class);
 			KeyPair sessionKey = cacheManager.getCache( CacheConfig.CACHE_SESSION).get("pubkey", KeyPair.class);
 
-			RSACrypto rsa = new RSACrypto();
 			String dec_passphrase = rsa.decrypt( sessionKey.getPrikey(), enc_passphrase);
 			
 			KeyPair userKeyPair = clientKeyPair.findOne(currentUser.getCurrentUserId()).getBody();
 			KeySym groupkeysym = clientKeySym.findGroupKeySym(groupId);
 			String dec_groupkeysym = rsa.decrypt(userKeyPair, dec_passphrase, groupkeysym.getSymkey());
-			AESCrypto aes = new AESCrypto();
-			aes.decrypt(dec_groupkeysym, new File( filename ) );
+			aesCrypto.decrypt(dec_groupkeysym, new File( filename ) );
 			Files.delete( Paths.get(filename));
 			Files.move( Paths.get(filename + ".dec"), Paths.get(filename) );
 		}

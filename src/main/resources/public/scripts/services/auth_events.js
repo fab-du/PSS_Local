@@ -16,5 +16,6 @@ angular.module('cryptClientApp')
     notFound            : 'resource-not-found',
     registrationFailed  : 'registration-failed',
     registrationSuccess : 'registration-success',
+    badRequest          : 'bad-request',
     notAuthorized       : 'auth-not-authorized'
 });

@@ -44,7 +44,8 @@ responseError: function( response ) {
         403: AUTH_EVENTS.notAuthorized,
         419: AUTH_EVENTS.sessionTimeout,
         440: AUTH_EVENTS.sessionTimeout,
-        404: AUTH_EVENTS.notFound
+        404: AUTH_EVENTS.notFound,
+        400: AUTH_EVENTS.badRequest
 
       }[response.status], response);
 

@@ -10,37 +10,21 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import de.app.client.HeaderInterceptor;
+import de.app.properties.AsymmetricCipherProperties;
+import de.app.properties.HashProperties;
+import de.app.properties.SaltProperties;
+import de.app.properties.SymmetricCipherProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(CryptoneProperties.class)
+@EnableConfigurationProperties({CryptoneProperties.class,
+								SymmetricCipherProperties.class, 
+								AsymmetricCipherProperties.class,
+								HashProperties.class,
+								SaltProperties.class
+								})
 public class LocalApplication {
-
-//	@Bean()
-//	public ServletContextTemplateResolver templateResolver() {
-//	    final ServletContextTemplateResolver resolver =
-//	            new ServletContextTemplateResolver();
-//	    resolver.setSuffix(".html");
-//	    resolver.setTemplateMode("HTML5");
-//	    resolver.setCacheable(false);
-//	    resolver.setCharacterEncoding("UTF-8");
-//	    return resolver;
-//	}
-//	
-	/*
-	 * Resolve for data up/down-load
-	 */
-	
-//	
-//	@Bean
-//	public CommonsMultipartResolver multipartResolver(){
-//		final CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-//		resolver.setMaxUploadSize(500000);
-//		return resolver;
-//	}
-	
 
 	@Bean
 	public HttpHeaders headers(){
@@ -74,13 +58,6 @@ public class LocalApplication {
 		return template;
 	}
 	
-	
-//	@Bean
-//	public CommonsMultipartResolver multipartResolver(){
-//		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-//		return multipartResolver;
-//	}
-
     public static void main(String[] args) {     
         SpringApplication.run(LocalApplication.class, args);
     }

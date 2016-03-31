@@ -34,10 +34,29 @@ public class RSACrypto {
     public final static int KEY_LENGHT           = 1024;
 
     public final static String EXC_MESS_NULL = "no arguments provided:";
+    
+    Integer key_lenght;
+    String asym_cipher_algo;
+    String asym_key_algo;
+    
 
+	public RSACrypto(int key_lenght, String asym_cipher_algo, String asym_key_algo) {
+		super();
+		this.key_lenght = key_lenght;
+		this.asym_cipher_algo = asym_cipher_algo;
+		this.asym_key_algo = asym_key_algo;
+	}
+	
+	public RSACrypto() {
+		super();
+		key_lenght = key_lenght != null ? key_lenght : KEY_LENGHT;
+		asym_cipher_algo = asym_cipher_algo != null ? asym_cipher_algo : ASYM_CIFFER_ALGO;
+		asym_key_algo = asym_key_algo != null ? asym_key_algo  : ASYM_KEY_ALGO;
+	}
+	
 	private KeyPair generatePairkey() throws NoSuchAlgorithmException {
-		 KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance( ASYM_KEY_ALGO );
-		 keyPairGen.initialize( KEY_LENGHT );
+		 KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance( this.asym_key_algo );
+		 keyPairGen.initialize( this.key_lenght );
 		 return keyPairGen.generateKeyPair();
 	}
 
@@ -84,7 +103,7 @@ public class RSACrypto {
 	}
 
 	private String encrypt(PublicKey key, String message) throws Exception {
-        Cipher cipher = Cipher.getInstance( ASYM_CIFFER_ALGO );
+        Cipher cipher = Cipher.getInstance( this.asym_cipher_algo );
         cipher.init(Cipher.ENCRYPT_MODE, key);
         byte[] stringBytes = message.getBytes();
         byte[] raw = cipher.doFinal(stringBytes);
@@ -113,7 +132,7 @@ public class RSACrypto {
 	}
 
 	private String decrypt(PrivateKey key, String message) throws Exception {
-        Cipher cipher = Cipher.getInstance( ASYM_CIFFER_ALGO );
+        Cipher cipher = Cipher.getInstance( this.asym_cipher_algo );
         cipher.init(Cipher.DECRYPT_MODE, key);
         byte[] raw = Base64.getDecoder().decode(message);
         byte[] stringBytes = cipher.doFinal(raw);
@@ -136,7 +155,7 @@ public class RSACrypto {
 
 		byte[] pubkeyBytes = Base64.getDecoder().decode(pubkey.getBytes());
 		X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(pubkeyBytes);
-        KeyFactory kf = KeyFactory.getInstance( ASYM_KEY_ALGO );
+        KeyFactory kf = KeyFactory.getInstance( this.asym_cipher_algo );
         return kf.generatePublic(X509publicKey);
 	}
 

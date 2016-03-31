@@ -5,7 +5,9 @@ import java.net.URI;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
 
 public abstract class CRUDHelper {
 	
@@ -18,8 +20,13 @@ public abstract class CRUDHelper {
 		return _uri;
 	}
 	
-	public <responseClazz> ResponseEntity<responseClazz> makeRequest( URI uri, HttpMethod method, RestClient client, HttpEntity<?> requestClazz, Class<responseClazz> responseClazz ){
+	public <responseClazz> ResponseEntity<responseClazz> makeRequest( URI uri, HttpMethod method, RestClient client, HttpEntity<?> requestClazz, Class<responseClazz> responseClazz )
+	{
+		try {
 			 return client.getRestTemplate().exchange(uri, method,  requestClazz,   responseClazz);
+		} catch (RestClientException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	HttpEntity<?> getHttpEntity( HttpHeaders headers ){

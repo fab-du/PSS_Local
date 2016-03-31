@@ -15,4 +15,19 @@ remoteserver:
         keypairs:  /api/{userId}/keypair
         symkeys:   /api/{groupId}/keysym
         url: http://localhost:8080
+        
+cipher:
+  symmetric:
+    key_algo: AES
+    cipher_algo: AES/ECB/PKCS7Padding
+    keylenght: 128
+  asymmetric:
+    key_algo: RSA
+    cipher_algo: RSA
+    keylenght: 1024
+  hash:
+    algo: MD5
+  salt:
+    algo: SHA1PRNG
+        
  

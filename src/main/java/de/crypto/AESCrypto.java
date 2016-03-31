@@ -19,16 +19,35 @@ import de.cryptone.utils.Helper;
 
 public class AESCrypto {
 
-    public final static int SALT_LENGHT = 32; 
+    public final static int SALT_LENGHT = 32;  
 
-    public final static int KEY_LENGHT = 128; 
+    public final static int KEY_LENGHT = 128;
 
     public final static String SYM_KEY_ALGO  = "AES";
 
-    public final static String SYM_CIPHER_ALGO = "AES/ECB/PKCS7Padding";
+    public final static String SYM_CIPHER_ALGO = "AES/ECB/PKCS7Padding"; 
 
     public final static String EXC_MESS_NULL = "no arguments provided:";
-	
+    
+    Integer key_length;
+    String sym_key_algo;
+    String sym_cipher_algo;
+    
+	public AESCrypto(int key_length, String sym_key_algo, String sym_cipher_algo) {
+		super();
+		this.key_length = key_length;
+		this.sym_key_algo = sym_key_algo;
+		this.sym_cipher_algo = sym_cipher_algo;
+	}
+
+	public AESCrypto(){
+		super();
+		new AESCrypto( KEY_LENGHT, SYM_KEY_ALGO, SYM_CIPHER_ALGO );
+		this.key_length = (this.key_length != null ) ? this.key_length : KEY_LENGHT;
+		this.sym_key_algo = ( this.sym_key_algo != null ) ? this.sym_key_algo : SYM_KEY_ALGO;
+		this.sym_cipher_algo = ( this.sym_cipher_algo != null ) ? this.sym_cipher_algo : SYM_CIPHER_ALGO;
+	}
+
 	public KeySym generateKey() throws NoSuchAlgorithmException {
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         KeyGenerator keygen = null;
@@ -37,8 +56,8 @@ public class AESCrypto {
         new SecureRandom();
         final SecureRandom r =  SecureRandom.getInstanceStrong();
         r.nextBytes(salt);
-        keygen = KeyGenerator.getInstance( SYM_KEY_ALGO );
-        keygen.init(KEY_LENGHT, r );
+        keygen = KeyGenerator.getInstance( this.sym_key_algo );
+        keygen.init( this.key_length , r );
         Key k = keygen.generateKey();
         result.setSymkey( Helper.encode( k.getEncoded()));
         result.setSalt( Helper.encode(salt));
@@ -49,7 +68,7 @@ public class AESCrypto {
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		byte[] bytes = key.getBytes();
 		byte[] keybytes = Base64.getDecoder().decode(bytes);
-		Key result = new SecretKeySpec( keybytes, 0, keybytes.length, SYM_KEY_ALGO );
+		Key result = new SecretKeySpec( keybytes, 0, keybytes.length, this.sym_key_algo );
 		return result;
 	}
 
@@ -61,7 +80,7 @@ public class AESCrypto {
              throw new Exception( EXC_MESS_NULL + "public  String decrypt( final String secretkey, final String message )" );
 
 		 Key key = this.symkeyFromString(secretkey);
-         Cipher cipher = Cipher.getInstance( SYM_CIPHER_ALGO , "BC");
+         Cipher cipher = Cipher.getInstance( this.sym_cipher_algo , "BC");
          cipher.init(Cipher.DECRYPT_MODE, key);
          byte[] raw = Base64.getDecoder().decode(message);
          stringBytes = cipher.doFinal(raw);
@@ -96,7 +115,7 @@ public class AESCrypto {
 
 		Key key = this.symkeyFromString(secretkey);
 		
-		Cipher cipher = Cipher.getInstance( SYM_CIPHER_ALGO, "BC");
+		Cipher cipher = Cipher.getInstance( this.sym_cipher_algo, "BC");
 		cipher.init(modus, key);
 
         BufferedInputStream bis = new BufferedInputStream( new FileInputStream(file));

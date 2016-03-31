@@ -27,6 +27,17 @@ public  class AbstractWriteRequest<CRES, CREQ > extends CRUDHelper{
     	return response; 
 	}
 	
+	/**
+	 * Do a Post Request from Localserver to RemoteServer.
+	 * Returns ResponseEntity<> that can be directly  return by 
+	 * the LocalServer controller to Webbrowser as Server Response.
+	 * All argument , uri and body are required. 
+	 * <p>
+	 *
+	 * @param  uri  path on the RemoteServer , http URI as defined in <a href="https://tools.ietf.org/html/rfc3986"> rfc3986 </a>
+	 * @param  body understand http-body, http entity body <a href="https://tools.ietf.org/html/rfc2616#page-43"> rfc2616 entity body </a>
+	 * @return @see body     
+	 */
 	public 
 	ResponseEntity<CRES> create( CREQ body, Object ...uriVariableValues){
 		return this.crud(body, HttpMethod.POST, uriVariableValues);

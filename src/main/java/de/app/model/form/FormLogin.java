@@ -1,9 +1,12 @@
 package de.app.model.form;
 
+import javax.validation.constraints.NotNull;
 
 public class FormLogin {
 	
+	@NotNull
 	String email;
+	@NotNull
 	String password;
 	String passphrase;
 

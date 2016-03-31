@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,36 +57,31 @@ public class ControllerSession extends AbstractController{
 	CacheManager cacheManager;
 	@Autowired
 	RestClient client;
+	@Autowired
+	RSACrypto rsa;
 
 	@RequestMapping( value="/login", method = RequestMethod.POST )
 	@Produces("application/json")
 	@Consumes("application/json")
 	@Cacheable(value=CacheConfig.CACHE_SESSION)
-	public ResponseEntity<FormLoginAuthenticateResponse>
-	login_challenge( @RequestBody FormLogin authdata ) throws RestClientException, Exception{
-		System.out.println(authdata.toString());
+	public ResponseEntity<?>
+	login_challenge(@Validated @RequestBody FormLogin authdata ) throws RestClientException, Exception{
 		
-		RSACrypto rsa = new RSACrypto();
 		serviceuser.step1( authdata.getEmail()	, authdata.getPassword());
-
 		FormLoginChallenge challenge = new FormLoginChallenge( authdata.getEmail());
-		 ResponseEntity<FormChallengeResponse> challengeResponse = clientSession.loginChallenge(challenge);
+		ResponseEntity<FormChallengeResponse> challengeResponse = clientSession.loginChallenge(challenge);
 		 
-		 if( challengeResponse.getBody() == null ) 
-			 throw new Exception("Login error");
+		 if( challengeResponse.getBody() == null ) return challengeResponse;
 		
 		FormAuthentication formAuth = serviceuser.step2( challengeResponse.getBody() );
-
 		formAuth.setEmail( authdata.getEmail());
 		KeyPair sessionkey = serviceuser.generateSessionKey();
 		formAuth.setSpubkey(sessionkey.getPubkey());
 		ResponseEntity<FormLoginAuthenticateResponse> response = clientSession.loginAuthenticate(formAuth);
-		
 		cacheManager.getCache( CacheConfig.CACHE_SESSION).put("pubkey", sessionkey );
 		
-		if ( authdata.getPassphrase() != null ){
+		if ( authdata.getPassphrase() != null )
 			cacheManager.getCache( CacheConfig.CACHE_SESSION).put("passphrase", rsa.encrypt(sessionkey.getPubkey(), authdata.getPassphrase()));	
-		}
 		
 		cacheManager.getCache(CacheConfig.CACHE_SESSION).put("currentUser", response.getBody());
 		return response;
@@ -94,9 +90,8 @@ public class ControllerSession extends AbstractController{
 	@RequestMapping( value="/register", method = RequestMethod.POST )
 	@Produces("application/json")
 	public ResponseEntity<?> 
-		register( @RequestBody FormRegister registration ) throws NoSuchAlgorithmException, InvalidKeySpecException, Exception{
-
-		System.out.println( registration.toString());
+		register( @Validated @RequestBody FormRegister registration ) throws NoSuchAlgorithmException, InvalidKeySpecException, Exception{
+		
 		SRP6CryptoParams config = SRP6CryptoParams.getInstance(); 
 
 		SRP6VerifierGenerator gen = new SRP6VerifierGenerator(config); 
@@ -105,8 +100,7 @@ public class ControllerSession extends AbstractController{
 		BigInteger verifier = gen.generateVerifier(salt, registration.getEmail(), registration.getPassword());
 		registration.setVerifier(verifier.toString());
 
-		RSACrypto rsacrypto = new RSACrypto();
-		KeyPair pairkey = rsacrypto.generateKey( registration.getPassphrase() );
+		KeyPair pairkey = rsa.generateKey( registration.getPassphrase() );
 
 		/*
 		 * remove password and passphrase
@@ -120,7 +114,6 @@ public class ControllerSession extends AbstractController{
 		AESCrypto aesCrypto = new AESCrypto();
 		KeySym groupKey = aesCrypto.generateKey();
 
-		RSACrypto rsa = new RSACrypto();
 		String encSymKey = rsa.encrypt( pairkey.getPubkey(), groupKey.getSymkey() );
 		groupKey.setSymkey(encSymKey);
 		group.setGroupkey(groupKey);

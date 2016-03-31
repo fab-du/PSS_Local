@@ -17,7 +17,7 @@ public class FormRegister {
 	String company;
 	@NotNull
 	String password;
-	
+	@NotNull
 	String passphrase;
 	String verifier;
 	String salt;

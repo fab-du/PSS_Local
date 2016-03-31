@@ -5,7 +5,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 public class Salt {
-
+	
 	public static byte[] generateSalt(int lenght){
 		SecureRandom random;
 		try {
