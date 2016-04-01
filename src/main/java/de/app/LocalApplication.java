@@ -1,12 +1,18 @@
 package de.app;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
@@ -25,6 +31,8 @@ import de.app.properties.SymmetricCipherProperties;
 								SaltProperties.class
 								})
 public class LocalApplication {
+
+	static Logger log = LoggerFactory.getLogger(LocalApplication.class);
 
 	@Bean
 	public HttpHeaders headers(){
@@ -58,7 +66,10 @@ public class LocalApplication {
 		return template;
 	}
 	
-    public static void main(String[] args) {     
-        SpringApplication.run(LocalApplication.class, args);
+    public static void main(String[] args) throws UnknownHostException {     
+        ConfigurableEnvironment env = SpringApplication.run(LocalApplication.class, args).getEnvironment();
+        String hostname = InetAddress.getLocalHost().getHostAddress();
+        String localServerUrl = "http://" + hostname + ":" + env.getProperty("local.server.port"); 
+        log.info( "Please copy this url to your browser:\t" + localServerUrl );
     }
 }

@@ -1,7 +1,6 @@
 server:
   port: 0
   
-  
 remoteserver:
     uri:
         register: /session/register
@@ -30,9 +29,3 @@ cipher:
   salt:
     algo: SHA1PRNG
         
-spring:
-  devtools:
-    restart:
-      additional-paths: 
-        - src/main/resources/public/
- 
