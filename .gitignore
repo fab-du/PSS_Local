@@ -1,6 +1,7 @@
 target/
 bin/
 .classpath/
+.classpath
 .settings/
 .factorypath/
 .settings/
