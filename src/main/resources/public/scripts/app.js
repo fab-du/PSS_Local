@@ -135,7 +135,8 @@ angular
       })
       .state('friends.friendId', {
           url : '/:friendId',
-          controller : "FriendDetailController"
+          controller : "FriendDetailController",
+          templateUrl : "/views/users/users.id.html"
       })
 
       $routeProvider.otherwise({redirectTo: '/'});

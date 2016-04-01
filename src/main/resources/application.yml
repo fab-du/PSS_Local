@@ -30,4 +30,9 @@ cipher:
   salt:
     algo: SHA1PRNG
         
+spring:
+  devtools:
+    restart:
+      additional-paths: 
+        - src/main/resources/public/
  

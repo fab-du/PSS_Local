@@ -13,11 +13,17 @@ angular.module('cryptClientApp')
     Rest.Friend.find( { currentUserId : store.get("currentUserId") } ).$promise.then( function( friends ){
         $scope.friends = friends;
     });
+    
+    $scope.revoke = function( index ){
+        Rest.Friend.revoke( {}, { friendId : $scope.items[index].id, currentUserId : store.get("currentUserId") } ).$promise.then( function( ){
+            if (index !== -1) {
+                $scope.items.splice(index, 1);
+                $state.reload();
+            }
+        });
+    };
 
 })
 .controller('FriendDetailController', function ( Rest, $q, $scope, $stateParams ) {
-    Rest.Friend.findOne( { friendId : $stateParams.friendId } ).$promise.then( function( friends ){
-        $scope.friend = friend;
-    });
-
+        $scope.user = $scope.friends[ $stateParams.friendId ] ;
 })

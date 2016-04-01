@@ -11,7 +11,6 @@ angular.module('cryptClientApp')
 
 var init = function(){
     Rest.Document.find( {  group : $stateParams.groupId }).$promise.then( function( documents ){
-        console.log( documents )
         $scope.documents = documents;
     });
 };
@@ -25,3 +24,4 @@ var init = function(){
 };
 init();
 });
+

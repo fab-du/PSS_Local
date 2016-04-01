@@ -12,6 +12,14 @@ angular.module('cryptClientApp')
 
     function init(){
         $rootScope.$watch('isLoggedIn', function(isLoggedIn){
+
+
+            $scope.addFriend = function( index ){
+                Rest.Friend.addFriend( {currentUserId : store.get("currentUserId")}, { id : $scope.items[index].id } ).$promise.then(function(){
+                    $state.reload();
+                });
+            };
+
             if( isLoggedIn === true ){
                 var currentUserId = store.get('currentUserId');
 
@@ -22,16 +30,9 @@ angular.module('cryptClientApp')
                     $scope.groups = [];
                 });
 
-                $scope.onSelect = function(){
-                    console.log('selected');
-                };
-
                 Rest.User.find().$promise.then( function( users ){
                     $scope.users = users;
-                });
-
-                Rest.Friend.find( { currentUserId : currentUserId  } ).$promise.then( function( friends ){
-                    $scope.friends = friends;
+                    $rootScope.users = users;
                 });
             }
         });
@@ -39,13 +40,8 @@ angular.module('cryptClientApp')
 
     init();
 })
-.controller('UserDetailsController', function( $scope, Storage, $stateParams, Rest ){
+.controller('UserDetailsController', function( $scope, Storage, $stateParams, Rest, $filter ){
     var  userId = $stateParams.userId;
-    Rest.Group.find( { gv : userId } ).$promise.then( function( usergroups ){
-        $scope.usergroups = usergroups;
-    });
-    Rest.Friend.find( {currentUserId : userId} ).$promise.then( function( friends ){
-        $scope.userfriends = friends;
-    });
+    $scope.user = $scope.users[ userId ];
 })
 

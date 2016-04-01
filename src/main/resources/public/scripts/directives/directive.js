@@ -1,63 +1,6 @@
 'use strict';
 
 angular.module('cryptClientApp')
-.directive('tabUser', function( ){
-return {
-    restrict     : 'E',
-    templateUrl  : '/views/users/widget.user.list.html',
-    scope        : {
-        title    : '@', // String binding
-        items    : '=', // two way data binding with parent scope
-        stTable  : '=items', // two way data binding with parent scope
-        onSelect : '&' // mehod
-    },
-    controller : function( $scope, Rest, Auth, store, $state ){
-        $scope.headers = ['id', 'firstname', 'secondname', 'email'];
-        $scope.items = null; 
-
-        $scope.addFriend = function( index ){
-            Rest.Friend.addFriend({currentUserId:store.get("currentUserId")}, { id : $scope.items[index].id } ).$promise.then(function(){
-                $state.reload();
-            });
-        };
-    }
-
-};
-})
-.directive('tabFriend', function(){
-return {
-    restrict : 'E',
-    templateUrl : '/views/users/widget.friend.list.html',
-    scope : {
-        title    : '@', // String binding
-        items    : '=', // two way data binding with parent scope
-        stTable  : '=items', // two way data binding with parent scope
-        onSelect : '&' // mehod
-    },
-    controller : function( $scope , Rest, store, Auth ){
-        $scope.items = null; 
-        $scope.headers = ['id', 'firstname', 'secondname', 'email'];
-
-        $scope.revoke = function( index ){
-            Rest.Friend.revoke( {}, { friendId : $scope.items[index].id, currentUserId : store.get("currentUserId") } ).$promise.then( function( ){
-                if (index !== -1) {
-                    $scope.items.splice(index, 1);
-                }
-            });
-        };
-    },
-
-    link: function( scope, el, attrs ){
-
-        scope.$watch( 'items', function( _old, _new ){
-           if( _old !== null ){
-           }
-        });
-
-    }
-
-};
-})
 .directive('tabDocument', function(){
 return {
     restrict : 'E',
@@ -87,7 +30,7 @@ return {
     },
     controller : function( $scope, $state ){
         $scope.items = null; 
-        $scope.headers = [ "id", "name"];
+        $scope.headers = [ "name"];
         $scope.details = function( row ){
              $state.go('groups.groupId', { groupId : row.id });
         };
@@ -103,17 +46,10 @@ return {
         scope : {
             groupFiles : '='
         },
-        controller : function( $scope, $rootScope, Documents, $stateParams, $window, $mdToast, $http, Rest, $timeout, $compile, $filter, store, Auth, usSpinnerService, Upload ){
+        controller : function( $scope, $rootScope, Documents, $stateParams, $window, $mdToast, $http, Rest, $timeout, $compile, $filter, $state, store, Auth, usSpinnerService, Upload ){
 
             $scope.files = [];
             $scope.filesString = [];
-
-            if ( angular.isUndefined( $scope.groupFiles ) ){
-                var groupId = $stateParams.groupId || store.get('currentGroupId');
-                Rest.Group.documents({ groupId : groupId }).$promise.then( function( documents ){
-                    $scope.groupFiles = documents;
-                });
-            }
 
             $scope.$watch( "files", function( _new, _old ){
                 if ( _new !== _old  && _new !== null ){
@@ -159,6 +95,7 @@ return {
 
                         usSpinnerService.stop('spinner-upload-' + index);
 
+                        $state.reload();
                         $mdToast.show({
                             template: '<md-toast class="md-toast success">' + res.data.name + " uploaded in "+ res.data.path + '</md-toast>',
                             hideDelay: 4000,
@@ -186,78 +123,54 @@ return {
         },
     };
 })
-.directive('cryptUpload', function(){
+.directive('cryptFind', function(){
   return {
     restrict : 'E',
     transclude : true,
-    templateUrl: '/views/documents/widget.document.upload.html',
-    link : function( $scope, el, attr ){
-        console.log('commer heeee');
+    scope : {
+        items : '='
+    },
+    templateUrl: '/views/widget.find.html',
+    link : function( scope, el, attr ){
+        var element = angular.element( document.querySelector('input.typeahead') )
+
+
+        scope.$watch('items', initialize);
+        function initialize() {
+            var users = [];
+            angular.forEach( scope.items , function ( v ){
+                users.push( v.email );
+            })
+
+            element.typeahead( { highlight : false, hint : true }, { name : 'User' , source : substringMatcher( users ) } );
+            console.log( scope.items )
+        }
+
+var substringMatcher = function(strs) {
+  return function findMatches(q, cb) {
+    var matches, substringRegex;
+
+    // an array that will be populated with substring matches
+    matches = [];
+
+    // regex used to determine if a string contains the substring `q`
+    substringRegex = new RegExp(q, 'i');
+
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    angular.forEach(strs, function(str,  i) {
+      if (substringRegex.test(str)) {
+        matches.push(str);
+      }
+    });
+
+    cb(matches);
+  };
+};
+
+
+
     }
   };
 });
 
-
-/*
- *<uploader groupFiles="groupFiles"> </uploader>
- *
- *<!--
- *   -<table class="table table-hover table-striped">
- *   -    <thead>
- *   -        <tr>
- *   -            <th> {{ 'groups.group' | translate }} : groupname  </th>
- *   -            <th></th>
- *   -            <th></th>
- *   -            <th></th>
- *   -            <th></th>
- *   -            <th></th>
- *   -        </tr>
- *   -        <tr>
- *   -            <th>{{ 'documents.name' | translate }}</th>
- *   -            <th> {{ 'documents.path' | translate }}</th>
- *   -            <th>createdAt</th>
- *   -            <th>{{ 'documents.size' | translate }}</th>
- *   -            <th>{{ 'documents.type' | translate }}</th>
- *   -            <th></th>
- *   -        </tr>
- *   -    </thead>
- *   -    <tbody>
- *   -        <tr class="sibling" ng-repeat="_file in documents">
- *   -            <td> {{ _file.name  }} </td>
- *   -            <td> {{ _file.path  }} </td>
- *   -            <td> {{ _file.createdAt | date  }} </td>
- *   -            <td> {{ _file.size  }} </td>
- *   -            <td> {{ _file.type  }} </td>
- *   -            <td> 
- *   -
- *   -                <div class="container-fluid">
- *   -                    <div>
- *   -                        <button ng-click="download($index)" class="btn btn-success btn-sm"> 
- *   -                            <span class="glyphicon glyphicon-download-alt" ></span>
- *   -                        </button>
- *   -                    </div>
- *   -                    
- *   -                    <div>
- *   -                        <button class="btn btn-danger btn-sm"> 
- *   -                            <span class="glyphicon glyphicon-minus" ></span>
- *   -                        </button>
- *   -                    </div>
- *   -                    
- *   -                    <div class="dropdown">
- *   -                        <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="shareDropdown" data-toggle="dropdown" aria-expanded="false"> 
- *   -                            <span class="glyphicon glyphicon-share" ></span>
- *   -                        </button>
- *   -                        <ul class="dropdown-menu" aria-labelledby="shareDropdown">
- *   -                            <li><a href="#">share with users  </a></li>
- *   -                            <li><a href="#">share with friends</a></li>
- *   -                            <li><a href="#">share with group  </a></li>
- *   -                        </ul>
- *   -                    </div>
- *   -                </div>
- *   -
- *   -            </td>
- *   -        </tr>
- *   -    </tbody>
- *   -</table>
- *   -->
- */

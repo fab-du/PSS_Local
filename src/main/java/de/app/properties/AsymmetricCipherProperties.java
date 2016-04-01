@@ -27,5 +27,4 @@ public class AsymmetricCipherProperties {
 	public void setCipher_algo(String cipher_algo) {
 		this.cipher_algo = cipher_algo;
 	}
-	
 }
