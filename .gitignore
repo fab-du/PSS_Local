@@ -1,5 +1,10 @@
 target/
 bin/
+.classpath/
+.settings/
+.factorypath/
+.settings/
+frontend/app/bower_components
 src/main/resources/static
 frontend/bower_components
 frontend/node_modules
