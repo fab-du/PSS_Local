@@ -1,6 +1,0 @@
-
-## LocalServer Implementierung
-
-
-\newpage
-
