@@ -22,180 +22,75 @@
   </head>
 
   <body ng-app="cryptClientApp" layout="column" ng-controller="MainController" ng-cloak>
-    <!--[if lte IE 8]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+	
+	<header ng-if="isLoggedIn">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+		  <div class="container-fluid">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="#">CryptOne-System</a>
+		    </div>
+		
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav">
+		        <li class="active"><a href="#">Documents <span class="sr-only">(current)</span></a></li>
+		        <li><a href="#">Users</a></li>
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Groups <span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+		            <li><a href="#">Create</a></li>
+		            <li><a href="#">My groups</a></li>
+		          </ul>
+		        </li>
+		      </ul>
+		      <ul class="nav navbar-nav navbar-right">
+		        <li><a href="#">User:</a></li>
+		        <li class="dropdown">
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">lang<span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+		            <li><a href="#">french</a></li>
+		            <li><a href="#">english</a></li>
+		            <li><a href="#">deutsch</a></li>
+		          </ul>
+		        </li>
+		      </ul>
+		    </div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
+	</header>
+	
+	<article>
+	<div class="container">
 
-    <md-toolbar layout="row" layout-align="center end" layout="row" class="md-thin">
-        <div  ng-controller="SessionController" > 
-
-            <md-button ng-click="toggleNavBar(0)" ng-if="isLoggedIn">
-               <i class="glyphicon glyphicon-menu-hamburger"></i> 
-            </md-button>
-
-            <md-button ng-if="!isLoggedIn" ui-sref="login" >
-            {{ 'session.signin' | translate }}
-            </md-button>
-
-            <md-button ng-if="!isLoggedIn" ui-sref="register" >
-            {{ 'session.signup' | translate }}
-            </md-button>
-
-            <md-button ng-if="isLoggedIn" ng-click="logout()">
-                <span class="glyphicon glyphicon-log-out" ></span>
-            </md-button>
-
+      <form class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
         </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
 
-            <h1> CryptOne </h1>
-            <ng-messages when="error">
-                {{ error | translate }}
-            </ng-messages>
-
-        <div>
-            <md-button ng-click="toggleNavBar(1)" ng-if="isLoggedIn">
-                online
-                <i class="glyphicon glyphicon-user"></i> 
-            </md-button>
-
-           <div class="pull-right btn-group">
-             <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                 lang: {{ prefferedLanguage }} <span class="caret"></span>
-             </button>
-             <ul class="dropdown-menu" role="menu">
-               <li>
-                <a href="#" ng-click="switchLanguage('de')">
-                    <img style="width:25px; height:25px" src="images/de.png"> 
-                </a>
-               </li>
-               <li class="divider"></li>
-               <li>
-                <a href="" ng-click="switchLanguage('en')">
-                    <img  style="width:25px; height:25px" src="images/en.png"> 
-                </a>
-               </li>
-               <li class="divider"></li>
-               <li>
-                <a href="" ng-click="switchLanguage('fr')">
-                    <img  style="width:25px; height:25px" src="images/fr.png">
-                </a>
-               </li>
-               <li class="divider"></li>
-               <li>
-                <a href="" ng-click="switchLanguage('fr')">
-                    <img  style="width:25px; height:25px" src="images/cm.png">
-                </a>
-               </li>
-               <li class="divider"></li>
-             </ul>
-           </div>
-            
-        </div>
-
-    </md-toolbar>
-
-
-    <div ng-cloak="" ng-if="isLoggedIn" class="tabsdemoDynamicHeight">
-        <md-content>
-            <md-tabs  md-dynamic-height="" md-border-bottom="" >
-                <md-content class="md-padding mg-warn">
-
-                    <md-tab  label="users"  class="md-primary">
-                        <md-button ui-sref="users" > {{ "users.user"  | translate }} </md-button>
-                        <md-button ui-sref="friends" > {{ "friends.friend"  | translate }} </md-button>
-                    </md-tab>
-
-                    <md-tab  label="documents"  class="md-primary">
-                        <md-button ui-sref="documents.groupId({ groupId : {{currentUserGroupId}}})"> my documents </md-button>
-                    </md-tab>
-
-                    <md-tab  label="groups" class="md-primary">
-                        <md-button class="button" ui-sref="groups" > public </md-button>
-                        <md-button class="button" ui-sref="groups/registered" > my groups </md-button>
-                        <md-button ng-click="showAddGroup()"> create </md-button>
-                    </md-tab>
-
-                    <md-tab label="friends"  class="md-primary">
-                        <md-button ui-sref="friends" > my friends </md-button>
-                    </md-tab>
-
-                </md-content>
-            </md-tabs>
-        </md-content>
-    </div> 
-    
-
-    <div flex  ng-if="isLoggedIn" layout="row">
-
-        <div ng-show="navBarShowL" flex="15" ng-hide="navBarHideL" >
-            <nav  ng-cloak>
-                <md-list>
-                    <md-item>
-                        <md-button  ui-sref="users" class="menu" aria-label="home">
-                            <md-icon md-svg-src="/images/48/home.svg" class="avatar"></md-icon>
-                                Home
-                        </md-button>
-                    </md-item>
-                    
-                    <md-item>
-                        <md-button  ui-sref="documents.groupId.upload({ groupId : {{currentUserGroupId}}})"   class="menu" aria-label="Upload">
-                                {{ currentUserGroupId }}
-                                <md-icon md-svg-src="/images/18/upload.svg" class="avatar"></md-icon> Upload
-                        </md-button>
-                    </md-item>
-                </md-list>
-            </nav>
-        </div>
-
-        <div flex>
-            <md-content id="content">
-                <div class="container-fluid" ui-view></div>
-            </md-content>
-        </div>
-
-        <div ng-show="navBarShowR"  flex="15" ng-hide="!navBarHideR" >
-
-               <table st-table="friends" ng-show="friends" class="table table-striped" st-sticky-header>
-                  <thead>                                                                           
-                    <tr>                                                                              
-                        <th> Friend Email
-                        </th>                                                                             
-                    </tr>                                                                             
-                  </thead>                                                                          
-                  <tbody>
-                        <tr ng-repeat="row in friends" >
-                            <td ng-drag="true" ng-drag-data='row' ng-drag-success='dragSuccess($data, $event)'> {{ row.email  }} </td>
-                        <tr>
-                  </tbody>
-                </table>
-
-               <table st-table="mygroups" ng-show="mygroups" class="table table-striped" st-sticky-header>
-                  <thead>                                                                           
-                    <tr>                                                                              
-                        <th> {{ 'groups.registered' | translate }}
-                        </th>                                                                             
-                    </tr>                                                                             
-                  </thead>                                                                          
-                  <tbody>
-                        <tr ng-repeat="row in mygroups" >
-                            <td ng-drop="true" ng-drop-success="dropSuccess($data, $event, row)" > {{ row.name }} </td>
-                        <tr>
-                  </tbody>
-                </table>
-        </div>
-
-    </div>
-
-    <ui-view ng-if="!isLoggedIn" layout-align="center end" layout="row"></ui-view>
-
+    </div> <!-- /container -->
+	</article>
 
     <script src="vendor/vendor.js"></script>
     <script src="vendor/typeahead.js"></script>
-
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/services/rest.js"></script>
-    <script src="scripts/services/storage.js"></script>
     <script src="scripts/services/rtdocuments.js"></script>
     <script src="scripts/services/rtusers.js"></script>
     <script src="scripts/services/rtfriends.js"></script>
