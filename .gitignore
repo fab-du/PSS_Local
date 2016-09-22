@@ -16,13 +16,6 @@ src/main/resources/static
 frontend/bower_components
 frontend/node_modules
 frontend/.tmp
-doc/src/md/output
-doc/src/md/node_modules
-doc/src/md/figures
-doc/src/dotty/output
-doc/src/dotty/out
-doc/src/pu/out
-doc/src/pu/output
 bower_components/
 .tmp/
 node_modules/
