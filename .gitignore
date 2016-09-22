@@ -5,6 +5,7 @@ bin/
 .settings/
 .factorypath/
 .settings/
+src/main/resources/public
 frontend/app/bower_components
 src/main/resources/static
 frontend/bower_components
