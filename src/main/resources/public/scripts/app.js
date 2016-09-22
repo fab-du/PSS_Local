@@ -22,7 +22,7 @@
 
 Array.prototype.sortPromise = function(){
     var _self = this;
-    var response = new Array();
+    var response = [];
 
     _self.forEach( function(item){
         response.push( item );
@@ -54,7 +54,7 @@ angular
 
     usSpinnerConfigProvider.setDefaults({color: '#5CB85C', radius:1});
     $translateProvider.preferredLanguage('de');
-    $translateProvider.useStaticFilesLoader({prefix: 'i18n/', suffix: '.json'})
+    $translateProvider.useStaticFilesLoader({prefix: 'i18n/', suffix: '.json'});
     $httpProvider.defaults.xsrfHeaderName = "X-XSRFToken";
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.headers["hash-algorithm"] = { "hash-algorithm" : "SHA256" };
@@ -84,7 +84,7 @@ angular
           url : '/:userId', 
           controller : 'UserDetailsController',
           templateUrl : '/views/users/users.id.html'
-      })
+      });
 
       $stateProvider
       .state('groups', {
@@ -108,7 +108,7 @@ angular
 
       $stateProvider
       .state('documents',{
-          controller : function($scope, $rootScope, $state ){ console.log('documents controller') /*just a work around*/ },
+          controller : function(){ console.log('documents controller');  },
           url : '/documents',
           template: '<ui-view></ui-view>'
       })
@@ -119,7 +119,7 @@ angular
       })
       .state('documents.groupId.upload', {
           url : '/upload',
-          controller : function($scope, $stateParams){},
+          controller : function(){},
           templateUrl : "/views/documents.html"
       })
       .state('groupId.documents.documentId', {
@@ -137,7 +137,7 @@ angular
           url : '/:friendId',
           controller : "FriendDetailController",
           templateUrl : "/views/users/users.id.html"
-      })
+      });
 
       $routeProvider.otherwise({redirectTo: '/'});
 })
@@ -149,4 +149,4 @@ angular
         }
 
     });
-})
+});

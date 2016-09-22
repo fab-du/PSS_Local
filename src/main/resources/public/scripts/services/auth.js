@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('cryptClientApp')
-.factory('Auth', function ($http, $state, $location, $window, $filter, $q, AUTH_EVENTS, Storage, store,  $rootScope ) {
+.factory('Auth', function ($http, $state, $location, $window, $filter, $q, AUTH_EVENTS,  store,  $rootScope ) {
 var api = {};
 
 function register( user, success, error ){
     $http.post('/session/register', user).success(function(res) {
+	console.log( res );
         $state.go('login');
     }).error(error);
 }
@@ -52,12 +53,11 @@ api.getCurrentUser = function(){
     /*
      *var currentUserGroupId = store.get("currentUserGroupId");
      */
-    var ret = ((currentUserEmail    !== null) &&
-               ( currentUserId      !== null) )
+    var ret = ((currentUserEmail    !== null) && ( currentUserId      !== null));
 
     if( ret === true ){
         return { currentUserEmail : currentUserEmail, 
-                 currentUserId: currentUserId }
+                 currentUserId: currentUserId };
     }
     else{
         return null;
@@ -81,7 +81,7 @@ api.isGv = function( group ){
     if( !isLoggedIn || group === null ){
         return false;
     }
-    return group['gvid'] === api.getCurrentUser().currentUserId;
+    return group.gvid === api.getCurrentUser().currentUserId;
 };
 
 api.logout =  function(){
@@ -93,14 +93,15 @@ api.logout =  function(){
     store.remove("currentUserGroupId");
 
     $http.post('/session/logout', {} ).success( function( res ){
-        $http.config.headers["Authorization"] = null;
-        $http.config.headers["authorization"] = null;
+	console.log( res );
+        $http.config.headers.Authorization = null;
+        $http.config.headers.authorization = null;
         $location.path("/");
         $window.location.reload();
     })
     .error( function( err ){
-        $http.config.headers["Authorization"] = null;
-        $http.config.headers["authorization"] = null;
+        $http.config.headers.Authorization = null;
+        $http.config.headers.authorization = null;
         $window.location.reload();
         console.log( err );
     });
