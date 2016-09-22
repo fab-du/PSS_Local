@@ -1,0 +1,80 @@
+{
+    "langs":
+    {
+        "de": "Lang.: German",
+        "en": "Lang.: English",
+        "fr": "Lang.: French"
+    },
+
+    "error":
+    {
+        "error": "error"
+    },
+
+    "date": 
+    {
+        "date": "Date"
+    },
+
+    "session":
+    {
+        "signin"  : "sign-in",
+        "signup"  : "sign-up",
+        "signout" : "sign-out"
+    },
+
+    "documents":
+    {
+        "document" : "document",
+        "name"     : "name",
+        "path"     : "path",
+        "size"     : "size",
+        "type"     : "type",
+        "remove"   : "remove",
+        "upload"   : "upload",
+        "download" : "download"
+    },
+
+    "groups":
+    {
+      "group"      : "group",
+      "mygroup"    : "my groups",
+      "public"     : "public group",
+      "private"    : "private group",
+      "registered" : "registered in group:",
+      "new"        : "new group",
+      "addUser"    : "add user",
+      "member"     : "member",
+      "remove"     : "remove group"
+    },
+
+    "friends":
+    {
+        "friends": "friends",
+        "new": "friendrequest",
+        "remove": "remove"
+    },
+
+    "users":
+    {
+        "user"       : "username",
+        "firstname"  : "firstname",
+        "secondname" : "secondname",
+        "company"    : "company",
+        "password"   : "password",
+        "passphrase" : "passphrase",
+        "email"      : "email"
+    },
+
+    "symkeys":
+    {
+        "symkey": "sym. key",
+        "change": "change sym. key"
+    },
+
+    "pairkeys":
+    {
+        "pairkey": "asym. key"
+    }
+
+}

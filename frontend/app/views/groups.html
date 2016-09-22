@@ -1,0 +1,17 @@
+<div class="well container-fluid row"  ng-cloak>
+
+    <div flex layout="container-fluid" ng-show="groups">
+
+        <tab-group  title="{{'groups.public' | translate}}"   items="groups"></tab-group>
+
+        <div class="container-fluid col-md-7">
+            <div class="well container-fluid" ui-view></div>
+        </div>
+
+    </div>
+
+    <div layout="row container-fluid" ng-show="mygroups">
+        <tab-group  title="{{'groups.registered' | translate}}" items="mygroups"></tab-group>
+    </div>
+
+</div>

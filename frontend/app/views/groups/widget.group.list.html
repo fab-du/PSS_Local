@@ -1,0 +1,25 @@
+<div class="well container-fluid">
+    <h4> {{ title }} <h4> <hr/>
+
+    <div>
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="row in items">
+                {{ row.name }}
+                <span class="pull-right">
+                    <button class="btn btn-xs" popover-placement="top" type="button"  ng-click="details(row)">
+                        <i class="glyphicon glyphicon-eye-open"></i>                                             
+                    </button>                                                                                
+                    <button class="btn btn-success btn-xs" popover-placement="top" type="button">
+                        <i class="glyphicon glyphicon-share"></i>                                            
+                    </button>                                                                                
+                    <button class="btn btn-danger btn-xs" popover-placement="top" type="button">
+                        <i class="glyphicon glyphicon-minus"></i>                                             
+                    </button>                                                                                
+                </span>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+

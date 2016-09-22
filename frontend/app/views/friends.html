@@ -1,0 +1,26 @@
+<div class="column" ng-cloak class="well container-fluid" >
+
+<div class="col-md-6 container-fluid">
+
+<ul class="list-group">
+  <li ng-repeat="user in friends" class="list-group-item">
+    {{ user.email }}
+
+    <span class="pull-right" >
+        <button class="btn btn-xs" popover-placement="top" ui-sref="friends.friendId({ friendId : $index })" type="button">
+            <i class="glyphicon glyphicon-eye-open"></i>                                             
+        </button>                                                                                
+        <button class="btn btn-info btn-xs" popover-placement="top" type="button" ng-click="revoke( $index )">
+            <i class="glyphicon glyphicon-minus"></i>                                             
+        </button>                                                                                
+    </span>
+
+  </li>
+</ul>
+
+</div>
+
+<div class="col-md-6 container-fluid" ui-view></div>
+
+</div>
+

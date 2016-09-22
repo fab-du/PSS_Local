@@ -1,0 +1,28 @@
+<div class="column" ng-cloak class="well container-fluid" >
+
+
+<div class="col-md-6 container-fluid">
+
+
+<ul class="list-group">
+  <li ng-repeat="user in users" class="list-group-item">
+    {{ user.email }}
+
+    <span class="pull-right" >
+        <button class="btn btn-xs" popover-placement="top" ui-sref="users.userId({ userId: $index })" type="button">
+            <i class="glyphicon glyphicon-eye-open"></i>                                             
+        </button>                                                                                
+        <button class="btn btn-info btn-xs" popover-placement="top" type="button" ng-click="addFriend( user.id )">
+            <i class="glyphicon glyphicon-plus"></i>                                             
+        </button>                                                                                
+    </span>
+
+  </li>
+</ul>
+
+</div>
+
+<div class="col-md-6 container-fluid" ui-view></div>
+
+</div>
+
