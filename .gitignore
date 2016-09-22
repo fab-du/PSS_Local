@@ -6,6 +6,11 @@ bin/
 .factorypath/
 .settings/
 src/main/resources/public
+node
+frontend/bower_components
+frontend/node_modules
+frontend/dist
+frontend/.tmp
 frontend/app/bower_components
 src/main/resources/static
 frontend/bower_components
